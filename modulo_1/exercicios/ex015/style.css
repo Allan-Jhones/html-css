@@ -1,0 +1,23 @@
+@charset "UTF-8";
+/* CSS Document */
+/* This is a comment */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+    background-color: lightsteelblue;
+    font-size: 20px;;
+}
+h1 {
+    color: #2c3e50;
+    font-size: 2em;
+}
+h2 {
+    color: #2980b9;
+    font-size: 1.5em;
+}
+p {
+    color: #34495e;
+    font-size: 1em;
+    margin-bottom: 20px;
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>História Crowdfunding</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+    .progress-container {
+      width: 80%;
+      margin: 20px auto;
+      background-color: #ddd;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 25px;
+      background-color: #72DDF7;
+      text-align: center;
+      line-height: 25px;
+      color: #fff;
+      font-weight: bold;
+    }
+    .chapters {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 0;
+      list-style: none;
+    }
+    .chapters li {
+      background-color: #fff;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      cursor: default;
+    }
+    .locked {
+      background-color: #e0e0e0;
+      color: #888;
+    }
+    .btn-contribute {
+      display: block;
+      width: 200px;
+      margin: 20px auto;
+      padding: 10px;
+      background-color: #DD6E42;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .btn-contribute:hover {
+      background-color: #c45d36;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>História Interativa</h1>
+  <h2>Contribua para desbloquear o próximo capítulo!</h2>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="progress-bar">0%</div>
+  </div>
+
+  <ul class="chapters" id="chapters-list">
+    <li>Capítulo 1: Introdução da história (Desbloqueado)</li>
+    <li class="locked">Capítulo 2: O mistério começa</li>
+    <li class="locked">Capítulo 3: A grande revelação</li>
+  </ul>
+
+  <button class="btn-contribute" onclick="contribute()">Contribuir +50</button>
+
+  <script>
+    const chapters = document.querySelectorAll('#chapters-list li');
+    const progressBar = document.getElementById('progress-bar');
+
+    let currentContribution = 0;
+    const contributionGoal = 100; // Meta para desbloquear cada capítulo
+    let unlockedChapters = 1;
+
+    function updateProgress() {
+      let progress = (currentContribution / contributionGoal) * 100;
+      if (progress > 100) progress = 100;
+      progressBar.style.width = progress + '%';
+      progressBar.textContent = Math.floor(progress) + '%';
+    }
+
+    function unlockNextChapter() {
+      if (unlockedChapters < chapters.length && currentContribution >= contributionGoal) {
+        chapters[unlockedChapters].classList.remove('locked');
+        unlockedChapters++;
+        currentContribution = 0; // reseta para a próxima meta
+        updateProgress();
+        alert('Novo capítulo desbloqueado!');
+      }
+    }
+
+    function contribute() {
+      currentContribution += 50; // valor simulado da contribuição
+      updateProgress();
+      unlockNextChapter();
+    }
+
+    updateProgress();
+  </script>
+
+</body>
+</html>

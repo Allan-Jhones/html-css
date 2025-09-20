@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fontes em CSS</title>
+    <style>
+        /* Medidas Absolutas
+        px - pixels
+        cm - centímetros
+        mm - milímetros
+        in - polegadas
+        pt - pontos (1/72 de polegada)
+        pc - picas (1 pica = 12 pontos)
+
+        Medidas Relativas
+        em - relativo ao tamanho da fonte do elemento pai
+        rem - relativo ao tamanho da fonte do elemento raiz (html)
+        % - percentual relativo ao tamanho da fonte do elemento pai
+        vw - 1% da largura da viewport
+        vh - 1% da altura da viewport
+        vmin - o menor valor entre vw e vh
+        vmax - o maior valor entre vw e vh
+        1em = 16px (tamanho padrão dos navegadores)
+        1rem = 16px (tamanho padrão dos navegadores)
+        100% = 16px (tamanho padrão dos navegadores)
+        10px = 0.625em
+        10px = 0.625rem
+        10px = 62.5%
+        16px = 1em
+        16px = 1rem
+        16px = 100%
+        20px = 1.25em
+        20px = 1.25rem
+        20px = 125%
+        */
+        body {
+        
+            font-family: worksans, sans-serif;
+            font-size: 1rem;
+            font-weight: lighter;
+            /*lighter normal bold bolder*/
+            /* shorthand font 
+                -font-style -> font-weight -> font-size/line-height -> font-family
+                font: italic bold 1.2rem/1.5 Arial, sans-serif;
+            */
+            /*font: italic bolder 3em 'Work Sans', sans-serif;*/
+        }
+        p {
+            font-style: italic;
+           /* text-decoration: underline; */
+        }
+        h2 {
+            font: bold 2em 'Work Sans', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>What is Lorem Ipsum?</h1>
+    <p>
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+    </p>
+    <p>
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+    </p>
+    <h2>Where does it come from?</h2>
+    <p>
+        Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+    </p>
+</body>
+</html>

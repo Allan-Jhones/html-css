@@ -1,0 +1,18 @@
+body{
+    background-color: #1f1e1e;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+h1 {
+    color: #ffffff;
+    font-size: 66px;
+}
+p {
+    color: #ffffff;
+    font-size: 30px;
+}
+#seta-esquerda{
+    width: 100px;
+    height: 100px;
+    
+}
