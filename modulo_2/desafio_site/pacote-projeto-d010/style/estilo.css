@@ -22,7 +22,7 @@
 }
 body {
     font-family: var(--fonte-padrao);
-    background-color: var(--cor0); 
+    background-color: var(--cor3); 
 }
 a.externo::after {
     content: '\00A0\1F517';
