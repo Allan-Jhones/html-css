@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mesclagem de Células</title>
+    <title>Desafio 2</title>
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -11,32 +11,47 @@
         table {
             border-collapse: collapse;
             width: 300px;
+            margin: auto;
+            border: 3px solid black;
         }
         td {
             border: 1px solid black;
             padding: 10px;
             text-align: center;
+             
+        }
+        h1 {
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <h1>Mesclagem de Células</h1>
+    <h1>Desafio 02</h1>
     <table>
         <tr>
-            <td>A</td>
-            <td colspan="2">B</td>
-        </tr>
-        <tr>
-            <td rowspan="3">D</td>
-            <td>E</td>
-            <td rowspan="2">F</td>
-        </tr>
-        <tr>
-            <td>H</td>
-        </tr>
-        <tr>
+            <td colspan="4">A</td>
+            <td rowspan="4">B</td>
            
-            <td colspan="2">M</td>
+        </tr>
+        <tr>
+            <td rowspan="4">C</td>
+            <td>D</td>
+            <td>E</td>
+            <td>F</td>
+        
+        </tr>
+        <tr>
+            <td>G</td>
+            <td>H</td>
+            <td>I</td>
+        </tr>
+        <tr>
+            <td>J</td>
+            <td>K</td>
+            <td>L</td>
+        </tr>
+        <tr>
+            <td colspan="4">N</td>
         </tr>
     </table>
 </body>
