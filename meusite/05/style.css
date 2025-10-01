@@ -5,20 +5,44 @@
     padding: 0;
     box-sizing: border-box;
 }
+/*Modificar Scrool Firefox*/
+* {
+    scrollbar-width: t12px;
+    scrollbar-color: #5a5a5a #e0e0e0;
+}
+/*Chrome, Edge e Safari*/
+*::-webkit-scrollbar {
+    width: 8px;
+}
+*::-webkit-scrollbar-track {
+    background: #e0e0e0;
+}
+*::-webkit-scrollbar-thumb {
+    background-color: #a03d3d;
+    border-radius: 20px;
+    border: 3px solid #e0e0e0;
+}
 header, nav, main, aside, footer {
-    background-color: #a1a1a1;
+  
     display: flex;
     margin: 3px;
+    background-color: #FFFFFF;
 }
+
 body {
     display: flex;
     margin: 3px;
     flex:  1 1 100vw;
     flex-wrap: wrap;
+    background-color: #F8F9FA;
+    margin: auto;
+   
 }
+
 header {
     flex: 1 1 100vw;
-    height: 100px;
+    /* height: 100px; */
+
 }
 header #logo {
     flex: 0 1 200px;
@@ -47,22 +71,47 @@ a {
 }
 main {
     flex: 20 1 500px;
-    height: calc(100vw - 224px);
+    /* height: calc(100vw - 224px); */
+    flex-wrap: wrap;
+    overflow: auto;
+ 
+}
+main section p {
+    padding: 10px;
+    text-align: justify;
+    font-size: 50px;
+}
+main section {
+    width: 100%;
+    /* height: 2500px; */
+    margin-top: 10px;
+    /* background: linear-gradient(#9a9a9a, #5a5a5a, #1a1a1a); */
+
 }
 aside {
     flex: 1 1 200px;
 }
 footer {
     flex: 1 1 100vw;
-    height: 100px;
+    /* height: 100px; */
+  
 }
 @media only screen and (max-width: 923px) {
+    header {
+        order: 0;
+    }
     main {
-        height: calc(100vw - 330px);
+        /* height: calc(100vw - 330px); */
+        order: 1;
     }
     aside {
         flex: 1 1 100vw;
-        height: 100px;
+        /* height: 100px; */
+        order: 2;
+    }
+    footer {
+        order: 3;
+
     }
 }
 
@@ -82,7 +131,7 @@ footer {
         position: fixed;
         flex-direction: column;
         width: 100vw;
-        height: 100vh;
+        /* height: 100vh; */
         background-color: rgba(255, 255, 255, 0.8);
         align-items: center;
         justify-content: center;
@@ -93,3 +142,80 @@ footer {
     }
   
 }
+
+.plans {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+    margin-bottom: 90px;
+    align-items: flex-end;
+  }
+
+  .plan {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 400px;
+    text-align: center;
+  }
+
+  .plan:hover {
+    transform: scale(1.05);
+  }
+
+  .plan h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+
+  .price {
+    font-size: 1.8em;
+    margin: 0;
+    color: #e63946;
+    font-weight: bold;
+    
+  }
+
+  ul {
+    list-style: none;
+    /* margin-bottom: 50px; */
+    text-align: left;
+    
+    
+  }
+
+  ul li {
+    padding: 5px 0;
+    font-size: 0.95em;
+    
+  }
+
+  .btn {
+    
+    display: block;
+    background: #e63946;
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  .btn:hover {
+    background: #c92f3e;
+  }
+  .plan a {
+    margin-top: auto;
+  }
+  

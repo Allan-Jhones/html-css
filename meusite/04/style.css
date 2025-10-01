@@ -47,7 +47,16 @@ a {
 }
 main {
     flex: 20 1 500px;
-    height: calc(100vw - 224px);
+    height: calc(100vw - 224px); 
+    background-color: black;
+  
+}
+main p {
+    margin: 15px;
+    font-size: 18px;
+    line-height: 1.5;
+    text-align: justify;
+    color: white;
 }
 aside {
     flex: 1 1 200px;
