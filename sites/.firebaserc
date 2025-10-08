@@ -12,23 +12,14 @@
           "site-cliente1"
         ],
         "cliente2": [
-          "site-cliente2"
-        ],
-        "cliente3": [
-          "site-cliente3"
+          "sitemaria2"
         ]
       }
     },
     "sites-8d2ce": {
       "hosting": {
-        "principal": [
-          "sites-8d2ce"
-        ],
-        "cliente1": [
-          "sitejoao"
-        ],
         "cliente2": [
-          "sitemaria"
+          "sitemaria2"
         ]
       }
     }
