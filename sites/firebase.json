@@ -26,6 +26,15 @@
         "**/.*",
         "**/node_modules/**"
       ]
+    },
+    {
+      "target": "cliente3",
+      "public": "clientes/landing",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
     }
   ]
 }

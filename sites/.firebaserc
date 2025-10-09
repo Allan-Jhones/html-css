@@ -1,25 +1,19 @@
 {
-  "projects": {
-    "default": "meu-projeto-firebase"
-  },
+  "projects": {},
   "targets": {
-    "meu-projeto-firebase": {
-      "hosting": {
-        "principal": [
-          "meu-site-principal"
-        ],
-        "cliente1": [
-          "site-cliente1"
-        ],
-        "cliente2": [
-          "sitemaria2"
-        ]
-      }
-    },
     "sites-8d2ce": {
       "hosting": {
+        "principal": [
+          "sites-8d2ce"
+        ],
+        "cliente1": [
+          "sitejoao"
+        ],
         "cliente2": [
           "sitemaria2"
+        ],
+        "cliente3": [
+          "landingpagge"
         ]
       }
     }
