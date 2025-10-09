@@ -35,6 +35,33 @@
         "**/.*",
         "**/node_modules/**"
       ]
+    },
+    {
+      "target": "cliente4",
+      "public": "clientes/kleber",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
+    },
+    {
+      "target": "cliente5",
+      "public": "clientes/inovatech",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
+    },
+    {
+      "target": "cliente6",
+      "public": "clientes/autotechsia",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
     }
   ]
 }
