@@ -62,6 +62,15 @@
         "**/.*",
         "**/node_modules/**"
       ]
+    },
+    {
+      "target": "cliente7",
+      "public": "clientes/allanjhones",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
     }
   ]
 }

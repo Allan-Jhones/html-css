@@ -243,142 +243,46 @@
     </footer>
 
     <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "firebase/app";
-        import { getAnalytics } from "firebase/analytics";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const firebaseConfig = {
+       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  
+      const firebaseConfig = {
         apiKey: "AIzaSyCxj0VSV7jeGg6m7juAdZ69w5sjCu6tD-c",
         authDomain: "sites-8d2ce.firebaseapp.com",
         projectId: "sites-8d2ce",
-        storageBucket: "sites-8d2ce.firebasestorage.app",
-        messagingSenderId: "567084513149",
-        appId: "1:567084513149:web:336b51b868b81c1b05fe14",
-        measurementId: "G-F2YF5KLQ93"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const properties = [];
-        async function carregarEmpreendimentos() {
-        const querySnapshot = await getDocs(collection(db, "empreendimentos"));
-        querySnapshot.forEach((doc) => {
-                const e = doc.data();
-                properties.push({
-           
-                type: e.type,
+      };
+  
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const properties = [];
+      async function carregarEmpreendimentos() {
+        try {
+          const querySnapshot = await getDocs(collection(db, "empreendimentos"));
+          const lista = document.getElementById("lista");
+  
+          querySnapshot.forEach((doc) => {
+            const e = doc.data();
+            properties.push({
+               // id: doc.id,
                 title: e.title,
-                location: e.location})})
-        }
-        carregarEmpreendimentos();
-        // Properties data
-
-        // const properties2 = [
-        //     {
-        //         id: 1,
-        //         type: 'casa',
-        //         title: 'Casa Moderna em Condomínio',
-        //         location: 'Alphaville, Barueri/SP',
-        //         price: 'R$ 850.000',
-        //         bedrooms: 3,
-        //         bathrooms: 2,
-        //         area: 180,
-        //         images: [
-        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23667eea" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Casa 1 - Foto 1</text></svg>',
-        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23764ba2" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Casa 1 - Foto 2</text></svg>',
-        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%2348bb78" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Casa 1 - Foto 3</text></svg>'
-        //         ]
-        //     },
-        //     {
-        //         id: 2,
-        //         type: 'apartamento',
-        //         title: 'Apartamento Luxo Vista Mar',
-        //         location: 'Guarujá, SP',
-        //         price: 'R$ 1.200.000',
-        //         bedrooms: 4,
-        //         bathrooms: 3,
-        //         area: 120,
-        //         images: [
-        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23e53e3e" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Apto 1 - Foto 1</text></svg>',
-        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23dd6b20" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Apto 1 - Foto 2</text></svg>',
-        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23d69e2e" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Apto 1 - Foto 3</text></svg>'
-        //         ]
-        //     },
-        //     {
-        //         id: 3,
-        //         type: 'terreno',
-        //         title: 'Terreno Comercial Centro',
-        //         location: 'Centro, São Paulo/SP',
-        //         price: 'R$ 2.500.000',
-        //         bedrooms: 0,
-        //         bathrooms: 0,
-        //         area: 500,
-        //         images: [
-        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%2338a169" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Terreno 1 - Foto 1</text></svg>',
-        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23319795" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Terreno 1 - Foto 2</text></svg>',
-        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%233182ce" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Terreno 1 - Foto 3</text></svg>'
-        //         ]
-        //     },
-        //     {
-        //         id: 4,
-        //         type: 'casa',
-        //         title: 'Casa Térrea com Piscina',
-        //         location: 'Vila Madalena, São Paulo/SP',
-        //         price: 'R$ 950.000',
-        //         bedrooms: 3,
-        //         bathrooms: 2,
-        //         area: 200,
-        //         images: [
-        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23805ad5" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Casa 2 - Foto 1</text></svg>',
-        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23d53f8c" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Casa 2 - Foto 2</text></svg>',
-        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23f56565" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Casa 2 - Foto 3</text></svg>'
-        //         ]
-        //     },
-        //     {
-        //         id: 5,
-        //         type: 'apartamento',
-        //         title: 'Studio Moderno Centro',
-        //         location: 'República, São Paulo/SP',
-        //         price: 'R$ 380.000',
-        //         bedrooms: 1,
-        //         bathrooms: 1,
-        //         area: 45,
-        //         images: [
-        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%2368d391" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Studio 1 - Foto 1</text></svg>',
-        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%234fd1c7" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Studio 1 - Foto 2</text></svg>',
-        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%2363b3ed" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Studio 1 - Foto 3</text></svg>'
-        //         ]
-        //     }
-        // ];
-
-        // // Generate more properties to reach 17 total
-        // for (let i = 6; i <= 17; i++) {
-        //     const types = ['casa', 'apartamento', 'terreno'];
-        //     const type = types[Math.floor(Math.random() * types.length)];
-        //     const prices = ['R$ 450.000', 'R$ 680.000', 'R$ 1.100.000', 'R$ 750.000', 'R$ 920.000'];
-        //     const locations = ['Moema, São Paulo/SP', 'Pinheiros, São Paulo/SP', 'Itaim Bibi, São Paulo/SP', 'Brooklin, São Paulo/SP', 'Vila Olímpia, São Paulo/SP'];
+                location: e.location,
+               // price: e.price,
+                //type: e.type,
+               // bedrooms: e.bedrooms,
+               // bathrooms: e.bathrooms,
+               // area: e.area,
+                //images: e.images || []
+            });
             
-        //     properties.push({
-        //         id: i,
-        //         type: type,
-        //         title: `${type === 'casa' ? 'Casa' : type === 'apartamento' ? 'Apartamento' : 'Terreno'} ${i}`,
-        //         location: locations[Math.floor(Math.random() * locations.length)],
-        //         price: prices[Math.floor(Math.random() * prices.length)],
-        //         bedrooms: type === 'terreno' ? 0 : Math.floor(Math.random() * 4) + 1,
-        //         bathrooms: type === 'terreno' ? 0 : Math.floor(Math.random() * 3) + 1,
-        //         area: Math.floor(Math.random() * 300) + 50,
-        //         images: [
-        //             `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23${Math.floor(Math.random()*16777215).toString(16)}" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="20">${type.charAt(0).toUpperCase() + type.slice(1)} ${i} - Foto 1</text></svg>`,
-        //             `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23${Math.floor(Math.random()*16777215).toString(16)}" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="20">${type.charAt(0).toUpperCase() + type.slice(1)} ${i} - Foto 2</text></svg>`,
-        //             `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23${Math.floor(Math.random()*16777215).toString(16)}" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="20">${type.charAt(0).toUpperCase() + type.slice(1)} ${i} - Foto 3</text></svg>`
-        //         ]
-        //     });
-        // }
+            renderProperties();
+          });
+        } catch (err) {
+          console.error("Erro ao carregar empreendimentos:", err);
+        }
+      }
+     
+      carregarEmpreendimentos();
+       
 
         // Gallery variables
         let currentGallery = [];
@@ -394,7 +298,7 @@
                 card.className = 'property-card';
                 card.innerHTML = `
                     <div class="property-image">
-                        <div class="property-badge">${property.type === 'casa' ? 'Casa' : property.type === 'apartamento' ? 'Apartamento' : 'Terreno'}</div>
+                        <div class="property-badge">${property.type === 'ceilandia' ? 'Ceilândia' : property.type === 'aguasclaras' ? 'Águas Claras' : 'Sobradinho'}</div>
                     </div>
                     <div class="property-content">
                         <div class="property-price">${property.price}</div>
