@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prime Imóveis - Corretora de Imóveis</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">🏡 Prime Imóveis</div>
+            <ul class="nav-links">
+                <li><a href="#home">Início</a></li>
+                <li><a href="#profile">Corretor</a></li>
+                <li><a href="#properties">Imóveis</a></li>
+                <li><a href="#cadastro">Cadastro</a></li>
+                <li><a href="#contact">Contato</a></li>
+            </ul>
+            <div class="nav-controls">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="menu-toggle">☰</button>
+            </div>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Encontre o Imóvel dos Seus Sonhos</h1>
+            <p>Mais de 10 anos conectando pessoas aos melhores imóveis da região. Casas, apartamentos e terrenos com a qualidade e confiança que você merece.</p>
+            <div class="cta-buttons">
+                <a href="#properties" class="btn btn-primary">Ver Imóveis</a>
+                <a href="#contact" class="btn btn-secondary">Fale Conosco</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="profile" class="profile">
+        <div class="profile-container">
+            <div class="profile-content">
+                <div class="profile-image-container">
+                    <div class="profile-image">
+                        <div class="profile-avatar">👨‍💼</div>
+                    </div>
+                    <div class="profile-badge">
+                        <span class="badge-icon">🏆</span>
+                        <span>CRECI Ativo</span>
+                    </div>
+                </div>
+                
+                <div class="profile-info">
+                    <h2 class="profile-name">Carlos Eduardo Silva</h2>
+                    <p class="profile-title">Corretor de Imóveis Especialista</p>
+                    <p class="profile-creci">CRECI: 12345-J | Registro Ativo desde 2014</p>
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">Imóveis Vendidos</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">10</div>
+                            <div class="stat-label">Anos de Experiência</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">98%</div>
+                            <div class="stat-label">Clientes Satisfeitos</div>
+                        </div>
+                    </div>
+                    
+                    <p class="profile-description">
+                        Especialista em imóveis residenciais e comerciais na Grande São Paulo. 
+                        Formado em Gestão Imobiliária pela UNIP, com pós-graduação em Avaliação de Imóveis. 
+                        Membro da Associação dos Corretores de Imóveis de São Paulo (ACIESP) e certificado 
+                        em Negociação Imobiliária pelo SECOVI-SP.
+                    </p>
+                    
+                    <div class="profile-certifications">
+                        <div class="cert-item">
+                            <span class="cert-icon">🎓</span>
+                            <span>Gestão Imobiliária - UNIP</span>
+                        </div>
+                        <div class="cert-item">
+                            <span class="cert-icon">📋</span>
+                            <span>Avaliação de Imóveis</span>
+                        </div>
+                        <div class="cert-item">
+                            <span class="cert-icon">🤝</span>
+                            <span>Negociação SECOVI-SP</span>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-actions">
+                        <a href="https://wa.me/5511998765432?text=Olá Carlos! Gostaria de conversar sobre imóveis." target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                            📱 Falar no WhatsApp
+                        </a>
+                        <a href="#contact" class="btn btn-secondary">
+                            📧 Outros Contatos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="properties" class="properties">
+        <h2 class="section-title">Nossos Imóveis</h2>
+        <p class="section-subtitle">Selecionamos cuidadosamente os melhores imóveis para você. Clique nas imagens para ver a galeria completa.</p>
+        
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">Todos</button>
+            <button class="filter-btn" data-filter="casa">Casas</button>
+            <button class="filter-btn" data-filter="apartamento">Apartamentos</button>
+            <button class="filter-btn" data-filter="terreno">Terrenos</button>
+        </div>
+
+        <div class="properties-grid" id="propertiesGrid">
+            <!-- Properties will be generated by JavaScript -->
+        </div>
+    </section>
+
+    <section id="cadastro" class="cadastro">
+        <div class="cadastro-container">
+            <h2 class="section-title">Cadastre-se para Receber Novidades</h2>
+            <p class="section-subtitle">Seja o primeiro a saber sobre os melhores imóveis disponíveis. Cadastre-se e receba ofertas exclusivas!</p>
+            
+            <div class="form-container">
+                <div class="success-message" id="successMessage">
+                    Cadastro realizado com sucesso! Entraremos em contato em breve.
+                </div>
+                <form id="cadastroForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nome">Nome Completo</label>
+                            <input type="text" id="nome" name="nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-mail</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="telefone">Telefone/WhatsApp</label>
+                            <input type="tel" id="telefone" name="telefone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="interesse">Tipo de Interesse</label>
+                            <select id="interesse" name="interesse" required>
+                                <option value="">Selecione seu interesse</option>
+                                <option value="comprar">Comprar Imóvel</option>
+                                <option value="vender">Vender Imóvel</option>
+                                <option value="alugar">Alugar Imóvel</option>
+                                <option value="investir">Investir em Imóveis</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="orcamento">Orçamento (R$)</label>
+                        <select id="orcamento" name="orcamento">
+                            <option value="">Selecione a faixa de preço</option>
+                            <option value="ate-200k">Até R$ 200.000</option>
+                            <option value="200k-500k">R$ 200.000 - R$ 500.000</option>
+                            <option value="500k-1m">R$ 500.000 - R$ 1.000.000</option>
+                            <option value="acima-1m">Acima de R$ 1.000.000</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="mensagem">Mensagem (Opcional)</label>
+                        <textarea id="mensagem" name="mensagem" rows="4" placeholder="Conte-nos mais sobre o que você procura..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Cadastrar</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="contact-container">
+            <h2 class="section-title">Entre em Contato</h2>
+            <p class="section-subtitle">Estamos prontos para ajudar você a encontrar o imóvel perfeito. Entre em contato conosco!</p>
+            
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <span class="contact-icon">📞</span>
+                    <div>
+                        <strong>Telefone</strong><br>
+                        (11) 3456-7890
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">📱</span>
+                    <div>
+                        <strong>WhatsApp</strong><br>
+                        (11) 99876-5432
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">📧</span>
+                    <div>
+                        <strong>E-mail</strong><br>
+                        contato@primeimoveis.com.br
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">📍</span>
+                    <div>
+                        <strong>Endereço</strong><br>
+                        Av. Paulista, 2000 - São Paulo/SP
+                    </div>
+                </div>
+            </div>
+            
+            <div class="social-links">
+                <a href="https://wa.me/5511998765432" target="_blank" rel="noopener noreferrer" class="social-link">📱</a>
+                <a href="https://facebook.com/primeimoveis" target="_blank" rel="noopener noreferrer" class="social-link">📘</a>
+                <a href="https://instagram.com/primeimoveis" target="_blank" rel="noopener noreferrer" class="social-link">📷</a>
+                <a href="mailto:contato@primeimoveis.com.br" class="social-link">✉️</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Modal -->
+    <div class="gallery-modal" id="galleryModal">
+        <div class="gallery-content">
+            <button class="gallery-close" id="galleryClose">×</button>
+            <button class="gallery-nav gallery-prev" id="galleryPrev">‹</button>
+            <img class="gallery-image" id="galleryImage" src="" alt="">
+            <button class="gallery-nav gallery-next" id="galleryNext">›</button>
+            <div class="gallery-counter" id="galleryCounter">1 / 3</div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/5511998765432?text=Olá! Gostaria de saber mais sobre os imóveis disponíveis." target="_blank" rel="noopener noreferrer" class="whatsapp-float">
+        📱
+    </a>
+
+    <footer>
+        <p>&copy; 2024 Prime Imóveis - Corretora de Imóveis. Todos os direitos reservados.</p>
+        <p>CRECI: 12345-J | Av. Paulista, 2000 - São Paulo/SP</p>
+    </footer>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "firebase/app";
+        import { getAnalytics } from "firebase/analytics";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+        apiKey: "AIzaSyCxj0VSV7jeGg6m7juAdZ69w5sjCu6tD-c",
+        authDomain: "sites-8d2ce.firebaseapp.com",
+        projectId: "sites-8d2ce",
+        storageBucket: "sites-8d2ce.firebasestorage.app",
+        messagingSenderId: "567084513149",
+        appId: "1:567084513149:web:336b51b868b81c1b05fe14",
+        measurementId: "G-F2YF5KLQ93"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const properties = [];
+        async function carregarEmpreendimentos() {
+        const querySnapshot = await getDocs(collection(db, "empreendimentos"));
+        querySnapshot.forEach((doc) => {
+                const e = doc.data();
+                properties.push({
+           
+                type: e.type,
+                title: e.title,
+                location: e.location})})
+        }
+        carregarEmpreendimentos();
+        // Properties data
+
+        // const properties2 = [
+        //     {
+        //         id: 1,
+        //         type: 'casa',
+        //         title: 'Casa Moderna em Condomínio',
+        //         location: 'Alphaville, Barueri/SP',
+        //         price: 'R$ 850.000',
+        //         bedrooms: 3,
+        //         bathrooms: 2,
+        //         area: 180,
+        //         images: [
+        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23667eea" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Casa 1 - Foto 1</text></svg>',
+        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23764ba2" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Casa 1 - Foto 2</text></svg>',
+        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%2348bb78" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Casa 1 - Foto 3</text></svg>'
+        //         ]
+        //     },
+        //     {
+        //         id: 2,
+        //         type: 'apartamento',
+        //         title: 'Apartamento Luxo Vista Mar',
+        //         location: 'Guarujá, SP',
+        //         price: 'R$ 1.200.000',
+        //         bedrooms: 4,
+        //         bathrooms: 3,
+        //         area: 120,
+        //         images: [
+        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23e53e3e" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Apto 1 - Foto 1</text></svg>',
+        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23dd6b20" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Apto 1 - Foto 2</text></svg>',
+        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23d69e2e" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Apto 1 - Foto 3</text></svg>'
+        //         ]
+        //     },
+        //     {
+        //         id: 3,
+        //         type: 'terreno',
+        //         title: 'Terreno Comercial Centro',
+        //         location: 'Centro, São Paulo/SP',
+        //         price: 'R$ 2.500.000',
+        //         bedrooms: 0,
+        //         bathrooms: 0,
+        //         area: 500,
+        //         images: [
+        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%2338a169" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Terreno 1 - Foto 1</text></svg>',
+        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23319795" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Terreno 1 - Foto 2</text></svg>',
+        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%233182ce" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Terreno 1 - Foto 3</text></svg>'
+        //         ]
+        //     },
+        //     {
+        //         id: 4,
+        //         type: 'casa',
+        //         title: 'Casa Térrea com Piscina',
+        //         location: 'Vila Madalena, São Paulo/SP',
+        //         price: 'R$ 950.000',
+        //         bedrooms: 3,
+        //         bathrooms: 2,
+        //         area: 200,
+        //         images: [
+        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23805ad5" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Casa 2 - Foto 1</text></svg>',
+        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23d53f8c" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Casa 2 - Foto 2</text></svg>',
+        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23f56565" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Casa 2 - Foto 3</text></svg>'
+        //         ]
+        //     },
+        //     {
+        //         id: 5,
+        //         type: 'apartamento',
+        //         title: 'Studio Moderno Centro',
+        //         location: 'República, São Paulo/SP',
+        //         price: 'R$ 380.000',
+        //         bedrooms: 1,
+        //         bathrooms: 1,
+        //         area: 45,
+        //         images: [
+        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%2368d391" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Studio 1 - Foto 1</text></svg>',
+        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%234fd1c7" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Studio 1 - Foto 2</text></svg>',
+        //             'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%2363b3ed" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="24">Studio 1 - Foto 3</text></svg>'
+        //         ]
+        //     }
+        // ];
+
+        // // Generate more properties to reach 17 total
+        // for (let i = 6; i <= 17; i++) {
+        //     const types = ['casa', 'apartamento', 'terreno'];
+        //     const type = types[Math.floor(Math.random() * types.length)];
+        //     const prices = ['R$ 450.000', 'R$ 680.000', 'R$ 1.100.000', 'R$ 750.000', 'R$ 920.000'];
+        //     const locations = ['Moema, São Paulo/SP', 'Pinheiros, São Paulo/SP', 'Itaim Bibi, São Paulo/SP', 'Brooklin, São Paulo/SP', 'Vila Olímpia, São Paulo/SP'];
+            
+        //     properties.push({
+        //         id: i,
+        //         type: type,
+        //         title: `${type === 'casa' ? 'Casa' : type === 'apartamento' ? 'Apartamento' : 'Terreno'} ${i}`,
+        //         location: locations[Math.floor(Math.random() * locations.length)],
+        //         price: prices[Math.floor(Math.random() * prices.length)],
+        //         bedrooms: type === 'terreno' ? 0 : Math.floor(Math.random() * 4) + 1,
+        //         bathrooms: type === 'terreno' ? 0 : Math.floor(Math.random() * 3) + 1,
+        //         area: Math.floor(Math.random() * 300) + 50,
+        //         images: [
+        //             `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23${Math.floor(Math.random()*16777215).toString(16)}" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="20">${type.charAt(0).toUpperCase() + type.slice(1)} ${i} - Foto 1</text></svg>`,
+        //             `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23${Math.floor(Math.random()*16777215).toString(16)}" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="20">${type.charAt(0).toUpperCase() + type.slice(1)} ${i} - Foto 2</text></svg>`,
+        //             `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23${Math.floor(Math.random()*16777215).toString(16)}" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="20">${type.charAt(0).toUpperCase() + type.slice(1)} ${i} - Foto 3</text></svg>`
+        //         ]
+        //     });
+        // }
+
+        // Gallery variables
+        let currentGallery = [];
+        let currentImageIndex = 0;
+
+        // Render properties
+        function renderProperties(propertiesToRender = properties) {
+            const grid = document.getElementById('propertiesGrid');
+            grid.innerHTML = '';
+
+            propertiesToRender.forEach(property => {
+                const card = document.createElement('div');
+                card.className = 'property-card';
+                card.innerHTML = `
+                    <div class="property-image">
+                        <div class="property-badge">${property.type === 'casa' ? 'Casa' : property.type === 'apartamento' ? 'Apartamento' : 'Terreno'}</div>
+                    </div>
+                    <div class="property-content">
+                        <div class="property-price">${property.price}</div>
+                        <div class="property-title">${property.title}</div>
+                        <div class="property-location">📍 ${property.location}</div>
+                        <div class="property-features">
+                            ${property.bedrooms > 0 ? `<div class="feature">🛏️ ${property.bedrooms} quartos</div>` : ''}
+                            ${property.bathrooms > 0 ? `<div class="feature">🚿 ${property.bathrooms} banheiros</div>` : ''}
+                            <div class="feature">📐 ${property.area}m²</div>
+                        </div>
+                        <div class="property-actions">
+                            <button class="btn btn-primary btn-small" onclick="event.stopPropagation(); openGallery(${property.id})">Ver Fotos</button>
+                            <a href="https://wa.me/5511998765432?text=Olá! Tenho interesse no imóvel: ${property.title}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-small" onclick="event.stopPropagation()">WhatsApp</a>
+                        </div>
+                    </div>
+                `;
+                
+                // Add click event to the entire card
+                card.addEventListener('click', () => {
+                    openGallery(property.id);
+                });
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filter = btn.dataset.filter;
+                const filtered = filter === 'all' ? properties : properties.filter(p => p.type === filter);
+                renderProperties(filtered);
+            });
+        });
+
+        // Gallery functions
+        function openGallery(propertyId) {
+            const property = properties.find(p => p.id === propertyId);
+            if (property) {
+                currentGallery = property.images;
+                currentImageIndex = 0;
+                updateGalleryImage();
+                document.getElementById('galleryModal').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function updateGalleryImage() {
+            const img = document.getElementById('galleryImage');
+            const counter = document.getElementById('galleryCounter');
+            
+            img.src = currentGallery[currentImageIndex];
+            counter.textContent = `${currentImageIndex + 1} / ${currentGallery.length}`;
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % currentGallery.length;
+            updateGalleryImage();
+        }
+
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + currentGallery.length) % currentGallery.length;
+            updateGalleryImage();
+        }
+
+        function closeGallery() {
+            document.getElementById('galleryModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Gallery event listeners
+        document.getElementById('galleryNext').addEventListener('click', nextImage);
+        document.getElementById('galleryPrev').addEventListener('click', prevImage);
+        document.getElementById('galleryClose').addEventListener('click', closeGallery);
+
+        // Close gallery on background click
+        document.getElementById('galleryModal').addEventListener('click', (e) => {
+            if (e.target.id === 'galleryModal') {
+                closeGallery();
+            }
+        });
+
+        // Keyboard navigation for gallery
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('galleryModal').style.display === 'block') {
+                if (e.key === 'ArrowRight') nextImage();
+                if (e.key === 'ArrowLeft') prevImage();
+                if (e.key === 'Escape') closeGallery();
+            }
+        });
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const header = document.querySelector('header');
+
+        // Function to update header style based on theme and scroll
+        function updateHeaderStyle() {
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            const isScrolled = window.scrollY > 100;
+            
+            if (isScrolled) {
+                header.style.background = isDark ? 'rgba(45, 55, 72, 0.98)' : 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = isDark ? '0 4px 20px rgba(0, 0, 0, 0.3)' : '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = isDark ? 'rgba(45, 55, 72, 0.95)' : 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        }
+
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        body.setAttribute('data-theme', currentTheme);
+        themeToggle.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+        updateHeaderStyle(); // Apply initial header style
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            updateHeaderStyle(); // Update header immediately after theme change
+        });
+
+        // Menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+
+        // Form handling
+        const cadastroForm = document.getElementById('cadastroForm');
+        const successMessage = document.getElementById('successMessage');
+
+        cadastroForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(cadastroForm);
+            const data = {
+                nome: formData.get('nome'),
+                email: formData.get('email'),
+                telefone: formData.get('telefone'),
+                interesse: formData.get('interesse'),
+                orcamento: formData.get('orcamento'),
+                mensagem: formData.get('mensagem')
+            };
+
+            // Simulate form submission
+            setTimeout(() => {
+                successMessage.style.display = 'block';
+                cadastroForm.reset();
+                
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 5000);
+            }, 500);
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', updateHeaderStyle);
+
+        // Initialize
+        renderProperties();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98c1ab7790676295',t:'MTc2MDA1MjY2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
