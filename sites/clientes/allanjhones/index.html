@@ -258,7 +258,7 @@
       async function carregarEmpreendimentos() {
         try {
           const querySnapshot = await getDocs(collection(db, "empreendimentos"));
-          const lista = document.getElementById("lista");
+         
   
           querySnapshot.forEach((doc) => {
             const e = doc.data();
@@ -271,7 +271,7 @@
                // bedrooms: e.bedrooms,
                // bathrooms: e.bathrooms,
                // area: e.area,
-                //images: e.images || []
+                images: e.images || []
             });
             
             renderProperties();
