@@ -110,9 +110,9 @@
         
         <div class="filter-buttons">
             <button class="filter-btn active" data-filter="all">Todos</button>
-            <button class="filter-btn" data-filter="casa">Casas</button>
-            <button class="filter-btn" data-filter="apartamento">Apartamentos</button>
-            <button class="filter-btn" data-filter="terreno">Terrenos</button>
+            <button class="filter-btn" data-filter="ceilandia">Ceilândia</button>
+            <button class="filter-btn" data-filter="aguasclaras">Águas Claras</button>
+            <button class="filter-btn" data-filter="sobradinho">Sobradinho</button>
         </div>
 
         <div class="properties-grid" id="propertiesGrid">
@@ -266,11 +266,12 @@
                 id: doc.id,
                 title: e.title,
                 location: e.location,
-               // price: e.price,
-                //type: e.type,
-               // bedrooms: e.bedrooms,
-               // bathrooms: e.bathrooms,
-               // area: e.area,
+                nome: e.nome,
+                type: e.type,
+                capa: e.capa,
+                bedrooms: e.bedrooms,
+                bathrooms: e.bathrooms,
+                area: e.area,
                 images: e.images || []
             });
             
@@ -298,20 +299,22 @@
                 card.className = 'property-card';
                 card.innerHTML = `
                     <div class="property-image">
+                        <img src="${property.capa || 'imagens/placeholder.jpg'}" alt="${property.title}">
+
                         <div class="property-badge">${property.type === 'ceilandia' ? 'Ceilândia' : property.type === 'aguasclaras' ? 'Águas Claras' : 'Sobradinho'}</div>
                     </div>
                     <div class="property-content">
-                        <div class="property-price">${property.price}</div>
+                        <div class="property-price">${property.nome}</div>
                         <div class="property-title">${property.title}</div>
                         <div class="property-location">📍 ${property.location}</div>
                         <div class="property-features">
-                            ${property.bedrooms > 0 ? `<div class="feature">🛏️ ${property.bedrooms} quartos</div>` : ''}
-                            ${property.bathrooms > 0 ? `<div class="feature">🚿 ${property.bathrooms} banheiros</div>` : ''}
+                           <div class="feature">🛏️ ${property.bedrooms}</div>
+                            <div class="feature">🚿 ${property.bathrooms}</div>
                             <div class="feature">📐 ${property.area}m²</div>
                         </div>
                         <div class="property-actions">
-                            <button class="btn btn-primary btn-small" onclick="event.stopPropagation(); openGallery(${property.id})">Ver Fotos</button>
-                            <a href="https://wa.me/5511998765432?text=Olá! Tenho interesse no imóvel: ${property.title}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-small" onclick="event.stopPropagation()">WhatsApp</a>
+                            <button class="btn btn-primary btn-small" onclick=""(event).stopPropagation(); openGallery(${property.id});"">Ver Fotos</button>
+                            <a href="https://wa.me/5561?text=Olá! Tenho interesse no imóvel: ${property.title}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-small" onclick="event.stopPropagation()">WhatsApp</a>
                         </div>
                     </div>
                 `;
