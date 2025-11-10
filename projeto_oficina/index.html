@@ -672,11 +672,11 @@
     <h1 id="systemTitle">Sistema de Gestão de Oficina</h1>
     <p class="subtitle" id="companyName">Auto Mecânica Premium</p>
    </header>
-   <nav><button class="nav-btn active" onclick="showSection('clientes')">👥 Clientes</button> <button class="nav-btn" onclick="showSection('servicos')">🔧 Serviços</button> <button class="nav-btn" onclick="showSection('ordens')">📋 Ordens de Serviço</button> <button class="nav-btn" onclick="showSection('contasPagar')">💰 Contas a Pagar</button> <button class="nav-btn" onclick="showSection('contasReceber')">💵 Contas a Receber</button> <button class="nav-btn" onclick="showSection('relatorios')">📊 Relatórios</button>
+   <nav><button class="nav-btn active" onclick="showSection('clientes', event)">👥 Clientes</button> <button class="nav-btn" onclick="showSection('servicos', event)">🔧 Serviços</button> <button class="nav-btn" onclick="showSection('ordens', event)">📋 Ordens de Serviço</button> <button class="nav-btn" onclick="showSection('contasPagar', event)">💰 Contas a Pagar</button> <button class="nav-btn" onclick="showSection('contasReceber', event)">💵 Contas a Receber</button> <button class="nav-btn" onclick="showSection('relatorios', event)">📊 Relatórios</button>
    </nav>
    <div id="messageContainer"></div><!-- Seção Clientes -->
    <section id="clientes" class="content-section active">
-    <div class="tabs"><button class="tab active" onclick="showTab('cadastroCliente')">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaCliente')">Pesquisar</button>
+    <div class="tabs"><button class="tab active" onclick="showTab('cadastroCliente', event)">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaCliente', event)">Pesquisar</button>
     </div>
     <div id="cadastroCliente" class="tab-content active">
      <h2>Cadastro de Clientes</h2>
@@ -749,7 +749,7 @@
     </div>
    </section><!-- Seção Serviços -->
    <section id="servicos" class="content-section">
-    <div class="tabs"><button class="tab active" onclick="showTab('cadastroServico')">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaServico')">Pesquisar</button>
+    <div class="tabs"><button class="tab active" onclick="showTab('cadastroServico', event)">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaServico', event)">Pesquisar</button>
     </div>
     <div id="cadastroServico" class="tab-content active">
      <h2>Cadastro de Serviços</h2>
@@ -770,7 +770,7 @@
     </div>
    </section><!-- Seção Ordens de Serviço -->
    <section id="ordens" class="content-section">
-    <div class="tabs"><button class="tab active" onclick="showTab('cadastroOS')">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaOS')">Pesquisar</button>
+    <div class="tabs"><button class="tab active" onclick="showTab('cadastroOS', event)">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaOS', event)">Pesquisar</button>
     </div>
     <div id="cadastroOS" class="tab-content active">
      <h2>Nova Ordem de Serviço</h2>
@@ -853,7 +853,7 @@
     </div>
    </section><!-- Seção Contas a Pagar -->
    <section id="contasPagar" class="content-section">
-    <div class="tabs"><button class="tab active" onclick="showTab('cadastroContaPagar')">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaContaPagar')">Pesquisar</button>
+    <div class="tabs"><button class="tab active" onclick="showTab('cadastroContaPagar', event)">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaContaPagar', event)">Pesquisar</button>
     </div>
     <div id="cadastroContaPagar" class="tab-content active">
      <h2>Cadastro de Contas a Pagar</h2>
@@ -903,7 +903,7 @@
     </div>
    </section><!-- Seção Contas a Receber -->
    <section id="contasReceber" class="content-section">
-    <div class="tabs"><button class="tab active" onclick="showTab('cadastroContaReceber')">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaContaReceber')">Pesquisar</button>
+    <div class="tabs"><button class="tab active" onclick="showTab('cadastroContaReceber', event)">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaContaReceber', event)">Pesquisar</button>
     </div>
     <div id="cadastroContaReceber" class="tab-content active">
      <h2>Cadastro de Contas a Receber</h2>
@@ -1061,7 +1061,7 @@
             }
         }
 
-        function showSection(sectionId) {
+        function showSection(sectionId, event) {
             const sections = document.querySelectorAll('.content-section');
             sections.forEach(section => section.classList.remove('active'));
             
@@ -1069,23 +1069,38 @@
             buttons.forEach(btn => btn.classList.remove('active'));
             
             document.getElementById(sectionId).classList.add('active');
-            event.target.classList.add('active');
+            
+            // Ativar o botão clicado
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
 
             if (sectionId === 'relatorios') {
                 atualizarEstatisticas();
             }
         }
 
-        function showTab(tabId) {
-            const section = event.target.closest('.content-section');
+        function showTab(tabId, event) {
+            // Pegar o elemento clicado
+            const clickedElement = event ? event.target : null;
+            
+            if (!clickedElement) return;
+            
+            const section = clickedElement.closest('.content-section');
+            if (!section) return;
+            
             const tabs = section.querySelectorAll('.tab');
             const contents = section.querySelectorAll('.tab-content');
             
             tabs.forEach(tab => tab.classList.remove('active'));
             contents.forEach(content => content.classList.remove('active'));
             
-            event.target.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
+            clickedElement.classList.add('active');
+            
+            const targetContent = document.getElementById(tabId);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
         }
 
         function showMessage(message, type = 'success') {
@@ -3101,5 +3116,5 @@
             loadFromLocalStorage();
         }
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99c1ed8744aff390',t:'MTc2MjczOTcyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99c1f642c552645d',t:'MTc2Mjc0MDA4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
