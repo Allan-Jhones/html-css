@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema de Gestão de Oficina</title>
-  <script src="/_sdk/data_sdk.js"></script>
-  <script src="/_sdk/element_sdk.js"></script>
   <style>
         * {
             margin: 0;
@@ -155,6 +153,7 @@
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
+            background: linear-gradient(135deg, #1e88e5 0%, #00acc1 100%);
         }
 
         .nav-btn:hover {
@@ -221,7 +220,7 @@
         input, select, textarea {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid;
+            border: 2px solid #3a3a5e;
             border-radius: 10px;
             font-size: 14px;
             font-family: Arial, sans-serif;
@@ -252,6 +251,7 @@
             margin-right: 10px;
             margin-top: 10px;
             box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
+            background: linear-gradient(135deg, #1e88e5 0%, #00acc1 100%);
         }
 
         .btn:hover {
@@ -266,6 +266,7 @@
         }
 
         .btn-danger {
+            background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
             box-shadow: 0 4px 15px rgba(229, 57, 53, 0.3);
         }
 
@@ -274,6 +275,7 @@
         }
 
         .btn-secondary {
+            background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
             color: white;
             box-shadow: 0 4px 15px rgba(67, 160, 71, 0.3);
         }
@@ -375,6 +377,7 @@
             text-transform: uppercase;
             font-size: 13px;
             letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #1e88e5 0%, #00acc1 100%);
         }
 
         tr:hover {
@@ -422,7 +425,7 @@
             padding: 30px;
             border-radius: 15px;
             text-align: center;
-            border: 2px solid;
+            border: 2px solid rgba(30, 136, 229, 0.4);
             transition: all 0.3s ease;
         }
 
@@ -574,6 +577,7 @@
             font-weight: 600;
             border-radius: 8px 8px 0 0;
             transition: all 0.3s ease;
+            color: #e0e0e0;
         }
 
         .tab:hover {
@@ -708,16 +712,11 @@
             .tabs {
                 flex-wrap: wrap;
             }
-
-            .theme-toggle {
-                position: static;
-                display: block;
-                margin: 10px auto 0;
-                width: fit-content;
-            }
         }
     </style>
   <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
   <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
  </head>
  <body class="dark-theme">
@@ -948,7 +947,7 @@
       <div class="form-row">
        <div class="form-group"><label for="searchContaPagar">Número do Documento ou Nome da Empresa</label> <input type="text" id="searchContaPagar" placeholder="Digite para buscar...">
        </div>
-       <div class="form-group"><label for="searchDataVencPagar">Data de Vencimento</label> <input type="date" id="searchDataVencPagar">
+       <div class="form-group"><label for="dataVencimentoBuscaPagar">Data de Vencimento</label> <input type="date" id="dataVencimentoBuscaPagar">
        </div>
        <div class="form-group"><label for="filterStatusPagar">Status</label> <select id="filterStatusPagar"> <option value="">Todos</option> <option value="aberto">Em Aberto</option> <option value="pago">Pago</option> </select>
        </div>
@@ -1018,23 +1017,35 @@
    <div id="editPanelContent"></div>
   </div>
   <script>
+        // Sistema de armazenamento usando localStorage
         let allData = [];
         let editingId = null;
         let currentOSItems = [];
         let osCounter = 1;
         let selectedClienteOS = null;
 
-        const defaultConfig = {
-            system_title: "Sistema de Gestão de Oficina",
-            company_name: "Auto Mecânica Premium",
-            background_color: "#1e88e5",
-            surface_color: "#ffffff",
-            text_color: "#2c3e50",
-            primary_action_color: "#00acc1",
-            secondary_action_color: "#43a047",
-            font_family: "Arial",
-            font_size: 16
-        };
+        // Funções de armazenamento local
+        function saveToLocalStorage() {
+            localStorage.setItem('oficinaData', JSON.stringify(allData));
+        }
+
+        function loadFromLocalStorage() {
+            const data = localStorage.getItem('oficinaData');
+            if (data) {
+                allData = JSON.parse(data);
+                const maxOS = Math.max(0, ...allData
+                    .filter(item => item.type === 'os' && item.numeroOS)
+                    .map(os => parseInt(os.numeroOS.replace('OS-', '')) || 0)
+                );
+                osCounter = maxOS + 1;
+                atualizarTodasListas();
+                atualizarEstatisticas();
+            }
+        }
+
+        function generateId() {
+            return 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
 
         // Máscaras de entrada
         function maskCPF(input) {
@@ -1101,126 +1112,6 @@
                 input.value = value + ' km';
                 input.setSelectionRange(value.length, value.length);
             }
-        }
-
-        // Carregar tema salvo
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            document.body.classList.add(savedTheme + '-theme');
-        });
-
-        const dataHandler = {
-            onDataChanged(data) {
-                allData = data;
-                atualizarTodasListas();
-                atualizarEstatisticas();
-                
-                const maxOS = Math.max(0, ...data
-                    .filter(item => item.type === 'os' && item.numeroOS)
-                    .map(os => parseInt(os.numeroOS.replace('OS-', '')) || 0)
-                );
-                osCounter = maxOS + 1;
-            }
-        };
-
-        async function init() {
-            const initResult = await window.dataSdk.init(dataHandler);
-            if (!initResult.isOk) {
-                showMessage('Erro ao inicializar o sistema', 'error');
-            }
-        }
-
-        async function onConfigChange(config) {
-            const systemTitle = document.getElementById('systemTitle');
-            const companyName = document.getElementById('companyName');
-            
-            if (systemTitle) {
-                systemTitle.textContent = config.system_title || defaultConfig.system_title;
-            }
-            if (companyName) {
-                companyName.textContent = config.company_name || defaultConfig.company_name;
-            }
-
-            const customFont = config.font_family || defaultConfig.font_family;
-            const baseSize = config.font_size || defaultConfig.font_size;
-            const baseFontStack = 'Arial, "Times New Roman", serif';
-
-            document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
-            document.body.style.fontSize = `${baseSize}px`;
-
-            const h1Elements = document.querySelectorAll('h1');
-            h1Elements.forEach(el => el.style.fontSize = `${baseSize * 2.625}px`);
-
-            const h2Elements = document.querySelectorAll('h2');
-            h2Elements.forEach(el => el.style.fontSize = `${baseSize * 2}px`);
-
-            const h3Elements = document.querySelectorAll('h3');
-            h3Elements.forEach(el => el.style.fontSize = `${baseSize * 1.25}px`);
-        }
-
-        if (window.elementSdk) {
-            window.elementSdk.init({
-                defaultConfig,
-                onConfigChange,
-                mapToCapabilities: (config) => ({
-                    recolorables: [
-                        {
-                            get: () => config.background_color || defaultConfig.background_color,
-                            set: (value) => {
-                                config.background_color = value;
-                                window.elementSdk.setConfig({ background_color: value });
-                            }
-                        },
-                        {
-                            get: () => config.surface_color || defaultConfig.surface_color,
-                            set: (value) => {
-                                config.surface_color = value;
-                                window.elementSdk.setConfig({ surface_color: value });
-                            }
-                        },
-                        {
-                            get: () => config.text_color || defaultConfig.text_color,
-                            set: (value) => {
-                                config.text_color = value;
-                                window.elementSdk.setConfig({ text_color: value });
-                            }
-                        },
-                        {
-                            get: () => config.primary_action_color || defaultConfig.primary_action_color,
-                            set: (value) => {
-                                config.primary_action_color = value;
-                                window.elementSdk.setConfig({ primary_action_color: value });
-                            }
-                        },
-                        {
-                            get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
-                            set: (value) => {
-                                config.secondary_action_color = value;
-                                window.elementSdk.setConfig({ secondary_action_color: value });
-                            }
-                        }
-                    ],
-                    borderables: [],
-                    fontEditable: {
-                        get: () => config.font_family || defaultConfig.font_family,
-                        set: (value) => {
-                            config.font_family = value;
-                            window.elementSdk.setConfig({ font_family: value });
-                        }
-                    },
-                    fontSizeable: {
-                        get: () => config.font_size || defaultConfig.font_size,
-                        set: (value) => {
-                            config.font_size = value;
-                            window.elementSdk.setConfig({ font_size: value });
-                        }
-                    }
-                }),
-                mapToEditPanelValues: (config) => new Map([
-                    ["system_title", config.system_title || defaultConfig.system_title],
-                    ["company_name", config.company_name || defaultConfig.company_name]
-                ])
-            });
         }
 
         function showSection(sectionId) {
@@ -1291,11 +1182,13 @@
             }
         }
 
-        async function salvarCliente(event) {
+        function salvarCliente(event) {
             event.preventDefault();
+            
             const tipo = document.querySelector('input[name="tipoCliente"]:checked').value;
             
             const cliente = {
+                id: editingId || generateId(),
                 type: 'cliente',
                 tipoCliente: tipo,
                 createdAt: new Date().toISOString()
@@ -1320,45 +1213,21 @@
                 cliente.cep = document.getElementById('cepEmpresa').value;
             }
 
-            const btn = document.getElementById('btnSalvarCliente');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loading"></span> Salvando...';
-
             if (editingId) {
-                const recordToUpdate = allData.find(r => r.__backendId === editingId);
-                if (recordToUpdate) {
-                    const updatedRecord = { ...recordToUpdate, ...cliente };
-                    const result = await window.dataSdk.update(updatedRecord);
-                    
-                    if (result.isOk) {
-                        showMessage('✅ Cliente atualizado com sucesso!', 'success');
-                        limparFormCliente();
-                        closeEditPanel();
-                    } else {
-                        showMessage('❌ Erro ao atualizar cliente', 'error');
-                    }
+                const index = allData.findIndex(r => r.id === editingId);
+                if (index !== -1) {
+                    allData[index] = cliente;
+                    showMessage('✅ Cliente atualizado com sucesso!', 'success');
                 }
             } else {
-                if (allData.length >= 999) {
-                    showMessage('⚠️ Limite de 999 registros atingido. Exclua alguns registros antes de adicionar novos.', 'error');
-                    btn.disabled = false;
-                    btn.textContent = '💾 Cadastrar Cliente';
-                    return;
-                }
-
-                const result = await window.dataSdk.create(cliente);
-                
-                if (result.isOk) {
-                    showMessage('✅ Cliente cadastrado com sucesso!', 'success');
-                    limparFormCliente();
-                } else {
-                    showMessage('❌ Erro ao cadastrar cliente', 'error');
-                }
+                allData.push(cliente);
+                showMessage('✅ Cliente cadastrado com sucesso!', 'success');
             }
 
-            btn.disabled = false;
-            btn.textContent = editingId ? '💾 Atualizar Cliente' : '💾 Cadastrar Cliente';
-            editingId = null;
+            saveToLocalStorage();
+            limparFormCliente();
+            atualizarTodasListas();
+            closeEditPanel();
         }
 
         function limparFormCliente() {
@@ -1370,7 +1239,7 @@
         }
 
         function editarCliente(id) {
-            const cliente = allData.find(c => c.__backendId === id);
+            const cliente = allData.find(c => c.id === id);
             if (!cliente) {
                 showMessage('❌ Cliente não encontrado', 'error');
                 return;
@@ -1451,40 +1320,35 @@
             `;
         }
 
-        async function salvarClienteEdit(event, id) {
+        function salvarClienteEdit(event, id) {
             event.preventDefault();
-            const cliente = allData.find(c => c.__backendId === id);
+            const cliente = allData.find(c => c.id === id);
             if (!cliente) return;
 
-            const updatedCliente = { ...cliente };
-            updatedCliente.nome = document.getElementById('editNome').value.toUpperCase();
-            updatedCliente.telefone = document.getElementById('editTelefone').value;
-            updatedCliente.cep = document.getElementById('editCep').value;
-            updatedCliente.endereco = document.getElementById('editEndereco').value.toUpperCase();
+            cliente.nome = document.getElementById('editNome').value.toUpperCase();
+            cliente.telefone = document.getElementById('editTelefone').value;
+            cliente.cep = document.getElementById('editCep').value;
+            cliente.endereco = document.getElementById('editEndereco').value.toUpperCase();
 
             if (cliente.tipoCliente === 'fisica') {
-                updatedCliente.cpf = document.getElementById('editCpf').value;
+                cliente.cpf = document.getElementById('editCpf').value;
             } else {
-                updatedCliente.cnpj = document.getElementById('editCnpj').value;
-                updatedCliente.razaoSocial = document.getElementById('editRazaoSocial').value.toUpperCase();
-                updatedCliente.nomeFantasia = document.getElementById('editNomeFantasia').value.toUpperCase();
-                updatedCliente.inscricaoEstadual = document.getElementById('editInscricaoEstadual').value.toUpperCase();
-                updatedCliente.inscricaoMunicipal = document.getElementById('editInscricaoMunicipal').value.toUpperCase();
-                updatedCliente.email = document.getElementById('editEmail').value.toUpperCase();
+                cliente.cnpj = document.getElementById('editCnpj').value;
+                cliente.razaoSocial = document.getElementById('editRazaoSocial').value.toUpperCase();
+                cliente.nomeFantasia = document.getElementById('editNomeFantasia').value.toUpperCase();
+                cliente.inscricaoEstadual = document.getElementById('editInscricaoEstadual').value.toUpperCase();
+                cliente.inscricaoMunicipal = document.getElementById('editInscricaoMunicipal').value.toUpperCase();
+                cliente.email = document.getElementById('editEmail').value.toUpperCase();
             }
 
-            const result = await window.dataSdk.update(updatedCliente);
-            
-            if (result.isOk) {
-                showMessage('✅ Cliente atualizado com sucesso!', 'success');
-                closeEditPanel();
-            } else {
-                showMessage('❌ Erro ao atualizar cliente', 'error');
-            }
+            saveToLocalStorage();
+            showMessage('✅ Cliente atualizado com sucesso!', 'success');
+            atualizarTodasListas();
+            closeEditPanel();
         }
 
-        async function excluirCliente(id) {
-            const cliente = allData.find(c => c.__backendId === id);
+        function excluirCliente(id) {
+            const cliente = allData.find(c => c.id === id);
             if (!cliente) return;
 
             const confirmDiv = document.createElement('div');
@@ -1499,17 +1363,11 @@
             document.getElementById('messageContainer').appendChild(confirmDiv);
         }
 
-        async function confirmarExclusaoCliente(id) {
-            const cliente = allData.find(c => c.__backendId === id);
-            if (!cliente) return;
-
-            const result = await window.dataSdk.delete(cliente);
-            
-            if (result.isOk) {
-                showMessage('✅ Cliente excluído com sucesso!', 'success');
-            } else {
-                showMessage('❌ Erro ao excluir cliente', 'error');
-            }
+        function confirmarExclusaoCliente(id) {
+            allData = allData.filter(c => c.id !== id);
+            saveToLocalStorage();
+            showMessage('✅ Cliente excluído com sucesso!', 'success');
+            atualizarTodasListas();
         }
 
         function filtrarClientes() {
@@ -1563,8 +1421,8 @@
                         <td>${cliente.telefone || '-'}</td>
                         <td>${cliente.tipoCliente === 'fisica' ? 'Pessoa Física' : 'Pessoa Jurídica'}</td>
                         <td class="action-buttons">
-                            <button class="btn btn-secondary btn-small" onclick="editarCliente('${cliente.__backendId}')">✏️ Editar</button>
-                            <button class="btn btn-danger btn-small" onclick="excluirCliente('${cliente.__backendId}')">🗑️ Excluir</button>
+                            <button class="btn btn-secondary btn-small" onclick="editarCliente('${cliente.id}')">✏️ Editar</button>
+                            <button class="btn btn-danger btn-small" onclick="excluirCliente('${cliente.id}')">🗑️ Excluir</button>
                         </td>
                     </tr>
                 `;
@@ -1574,55 +1432,32 @@
             container.innerHTML = html;
         }
 
-        async function salvarServico(event) {
+        function salvarServico(event) {
             event.preventDefault();
             
             const servico = {
+                id: editingId || generateId(),
                 type: 'servico',
                 descricao: document.getElementById('descricaoServico').value.toUpperCase(),
                 valor: parseFloat(document.getElementById('valorServico').value),
                 createdAt: new Date().toISOString()
             };
 
-            const btn = document.getElementById('btnSalvarServico');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loading"></span> Salvando...';
-
             if (editingId) {
-                const recordToUpdate = allData.find(r => r.__backendId === editingId);
-                if (recordToUpdate) {
-                    const updatedRecord = { ...recordToUpdate, ...servico };
-                    const result = await window.dataSdk.update(updatedRecord);
-                    
-                    if (result.isOk) {
-                        showMessage('✅ Serviço atualizado com sucesso!', 'success');
-                        limparFormServico();
-                        closeEditPanel();
-                    } else {
-                        showMessage('❌ Erro ao atualizar serviço', 'error');
-                    }
+                const index = allData.findIndex(r => r.id === editingId);
+                if (index !== -1) {
+                    allData[index] = servico;
+                    showMessage('✅ Serviço atualizado com sucesso!', 'success');
                 }
             } else {
-                if (allData.length >= 999) {
-                    showMessage('⚠️ Limite de 999 registros atingido. Exclua alguns registros antes de adicionar novos.', 'error');
-                    btn.disabled = false;
-                    btn.textContent = '💾 Cadastrar Serviço';
-                    return;
-                }
-
-                const result = await window.dataSdk.create(servico);
-                
-                if (result.isOk) {
-                    showMessage('✅ Serviço cadastrado com sucesso!', 'success');
-                    limparFormServico();
-                } else {
-                    showMessage('❌ Erro ao cadastrar serviço', 'error');
-                }
+                allData.push(servico);
+                showMessage('✅ Serviço cadastrado com sucesso!', 'success');
             }
 
-            btn.disabled = false;
-            btn.textContent = editingId ? '💾 Atualizar Serviço' : '💾 Cadastrar Serviço';
-            editingId = null;
+            saveToLocalStorage();
+            limparFormServico();
+            atualizarTodasListas();
+            closeEditPanel();
         }
 
         function limparFormServico() {
@@ -1632,7 +1467,7 @@
         }
 
         function editarServico(id) {
-            const servico = allData.find(s => s.__backendId === id);
+            const servico = allData.find(s => s.id === id);
             if (!servico) {
                 showMessage('❌ Serviço não encontrado', 'error');
                 return;
@@ -1658,29 +1493,22 @@
             `;
         }
 
-        async function salvarServicoEdit(event, id) {
+        function salvarServicoEdit(event, id) {
             event.preventDefault();
-            const servico = allData.find(s => s.__backendId === id);
+            const servico = allData.find(s => s.id === id);
             if (!servico) return;
 
-            const updatedServico = {
-                ...servico,
-                descricao: document.getElementById('editDescricao').value.toUpperCase(),
-                valor: parseFloat(document.getElementById('editValor').value)
-            };
+            servico.descricao = document.getElementById('editDescricao').value.toUpperCase();
+            servico.valor = parseFloat(document.getElementById('editValor').value);
 
-            const result = await window.dataSdk.update(updatedServico);
-            
-            if (result.isOk) {
-                showMessage('✅ Serviço atualizado com sucesso!', 'success');
-                closeEditPanel();
-            } else {
-                showMessage('❌ Erro ao atualizar serviço', 'error');
-            }
+            saveToLocalStorage();
+            showMessage('✅ Serviço atualizado com sucesso!', 'success');
+            atualizarTodasListas();
+            closeEditPanel();
         }
 
-        async function excluirServico(id) {
-            const servico = allData.find(s => s.__backendId === id);
+        function excluirServico(id) {
+            const servico = allData.find(s => s.id === id);
             if (!servico) return;
 
             const confirmDiv = document.createElement('div');
@@ -1695,17 +1523,11 @@
             document.getElementById('messageContainer').appendChild(confirmDiv);
         }
 
-        async function confirmarExclusaoServico(id) {
-            const servico = allData.find(s => s.__backendId === id);
-            if (!servico) return;
-
-            const result = await window.dataSdk.delete(servico);
-            
-            if (result.isOk) {
-                showMessage('✅ Serviço excluído com sucesso!', 'success');
-            } else {
-                showMessage('❌ Erro ao excluir serviço', 'error');
-            }
+        function confirmarExclusaoServico(id) {
+            allData = allData.filter(s => s.id !== id);
+            saveToLocalStorage();
+            showMessage('✅ Serviço excluído com sucesso!', 'success');
+            atualizarTodasListas();
         }
 
         function filtrarServicos() {
@@ -1740,8 +1562,8 @@
                         <td>${servico.descricao || '-'}</td>
                         <td>R$ ${(servico.valor || 0).toFixed(2)}</td>
                         <td class="action-buttons">
-                            <button class="btn btn-secondary btn-small" onclick="editarServico('${servico.__backendId}')">✏️ Editar</button>
-                            <button class="btn btn-danger btn-small" onclick="excluirServico('${servico.__backendId}')">🗑️ Excluir</button>
+                            <button class="btn btn-secondary btn-small" onclick="editarServico('${servico.id}')">✏️ Editar</button>
+                            <button class="btn btn-danger btn-small" onclick="excluirServico('${servico.id}')">🗑️ Excluir</button>
                         </td>
                     </tr>
                 `;
@@ -1777,7 +1599,7 @@
             let html = '';
             clientes.forEach(cliente => {
                 html += `
-                    <div class="search-result-item" onclick="selecionarClienteOS('${cliente.__backendId}')">
+                    <div class="search-result-item" onclick="selecionarClienteOS('${cliente.id}')">
                         <strong>${cliente.nome}</strong><br>
                         <small>${cliente.cpf || cliente.cnpj || 'Sem documento'}</small>
                         ${cliente.razaoSocial ? `<br><small>Razão Social: ${cliente.razaoSocial}</small>` : ''}
@@ -1790,7 +1612,7 @@
         }
 
         function selecionarClienteOS(id) {
-            const cliente = allData.find(c => c.__backendId === id);
+            const cliente = allData.find(c => c.id === id);
             if (!cliente) return;
 
             selectedClienteOS = cliente;
@@ -1832,7 +1654,7 @@
             let html = '';
             servicos.forEach(servico => {
                 html += `
-                    <div class="search-result-item" onclick="adicionarServicoOS('${servico.__backendId}')">
+                    <div class="search-result-item" onclick="adicionarServicoOS('${servico.id}')">
                         <strong>${servico.descricao}</strong><br>
                         <small>R$ ${(servico.valor || 0).toFixed(2)}</small>
                     </div>
@@ -1844,7 +1666,7 @@
         }
 
         function adicionarServicoOS(id) {
-            const servico = allData.find(s => s.__backendId === id);
+            const servico = allData.find(s => s.id === id);
             if (!servico) return;
 
             const existente = currentOSItems.find(item => item.id === id);
@@ -1938,7 +1760,7 @@
             atualizarItensOS();
         }
 
-        async function salvarOS(event) {
+        function salvarOS(event) {
             event.preventDefault();
 
             if (!selectedClienteOS) {
@@ -1954,11 +1776,12 @@
             const total = currentOSItems.reduce((sum, item) => sum + (item.valor * item.quantidade), 0);
 
             const os = {
+                id: editingId || generateId(),
                 type: 'os',
                 numeroOS: `OS-${String(osCounter).padStart(6, '0')}`,
                 dataEntrada: new Date().toISOString(),
                 status: 'aberta',
-                clienteId: selectedClienteOS.__backendId,
+                clienteId: selectedClienteOS.id,
                 placa: document.getElementById('placaOS').value.toUpperCase(),
                 marca: document.getElementById('marcaOS').value.toUpperCase(),
                 modelo: document.getElementById('modeloOS').value.toUpperCase(),
@@ -1972,45 +1795,25 @@
                 createdAt: new Date().toISOString()
             };
 
-            const btn = document.getElementById('btnSalvarOS');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loading"></span> Salvando...';
-
-            if (editingId) {
-                const recordToUpdate = allData.find(r => r.__backendId === editingId);
-                if (recordToUpdate) {
-                    const updatedRecord = { ...recordToUpdate, ...os };
-                    const result = await window.dataSdk.update(updatedRecord);
-                    
-                    if (result.isOk) {
-                        showMessage('✅ Ordem de serviço atualizada com sucesso!', 'success');
-                        limparFormOS();
-                        closeEditPanel();
-                    } else {
-                        showMessage('❌ Erro ao atualizar ordem de serviço', 'error');
-                    }
-                }
-            } else {
-                if (allData.length >= 999) {
-                    showMessage('⚠️ Limite de 999 registros atingido. Exclua alguns registros antes de adicionar novos.', 'error');
-                    btn.disabled = false;
-                    btn.textContent = '💾 Criar Ordem de Serviço';
-                    return;
-                }
-
-                const result = await window.dataSdk.create(os);
-                
-                if (result.isOk) {
-                    showMessage(`✅ Ordem de serviço ${os.numeroOS} criada com sucesso!`, 'success');
-                    limparFormOS();
-                } else {
-                    showMessage('❌ Erro ao criar ordem de serviço', 'error');
-                }
+            if (!editingId) {
+                osCounter++;
             }
 
-            btn.disabled = false;
-            btn.textContent = editingId ? '💾 Atualizar OS' : '💾 Criar Ordem de Serviço';
-            editingId = null;
+            if (editingId) {
+                const index = allData.findIndex(r => r.id === editingId);
+                if (index !== -1) {
+                    allData[index] = os;
+                    showMessage('✅ Ordem de serviço atualizada com sucesso!', 'success');
+                }
+            } else {
+                allData.push(os);
+                showMessage(`✅ Ordem de serviço ${os.numeroOS} criada com sucesso!`, 'success');
+            }
+
+            saveToLocalStorage();
+            limparFormOS();
+            atualizarTodasListas();
+            closeEditPanel();
         }
 
         function limparFormOS() {
@@ -2024,7 +1827,7 @@
         }
 
         function editarOS(id) {
-            const os = allData.find(o => o.__backendId === id);
+            const os = allData.find(o => o.id === id);
             if (!os) {
                 showMessage('❌ Ordem de serviço não encontrada', 'error');
                 return;
@@ -2032,7 +1835,7 @@
 
             openEditPanel();
             
-            const cliente = allData.find(c => c.__backendId === os.clienteId);
+            const cliente = allData.find(c => c.id === os.clienteId);
             const clienteNome = cliente ? cliente.nome : 'Cliente não encontrado';
             const clienteCpfCnpj = cliente ? (cliente.cpf || cliente.cnpj || '-') : '-';
 
@@ -2184,35 +1987,28 @@
             renderizarServicosEditOS();
         }
 
-        async function salvarEdicaoOS(event, id) {
+        function salvarEdicaoOS(event, id) {
             event.preventDefault();
-            const os = allData.find(o => o.__backendId === id);
+            const os = allData.find(o => o.id === id);
             if (!os) return;
 
             const totalServicos = window.editServicosOSData.reduce((sum, item) => sum + (item.valor * item.quantidade), 0);
 
-            const updatedOS = {
-                ...os,
-                placa: document.getElementById('editPlaca').value.toUpperCase(),
-                modelo: document.getElementById('editModelo').value.toUpperCase(),
-                quilometragem: document.getElementById('editQuilometragem').value,
-                observacoes: document.getElementById('editObservacoes').value.toUpperCase(),
-                servicos: JSON.stringify(window.editServicosOSData),
-                total: totalServicos
-            };
+            os.placa = document.getElementById('editPlaca').value.toUpperCase();
+            os.modelo = document.getElementById('editModelo').value.toUpperCase();
+            os.quilometragem = document.getElementById('editQuilometragem').value;
+            os.observacoes = document.getElementById('editObservacoes').value.toUpperCase();
+            os.servicos = JSON.stringify(window.editServicosOSData);
+            os.total = totalServicos;
 
-            const result = await window.dataSdk.update(updatedOS);
-            
-            if (result.isOk) {
-                showMessage('✅ Ordem de serviço atualizada com sucesso!', 'success');
-                closeEditPanel();
-            } else {
-                showMessage('❌ Erro ao atualizar ordem de serviço', 'error');
-            }
+            saveToLocalStorage();
+            showMessage('✅ Ordem de serviço atualizada com sucesso!', 'success');
+            atualizarTodasListas();
+            closeEditPanel();
         }
 
-        async function excluirOS(id) {
-            const os = allData.find(o => o.__backendId === id);
+        function excluirOS(id) {
+            const os = allData.find(o => o.id === id);
             if (!os) return;
 
             const confirmDiv = document.createElement('div');
@@ -2227,37 +2023,24 @@
             document.getElementById('messageContainer').appendChild(confirmDiv);
         }
 
-        async function confirmarExclusaoOS(id) {
-            const os = allData.find(o => o.__backendId === id);
-            if (!os) return;
-
-            const result = await window.dataSdk.delete(os);
-            
-            if (result.isOk) {
-                showMessage('✅ Ordem de serviço excluída com sucesso!', 'success');
-            } else {
-                showMessage('❌ Erro ao excluir ordem de serviço', 'error');
-            }
+        function confirmarExclusaoOS(id) {
+            allData = allData.filter(o => o.id !== id);
+            saveToLocalStorage();
+            showMessage('✅ Ordem de serviço excluída com sucesso!', 'success');
+            atualizarTodasListas();
         }
 
-        async function fecharOS(id) {
-            const os = allData.find(o => o.__backendId === id);
+        function fecharOS(id) {
+            const os = allData.find(o => o.id === id);
             if (!os) return;
 
-            const updatedOS = { 
-                ...os, 
-                status: 'fechada',
-                dataSaida: new Date().toISOString()
-            };
+            os.status = 'fechada';
+            os.dataSaida = new Date().toISOString();
             
-            const result = await window.dataSdk.update(updatedOS);
-            
-            if (result.isOk) {
-                showMessage('✅ Ordem de serviço fechada com sucesso!', 'success');
-                closeEditPanel();
-            } else {
-                showMessage('❌ Erro ao fechar ordem de serviço', 'error');
-            }
+            saveToLocalStorage();
+            showMessage('✅ Ordem de serviço fechada com sucesso!', 'success');
+            atualizarTodasListas();
+            closeEditPanel();
         }
 
         function filtrarOS() {
@@ -2280,7 +2063,7 @@
                 const matchPlaca = !searchPlaca || (item.placa && item.placa.toLowerCase().includes(searchPlaca));
                 
                 const matchCpfCnpj = !searchCpfCnpj || (item.clienteId && (() => {
-                    const cliente = allData.find(c => c.__backendId === item.clienteId);
+                    const cliente = allData.find(c => c.id === item.clienteId);
                     return cliente && (
                         (cliente.cpf && cliente.cpf.includes(searchCpfCnpj)) ||
                         (cliente.cnpj && cliente.cnpj.includes(searchCpfCnpj))
@@ -2321,7 +2104,7 @@
             let html = '<table><thead><tr><th>Número</th><th>Cliente</th><th>Veículo</th><th>Data Entrada</th><th>Total</th><th>Status</th><th>Ações</th></tr></thead><tbody>';
             
             ordens.forEach(os => {
-                const cliente = allData.find(c => c.__backendId === os.clienteId);
+                const cliente = allData.find(c => c.id === os.clienteId);
                 const clienteNome = cliente ? cliente.nome : 'Cliente não encontrado';
                 const dataFormatada = new Date(os.dataEntrada).toLocaleDateString('pt-BR');
                 
@@ -2334,8 +2117,9 @@
                         <td><strong>R$ ${(os.total || 0).toFixed(2)}</strong></td>
                         <td><span class="badge badge-${os.status === 'aberta' ? 'open' : 'closed'}">${os.status === 'aberta' ? 'Aberta' : 'Fechada'}</span></td>
                         <td class="action-buttons">
-                            <button class="btn btn-secondary btn-small" onclick="editarOS('${os.__backendId}')">👁️ Ver Detalhes</button>
-                            <button class="btn btn-danger btn-small" onclick="excluirOS('${os.__backendId}')">🗑️ Excluir</button>
+                            <button class="btn btn-secondary btn-small" onclick="gerarPDFOS('${os.id}')">📄 Gerar PDF</button>
+                            <button class="btn btn-secondary btn-small" onclick="editarOS('${os.id}')">👁️ Ver Detalhes</button>
+                            <button class="btn btn-danger btn-small" onclick="excluirOS('${os.id}')">🗑️ Excluir</button>
                         </td>
                     </tr>
                 `;
@@ -2345,10 +2129,11 @@
             container.innerHTML = html;
         }
 
-        async function salvarContaPagar(event) {
+        function salvarContaPagar(event) {
             event.preventDefault();
             
             const conta = {
+                id: editingId || generateId(),
                 type: 'contaPagar',
                 numeroDocumento: document.getElementById('numeroDocPagar').value.toUpperCase(),
                 empresaNome: document.getElementById('empresaNomePagar').value.toUpperCase(),
@@ -2360,45 +2145,21 @@
                 createdAt: new Date().toISOString()
             };
 
-            const btn = document.getElementById('btnSalvarContaPagar');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loading"></span> Salvando...';
-
             if (editingId) {
-                const recordToUpdate = allData.find(r => r.__backendId === editingId);
-                if (recordToUpdate) {
-                    const updatedRecord = { ...recordToUpdate, ...conta };
-                    const result = await window.dataSdk.update(updatedRecord);
-                    
-                    if (result.isOk) {
-                        showMessage('✅ Conta atualizada com sucesso!', 'success');
-                        limparFormContaPagar();
-                        closeEditPanel();
-                    } else {
-                        showMessage('❌ Erro ao atualizar conta', 'error');
-                    }
+                const index = allData.findIndex(r => r.id === editingId);
+                if (index !== -1) {
+                    allData[index] = conta;
+                    showMessage('✅ Conta atualizada com sucesso!', 'success');
                 }
             } else {
-                if (allData.length >= 999) {
-                    showMessage('⚠️ Limite de 999 registros atingido. Exclua alguns registros antes de adicionar novos.', 'error');
-                    btn.disabled = false;
-                    btn.textContent = '💾 Cadastrar Conta';
-                    return;
-                }
-
-                const result = await window.dataSdk.create(conta);
-                
-                if (result.isOk) {
-                    showMessage('✅ Conta cadastrada com sucesso!', 'success');
-                    limparFormContaPagar();
-                } else {
-                    showMessage('❌ Erro ao cadastrar conta', 'error');
-                }
+                allData.push(conta);
+                showMessage('✅ Conta cadastrada com sucesso!', 'success');
             }
 
-            btn.disabled = false;
-            btn.textContent = editingId ? '💾 Atualizar Conta' : '💾 Cadastrar Conta';
-            editingId = null;
+            saveToLocalStorage();
+            limparFormContaPagar();
+            atualizarTodasListas();
+            closeEditPanel();
         }
 
         function limparFormContaPagar() {
@@ -2433,7 +2194,7 @@
             let html = '';
             empresas.forEach(empresa => {
                 html += `
-                    <div class="search-result-item" onclick="selecionarEmpresaPagar('${empresa.__backendId}')">
+                    <div class="search-result-item" onclick="selecionarEmpresaPagar('${empresa.id}')">
                         <strong>${empresa.nome}</strong><br>
                         <small>CNPJ: ${empresa.cnpj || 'Sem CNPJ'}</small>
                         ${empresa.razaoSocial ? `<br><small>Razão Social: ${empresa.razaoSocial}</small>` : ''}
@@ -2446,7 +2207,7 @@
         }
 
         function selecionarEmpresaPagar(id) {
-            const empresa = allData.find(c => c.__backendId === id);
+            const empresa = allData.find(c => c.id === id);
             if (!empresa) return;
 
             document.getElementById('resultadosEmpresaPagar').style.display = 'none';
@@ -2466,7 +2227,7 @@
         }
 
         function editarContaPagar(id) {
-            const conta = allData.find(c => c.__backendId === id);
+            const conta = allData.find(c => c.id === id);
             if (!conta) {
                 showMessage('❌ Conta não encontrada', 'error');
                 return;
@@ -2515,34 +2276,27 @@
             `;
         }
 
-        async function salvarContaPagarEdit(event, id) {
+        function salvarContaPagarEdit(event, id) {
             event.preventDefault();
-            const conta = allData.find(c => c.__backendId === id);
+            const conta = allData.find(c => c.id === id);
             if (!conta) return;
 
-            const updatedConta = {
-                ...conta,
-                numeroDocumento: document.getElementById('editNumeroDoc').value.toUpperCase(),
-                empresaNome: document.getElementById('editEmpresaNome').value.toUpperCase(),
-                empresaCnpj: document.getElementById('editEmpresaCnpj').value,
-                dataLancamento: document.getElementById('editDataLancamento').value,
-                dataVencimento: document.getElementById('editDataVencimento').value,
-                valor: parseFloat(document.getElementById('editValor').value),
-                statusPagamento: document.getElementById('editStatus').value
-            };
+            conta.numeroDocumento = document.getElementById('editNumeroDoc').value.toUpperCase();
+            conta.empresaNome = document.getElementById('editEmpresaNome').value.toUpperCase();
+            conta.empresaCnpj = document.getElementById('editEmpresaCnpj').value;
+            conta.dataLancamento = document.getElementById('editDataLancamento').value;
+            conta.dataVencimento = document.getElementById('editDataVencimento').value;
+            conta.valor = parseFloat(document.getElementById('editValor').value);
+            conta.statusPagamento = document.getElementById('editStatus').value;
 
-            const result = await window.dataSdk.update(updatedConta);
-            
-            if (result.isOk) {
-                showMessage('✅ Conta atualizada com sucesso!', 'success');
-                closeEditPanel();
-            } else {
-                showMessage('❌ Erro ao atualizar conta', 'error');
-            }
+            saveToLocalStorage();
+            showMessage('✅ Conta atualizada com sucesso!', 'success');
+            atualizarTodasListas();
+            closeEditPanel();
         }
 
-        async function excluirContaPagar(id) {
-            const conta = allData.find(c => c.__backendId === id);
+        function excluirContaPagar(id) {
+            const conta = allData.find(c => c.id === id);
             if (!conta) return;
 
             const confirmDiv = document.createElement('div');
@@ -2557,17 +2311,11 @@
             document.getElementById('messageContainer').appendChild(confirmDiv);
         }
 
-        async function confirmarExclusaoContaPagar(id) {
-            const conta = allData.find(c => c.__backendId === id);
-            if (!conta) return;
-
-            const result = await window.dataSdk.delete(conta);
-            
-            if (result.isOk) {
-                showMessage('✅ Conta excluída com sucesso!', 'success');
-            } else {
-                showMessage('❌ Erro ao excluir conta', 'error');
-            }
+        function confirmarExclusaoContaPagar(id) {
+            allData = allData.filter(c => c.id !== id);
+            saveToLocalStorage();
+            showMessage('✅ Conta excluída com sucesso!', 'success');
+            atualizarTodasListas();
         }
 
         function filtrarContasPagar() {
@@ -2576,8 +2324,8 @@
 
         function renderizarContasPagar() {
             const searchTerm = document.getElementById('searchContaPagar').value.toLowerCase();
-            const searchDataVenc = document.getElementById('searchDataVencPagar').value;
             const filterStatus = document.getElementById('filterStatusPagar').value;
+            const dataVencimentoBusca = document.getElementById('dataVencimentoBuscaPagar') ? document.getElementById('dataVencimentoBuscaPagar').value : '';
             
             const contas = allData.filter(item => {
                 if (item.type !== 'contaPagar') return false;
@@ -2589,17 +2337,17 @@
                 
                 const matchStatus = !filterStatus || item.statusPagamento === filterStatus;
                 
-                let matchDataVenc = true;
-                if (searchDataVenc) {
-                    matchDataVenc = item.dataVencimento === searchDataVenc;
+                let matchDataVencimento = true;
+                if (dataVencimentoBusca && item.dataVencimento) {
+                    matchDataVencimento = item.dataVencimento === dataVencimentoBusca;
                 }
                 
-                return matchSearch && matchStatus && matchDataVenc;
+                return matchSearch && matchStatus && matchDataVencimento;
             });
 
             const container = document.getElementById('listaContasPagar');
             
-            const hasSearchCriteria = searchTerm || searchDataVenc || filterStatus;
+            const hasSearchCriteria = searchTerm || filterStatus;
             
             if (contas.length === 0 && hasSearchCriteria) {
                 container.innerHTML = '<div class="message info">❌ Nenhuma conta encontrada</div>';
@@ -2625,8 +2373,8 @@
                         <td><strong>R$ ${(conta.valor || 0).toFixed(2)}</strong></td>
                         <td><span class="badge badge-${conta.statusPagamento === 'pago' ? 'paid' : 'pending'}">${conta.statusPagamento === 'pago' ? 'Pago' : 'Em Aberto'}</span></td>
                         <td class="action-buttons">
-                            <button class="btn btn-secondary btn-small" onclick="editarContaPagar('${conta.__backendId}')">✏️ Editar</button>
-                            <button class="btn btn-danger btn-small" onclick="excluirContaPagar('${conta.__backendId}')">🗑️ Excluir</button>
+                            <button class="btn btn-secondary btn-small" onclick="editarContaPagar('${conta.id}')">✏️ Editar</button>
+                            <button class="btn btn-danger btn-small" onclick="excluirContaPagar('${conta.id}')">🗑️ Excluir</button>
                         </td>
                     </tr>
                 `;
@@ -2636,10 +2384,11 @@
             container.innerHTML = html;
         }
 
-        async function salvarContaReceber(event) {
+        function salvarContaReceber(event) {
             event.preventDefault();
             
             const conta = {
+                id: editingId || generateId(),
                 type: 'contaReceber',
                 numeroDocumento: document.getElementById('numeroDocReceber').value.toUpperCase(),
                 dataEmissao: document.getElementById('dataEmissaoReceber').value,
@@ -2649,45 +2398,21 @@
                 createdAt: new Date().toISOString()
             };
 
-            const btn = document.getElementById('btnSalvarContaReceber');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loading"></span> Salvando...';
-
             if (editingId) {
-                const recordToUpdate = allData.find(r => r.__backendId === editingId);
-                if (recordToUpdate) {
-                    const updatedRecord = { ...recordToUpdate, ...conta };
-                    const result = await window.dataSdk.update(updatedRecord);
-                    
-                    if (result.isOk) {
-                        showMessage('✅ Conta atualizada com sucesso!', 'success');
-                        limparFormContaReceber();
-                        closeEditPanel();
-                    } else {
-                        showMessage('❌ Erro ao atualizar conta', 'error');
-                    }
+                const index = allData.findIndex(r => r.id === editingId);
+                if (index !== -1) {
+                    allData[index] = conta;
+                    showMessage('✅ Conta atualizada com sucesso!', 'success');
                 }
             } else {
-                if (allData.length >= 999) {
-                    showMessage('⚠️ Limite de 999 registros atingido. Exclua alguns registros antes de adicionar novos.', 'error');
-                    btn.disabled = false;
-                    btn.textContent = '💾 Cadastrar Conta';
-                    return;
-                }
-
-                const result = await window.dataSdk.create(conta);
-                
-                if (result.isOk) {
-                    showMessage('✅ Conta cadastrada com sucesso!', 'success');
-                    limparFormContaReceber();
-                } else {
-                    showMessage('❌ Erro ao cadastrar conta', 'error');
-                }
+                allData.push(conta);
+                showMessage('✅ Conta cadastrada com sucesso!', 'success');
             }
 
-            btn.disabled = false;
-            btn.textContent = editingId ? '💾 Atualizar Conta' : '💾 Cadastrar Conta';
-            editingId = null;
+            saveToLocalStorage();
+            limparFormContaReceber();
+            atualizarTodasListas();
+            closeEditPanel();
         }
 
         function limparFormContaReceber() {
@@ -2697,7 +2422,7 @@
         }
 
         function editarContaReceber(id) {
-            const conta = allData.find(c => c.__backendId === id);
+            const conta = allData.find(c => c.id === id);
             if (!conta) {
                 showMessage('❌ Conta não encontrada', 'error');
                 return;
@@ -2738,32 +2463,25 @@
             `;
         }
 
-        async function salvarContaReceberEdit(event, id) {
+        function salvarContaReceberEdit(event, id) {
             event.preventDefault();
-            const conta = allData.find(c => c.__backendId === id);
+            const conta = allData.find(c => c.id === id);
             if (!conta) return;
 
-            const updatedConta = {
-                ...conta,
-                numeroDocumento: document.getElementById('editNumeroDoc').value.toUpperCase(),
-                dataEmissao: document.getElementById('editDataEmissao').value,
-                dataVencimento: document.getElementById('editDataVencimento').value,
-                valor: parseFloat(document.getElementById('editValor').value),
-                statusPagamento: document.getElementById('editStatus').value
-            };
+            conta.numeroDocumento = document.getElementById('editNumeroDoc').value.toUpperCase();
+            conta.dataEmissao = document.getElementById('editDataEmissao').value;
+            conta.dataVencimento = document.getElementById('editDataVencimento').value;
+            conta.valor = parseFloat(document.getElementById('editValor').value);
+            conta.statusPagamento = document.getElementById('editStatus').value;
 
-            const result = await window.dataSdk.update(updatedConta);
-            
-            if (result.isOk) {
-                showMessage('✅ Conta atualizada com sucesso!', 'success');
-                closeEditPanel();
-            } else {
-                showMessage('❌ Erro ao atualizar conta', 'error');
-            }
+            saveToLocalStorage();
+            showMessage('✅ Conta atualizada com sucesso!', 'success');
+            atualizarTodasListas();
+            closeEditPanel();
         }
 
-        async function excluirContaReceber(id) {
-            const conta = allData.find(c => c.__backendId === id);
+        function excluirContaReceber(id) {
+            const conta = allData.find(c => c.id === id);
             if (!conta) return;
 
             const confirmDiv = document.createElement('div');
@@ -2778,17 +2496,11 @@
             document.getElementById('messageContainer').appendChild(confirmDiv);
         }
 
-        async function confirmarExclusaoContaReceber(id) {
-            const conta = allData.find(c => c.__backendId === id);
-            if (!conta) return;
-
-            const result = await window.dataSdk.delete(conta);
-            
-            if (result.isOk) {
-                showMessage('✅ Conta excluída com sucesso!', 'success');
-            } else {
-                showMessage('❌ Erro ao excluir conta', 'error');
-            }
+        function confirmarExclusaoContaReceber(id) {
+            allData = allData.filter(c => c.id !== id);
+            saveToLocalStorage();
+            showMessage('✅ Conta excluída com sucesso!', 'success');
+            atualizarTodasListas();
         }
 
         function filtrarContasReceber() {
@@ -2838,8 +2550,8 @@
                         <td><strong>R$ ${(conta.valor || 0).toFixed(2)}</strong></td>
                         <td><span class="badge badge-${conta.statusPagamento === 'pago' ? 'paid' : 'pending'}">${conta.statusPagamento === 'pago' ? 'Pago' : 'Em Aberto'}</span></td>
                         <td class="action-buttons">
-                            <button class="btn btn-secondary btn-small" onclick="editarContaReceber('${conta.__backendId}')">✏️ Editar</button>
-                            <button class="btn btn-danger btn-small" onclick="excluirContaReceber('${conta.__backendId}')">🗑️ Excluir</button>
+                            <button class="btn btn-secondary btn-small" onclick="editarContaReceber('${conta.id}')">✏️ Editar</button>
+                            <button class="btn btn-danger btn-small" onclick="excluirContaReceber('${conta.id}')">🗑️ Excluir</button>
                         </td>
                     </tr>
                 `;
@@ -2939,7 +2651,7 @@
                     html += '<h3>📂 Relatório de Ordens de Serviço em Aberto</h3>';
                     html += '<table><thead><tr><th>Número</th><th>Data</th><th>Cliente</th><th>Veículo</th><th>Total</th></tr></thead><tbody>';
                     osAbertas.forEach(os => {
-                        const cliente = allData.find(c => c.__backendId === os.clienteId);
+                        const cliente = allData.find(c => c.id === os.clienteId);
                         html += `<tr>
                             <td><strong>${os.numeroOS || '-'}</strong></td>
                             <td>${new Date(os.dataEntrada).toLocaleDateString('pt-BR')}</td>
@@ -2956,7 +2668,7 @@
                     html += '<h3>✅ Relatório de Ordens de Serviço Finalizadas</h3>';
                     html += '<table><thead><tr><th>Número</th><th>Data Entrada</th><th>Data Saída</th><th>Cliente</th><th>Total</th></tr></thead><tbody>';
                     osFechadas.forEach(os => {
-                        const cliente = allData.find(c => c.__backendId === os.clienteId);
+                        const cliente = allData.find(c => c.id === os.clienteId);
                         html += `<tr>
                             <td><strong>${os.numeroOS || '-'}</strong></td>
                             <td>${new Date(os.dataEntrada).toLocaleDateString('pt-BR')}</td>
@@ -3050,7 +2762,7 @@
                     html += `<p style="font-size: 24px; color: #1e88e5;"><strong>Total: R$ ${faturamentoPeriodo.toFixed(2)}</strong></p>`;
                     html += '<table><thead><tr><th>Número OS</th><th>Data</th><th>Cliente</th><th>Valor</th></tr></thead><tbody>';
                     ordensPeriodo.forEach(os => {
-                        const cliente = allData.find(c => c.__backendId === os.clienteId);
+                        const cliente = allData.find(c => c.id === os.clienteId);
                         html += `<tr>
                             <td><strong>${os.numeroOS || '-'}</strong></td>
                             <td>${new Date(os.dataEntrada).toLocaleDateString('pt-BR')}</td>
@@ -3064,6 +2776,356 @@
 
             html += '</div>';
             container.innerHTML = html;
+        }
+
+        function gerarPDFOS(id) {
+            const os = allData.find(o => o.id === id);
+            if (!os) {
+                showMessage('❌ Ordem de serviço não encontrada', 'error');
+                return;
+            }
+
+            const cliente = allData.find(c => c.id === os.clienteId);
+            const clienteNome = cliente ? cliente.nome : 'Cliente não encontrado';
+            const clienteCpfCnpj = cliente ? (cliente.cpf || cliente.cnpj || '-') : '-';
+            const clienteTelefone = cliente ? (cliente.telefone || '-') : '-';
+            const clienteEndereco = cliente ? (cliente.endereco || '-') : '-';
+
+            let servicosHTML = '';
+            let total = 0;
+
+            if (os.servicos) {
+                try {
+                    const servicos = JSON.parse(os.servicos);
+                    servicos.forEach(s => {
+                        const subtotal = s.valor * s.quantidade;
+                        total += subtotal;
+                        servicosHTML += `
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #333;">${s.descricao}</td>
+                                <td style="padding: 10px; border: 1px solid #333; text-align: center;">${s.quantidade}</td>
+                                <td style="padding: 10px; border: 1px solid #333; text-align: right;">R$ ${s.valor.toFixed(2)}</td>
+                                <td style="padding: 10px; border: 1px solid #333; text-align: right;">R$ ${subtotal.toFixed(2)}</td>
+                            </tr>
+                        `;
+                    });
+                } catch (e) {}
+            }
+
+            const dataEntrada = new Date(os.dataEntrada).toLocaleDateString('pt-BR');
+            const dataSaida = os.dataSaida ? new Date(os.dataSaida).toLocaleDateString('pt-BR') : '-';
+
+            const pdfWindow = window.open('', '_blank');
+            pdfWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="pt-BR">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Ordem de Serviço - ${os.numeroOS}</title>
+                    <style>
+                        * {
+                            margin: 0;
+                            padding: 0;
+                            box-sizing: border-box;
+                        }
+                        @page {
+                            size: A4;
+                            margin: 10mm;
+                        }
+                        body {
+                            font-family: Arial, sans-serif;
+                            padding: 15px;
+                            background: white;
+                            color: #000;
+                            font-size: 10px;
+                        }
+                        .container {
+                            max-width: 100%;
+                            margin: 0 auto;
+                            border: 2px solid #000;
+                            padding: 12px;
+                        }
+                        .header {
+                            text-align: center;
+                            border-bottom: 2px solid #000;
+                            padding-bottom: 8px;
+                            margin-bottom: 12px;
+                        }
+                        .header h1 {
+                            font-size: 18px;
+                            margin-bottom: 3px;
+                            color: #000;
+                        }
+                        .header h2 {
+                            font-size: 14px;
+                            color: #333;
+                        }
+                        .os-number {
+                            background: #000;
+                            color: white;
+                            padding: 6px;
+                            text-align: center;
+                            font-size: 14px;
+                            font-weight: bold;
+                            margin-bottom: 12px;
+                        }
+                        .section {
+                            margin-bottom: 10px;
+                            border: 1px solid #333;
+                            padding: 8px;
+                            page-break-inside: avoid;
+                        }
+                        .section-title {
+                            font-size: 11px;
+                            font-weight: bold;
+                            background: #f0f0f0;
+                            padding: 5px;
+                            margin: -8px -8px 8px -8px;
+                            border-bottom: 1px solid #333;
+                        }
+                        .info-row {
+                            display: flex;
+                            margin-bottom: 4px;
+                            line-height: 1.3;
+                        }
+                        .info-label {
+                            font-weight: bold;
+                            min-width: 120px;
+                        }
+                        .info-value {
+                            flex: 1;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 5px;
+                            font-size: 9px;
+                        }
+                        th {
+                            background: #333;
+                            color: white;
+                            padding: 5px;
+                            text-align: left;
+                            border: 1px solid #333;
+                        }
+                        td {
+                            padding: 5px;
+                            border: 1px solid #333;
+                        }
+                        .total-section {
+                            background: #000;
+                            color: white;
+                            padding: 8px;
+                            text-align: right;
+                            font-size: 14px;
+                            font-weight: bold;
+                            margin-top: 10px;
+                        }
+                        .observacoes {
+                            min-height: 50px;
+                            border: 1px solid #333;
+                            padding: 6px;
+                            margin-top: 5px;
+                            font-size: 9px;
+                        }
+                        .footer {
+                            margin-top: 15px;
+                            padding-top: 10px;
+                            border-top: 2px solid #000;
+                            display: flex;
+                            justify-content: space-between;
+                            page-break-inside: avoid;
+                        }
+                        .assinatura {
+                            text-align: center;
+                            flex: 1;
+                        }
+                        .assinatura-linha {
+                            border-top: 1px solid #000;
+                            margin-top: 30px;
+                            padding-top: 3px;
+                            font-size: 9px;
+                        }
+                        .status-badge {
+                            display: inline-block;
+                            padding: 3px 10px;
+                            border-radius: 3px;
+                            font-weight: bold;
+                            font-size: 10px;
+                        }
+                        .status-aberta {
+                            background: #fff3cd;
+                            color: #856404;
+                            border: 1px solid #856404;
+                        }
+                        .status-fechada {
+                            background: #d4edda;
+                            color: #155724;
+                            border: 1px solid #155724;
+                        }
+                        @media print {
+                            body {
+                                padding: 0;
+                            }
+                            .no-print {
+                                display: none !important;
+                            }
+                            .container {
+                                border: 2px solid #000;
+                                padding: 12px;
+                            }
+                        }
+                        .print-button {
+                            position: fixed;
+                            top: 20px;
+                            right: 20px;
+                            padding: 15px 30px;
+                            background: #1e88e5;
+                            color: white;
+                            border: none;
+                            border-radius: 8px;
+                            font-size: 16px;
+                            font-weight: bold;
+                            cursor: pointer;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                            z-index: 1000;
+                        }
+                        .print-button:hover {
+                            background: #1565c0;
+                        }
+                        @media screen {
+                            body {
+                                padding: 20px;
+                            }
+                            .container {
+                                max-width: 800px;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <button class="print-button no-print" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+                    
+                    <div class="container">
+                        <div class="header">
+                            <h1>AUTO MECÂNICA PREMIUM</h1>
+                            <h2>Ordem de Serviço</h2>
+                        </div>
+
+                        <div class="os-number">
+                            ${os.numeroOS} - <span class="status-badge status-${os.status === 'aberta' ? 'aberta' : 'fechada'}">${os.status === 'aberta' ? 'ABERTA' : 'FECHADA'}</span>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">📅 INFORMAÇÕES DA ORDEM</div>
+                            <div class="info-row">
+                                <div class="info-label">Data de Entrada:</div>
+                                <div class="info-value">${dataEntrada}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Data de Saída:</div>
+                                <div class="info-value">${dataSaida}</div>
+                            </div>
+                            ${os.recebidoPor ? `
+                            <div class="info-row">
+                                <div class="info-label">Recebido Por:</div>
+                                <div class="info-value">${os.recebidoPor}</div>
+                            </div>
+                            ` : ''}
+                            ${os.autorizadoPor ? `
+                            <div class="info-row">
+                                <div class="info-label">Autorizado Por:</div>
+                                <div class="info-value">${os.autorizadoPor}</div>
+                            </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">👤 DADOS DO CLIENTE</div>
+                            <div class="info-row">
+                                <div class="info-label">Nome:</div>
+                                <div class="info-value">${clienteNome}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">CPF/CNPJ:</div>
+                                <div class="info-value">${clienteCpfCnpj}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Telefone:</div>
+                                <div class="info-value">${clienteTelefone}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Endereço:</div>
+                                <div class="info-value">${clienteEndereco}</div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">🚗 DADOS DO VEÍCULO</div>
+                            <div class="info-row">
+                                <div class="info-label">Placa:</div>
+                                <div class="info-value">${os.placa || '-'}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Marca:</div>
+                                <div class="info-value">${os.marca || '-'}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Modelo:</div>
+                                <div class="info-value">${os.modelo || '-'}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Cor:</div>
+                                <div class="info-value">${os.cor || '-'}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Quilometragem:</div>
+                                <div class="info-value">${os.quilometragem || '-'}</div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">🔧 SERVIÇOS EXECUTADOS</div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Descrição</th>
+                                        <th style="text-align: center; width: 80px;">Qtd</th>
+                                        <th style="text-align: right; width: 120px;">Valor Unit.</th>
+                                        <th style="text-align: right; width: 120px;">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${servicosHTML}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="total-section">
+                            VALOR TOTAL: R$ ${total.toFixed(2)}
+                        </div>
+
+                        ${os.observacoes ? `
+                        <div class="section">
+                            <div class="section-title">📝 OBSERVAÇÕES</div>
+                            <div class="observacoes">${os.observacoes}</div>
+                        </div>
+                        ` : ''}
+
+                        <div class="footer">
+                            <div class="assinatura">
+                                <div class="assinatura-linha">Assinatura do Cliente</div>
+                            </div>
+                            <div class="assinatura">
+                                <div class="assinatura-linha">Assinatura do Responsável</div>
+                            </div>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
+            pdfWindow.document.close();
         }
 
         function atualizarTodasListas() {
@@ -3085,7 +3147,10 @@
             editingId = null;
         }
 
-        init();
+        // Carregar dados ao iniciar
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+        });
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99c19bb327d1628f',t:'MTc2MjczNjM3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99c1dbf5c6a0645d',t:'MTc2MjczOTAwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
