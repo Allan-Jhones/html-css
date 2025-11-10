@@ -71,6 +71,15 @@
         "**/.*",
         "**/node_modules/**"
       ]
+    },
+    {
+      "target": "cliente8",
+      "public": "clientes/scanner",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
     }
   ]
 }

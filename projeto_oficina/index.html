@@ -1,0 +1,3091 @@
+<!doctype html>
+<html lang="pt-BR">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Gestão de Oficina</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            box-sizing: border-box;
+            font-family: Arial, 'Times New Roman', serif;
+            min-height: 100%;
+            transition: all 0.3s ease;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        /* Tema Escuro */
+        body.dark-theme {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .container {
+            background: rgba(26, 26, 46, 0.95);
+        }
+
+        body.dark-theme header,
+        body.dark-theme nav,
+        body.dark-theme .content-section,
+        body.dark-theme .card,
+        body.dark-theme .search-box {
+            background: rgba(30, 30, 50, 0.98);
+            color: #e0e0e0;
+        }
+
+        body.dark-theme input,
+        body.dark-theme select,
+        body.dark-theme textarea {
+            background: #2a2a3e;
+            color: #e0e0e0;
+            border-color: #3a3a5e;
+        }
+
+        body.dark-theme label {
+            color: #b0b0c0;
+        }
+
+        body.dark-theme .btn {
+            background: linear-gradient(135deg, #0f4c81 0%, #1e88e5 100%);
+        }
+
+        body.dark-theme .btn-danger {
+            background: linear-gradient(135deg, #c62828 0%, #e53935 100%);
+        }
+
+        body.dark-theme .btn-secondary {
+            background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);
+        }
+
+        body.dark-theme th {
+            background: linear-gradient(135deg, #0f4c81 0%, #0d47a1 100%);
+        }
+
+        body.dark-theme tr:hover {
+            background: rgba(30, 136, 229, 0.1);
+        }
+
+        body.dark-theme .stat-card {
+            background: linear-gradient(135deg, rgba(30, 136, 229, 0.15) 0%, rgba(0, 172, 193, 0.15) 100%);
+            border-color: rgba(30, 136, 229, 0.4);
+        }
+
+        body.dark-theme .edit-panel {
+            background: #1e1e32;
+        }
+
+        body.dark-theme .search-result-item:hover {
+            background: rgba(30, 136, 229, 0.2);
+        }
+
+        body.dark-theme .selected-client {
+            background: linear-gradient(135deg, rgba(30, 136, 229, 0.2) 0%, rgba(0, 172, 193, 0.2) 100%);
+            border-color: #1e88e5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100%;
+            border-radius: 15px;
+        }
+
+        header {
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        header:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 42px;
+            background: linear-gradient(135deg, #1e88e5 0%, #00acc1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            font-size: 18px;
+            font-style: italic;
+        }
+
+        nav {
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn {
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-family: Arial, sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(30, 136, 229, 0.4);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
+            box-shadow: 0 6px 25px rgba(67, 160, 71, 0.4);
+        }
+
+        .content-section {
+            padding: 35px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #1e88e5;
+            margin-bottom: 25px;
+            font-size: 32px;
+            font-weight: bold;
+            border-bottom: 3px solid #00acc1;
+            padding-bottom: 12px;
+        }
+
+        h3 {
+            color: #00acc1;
+            margin-bottom: 15px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #1e88e5;
+            box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(30, 136, 229, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-danger {
+            box-shadow: 0 4px 15px rgba(229, 57, 53, 0.3);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 6px 25px rgba(229, 57, 53, 0.4);
+        }
+
+        .btn-secondary {
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 160, 71, 0.3);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 6px 25px rgba(67, 160, 71, 0.4);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .message {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            animation: slideDown 0.5s ease;
+            border-left: 5px solid;
+            font-weight: 500;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .message.info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(30, 136, 229, 0.05);
+            border-radius: 10px;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .radio-group input[type="radio"] {
+            width: auto;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            transition: all 0.3s ease;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 2px solid rgba(30, 136, 229, 0.2);
+        }
+
+        .card {
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 2px solid rgba(30, 136, 229, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(30, 136, 229, 0.2);
+        }
+
+        .stat-value {
+            font-size: 40px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #1e88e5 0%, #00acc1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .os-items {
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 2px solid rgba(30, 136, 229, 0.2);
+        }
+
+        .os-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .os-item:hover {
+            background: rgba(30, 136, 229, 0.05);
+        }
+
+        .os-item:last-child {
+            border-bottom: none;
+        }
+
+        .total-section {
+            background: linear-gradient(135deg, #1e88e5 0%, #00acc1 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            text-align: right;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 20px rgba(30, 136, 229, 0.3);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-open {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-closed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-paid {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .search-results {
+            border: 2px solid rgba(30, 136, 229, 0.3);
+            border-radius: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-result-item {
+            padding: 15px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .search-result-item:hover {
+            background: rgba(30, 136, 229, 0.1);
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .selected-client {
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 15px;
+            border: 2px solid #1e88e5;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(30, 136, 229, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            background: rgba(30, 136, 229, 0.1);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #1e88e5 0%, #00acc1 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .edit-panel {
+            position: fixed;
+            top: 0;
+            right: -600px;
+            width: 600px;
+            height: 100%;
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.3);
+            transition: right 0.4s ease;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .edit-panel.open {
+            right: 0;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        .close-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #e53935;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .close-panel:hover {
+            transform: rotate(90deg);
+            background: #c62828;
+        }
+
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qty-btn {
+            background: #1e88e5;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .qty-btn:hover {
+            background: #1565c0;
+            transform: scale(1.1);
+        }
+
+        .qty-display {
+            min-width: 40px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                flex-direction: column;
+            }
+
+            .nav-btn {
+                width: 100%;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .edit-panel {
+                width: 100%;
+                right: -100%;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .theme-toggle {
+                position: static;
+                display: block;
+                margin: 10px auto 0;
+                width: fit-content;
+            }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body class="dark-theme">
+  <div class="overlay" id="overlay" onclick="closeEditPanel()"></div>
+  <div class="container">
+   <header>
+    <h1 id="systemTitle">Sistema de Gestão de Oficina</h1>
+    <p class="subtitle" id="companyName">Auto Mecânica Premium</p>
+   </header>
+   <nav><button class="nav-btn active" onclick="showSection('clientes')">👥 Clientes</button> <button class="nav-btn" onclick="showSection('servicos')">🔧 Serviços</button> <button class="nav-btn" onclick="showSection('ordens')">📋 Ordens de Serviço</button> <button class="nav-btn" onclick="showSection('contasPagar')">💰 Contas a Pagar</button> <button class="nav-btn" onclick="showSection('contasReceber')">💵 Contas a Receber</button> <button class="nav-btn" onclick="showSection('relatorios')">📊 Relatórios</button>
+   </nav>
+   <div id="messageContainer"></div><!-- Seção Clientes -->
+   <section id="clientes" class="content-section active">
+    <div class="tabs"><button class="tab active" onclick="showTab('cadastroCliente')">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaCliente')">Pesquisar</button>
+    </div>
+    <div id="cadastroCliente" class="tab-content active">
+     <h2>Cadastro de Clientes</h2>
+     <div class="radio-group"><label> <input type="radio" name="tipoCliente" value="fisica" checked onchange="toggleClienteForm()"> Pessoa Física </label> <label> <input type="radio" name="tipoCliente" value="juridica" onchange="toggleClienteForm()"> Pessoa Jurídica </label>
+     </div>
+     <form id="formCliente" onsubmit="salvarCliente(event)">
+      <div id="camposFisica">
+       <div class="form-row">
+        <div class="form-group"><label for="nomeCliente">Nome *</label> <input type="text" id="nomeCliente" required>
+        </div>
+        <div class="form-group"><label for="cpfCliente">CPF</label> <input type="text" id="cpfCliente" maxlength="14" placeholder="000.000.000-00" oninput="maskCPF(this)">
+        </div>
+       </div>
+       <div class="form-row">
+        <div class="form-group"><label for="telefoneCliente">Telefone *</label> <input type="text" id="telefoneCliente" required maxlength="15" placeholder="(00) 00000-0000" oninput="maskPhone(this)">
+        </div>
+        <div class="form-group"><label for="cepCliente">CEP</label> <input type="text" id="cepCliente" maxlength="9" placeholder="00000-000" oninput="maskCEP(this)">
+        </div>
+       </div>
+       <div class="form-group"><label for="enderecoCliente">Endereço</label> <input type="text" id="enderecoCliente">
+       </div>
+      </div>
+      <div id="camposJuridica" style="display: none;">
+       <div class="form-row">
+        <div class="form-group"><label for="nomeEmpresa">Nome *</label> <input type="text" id="nomeEmpresa">
+        </div>
+        <div class="form-group"><label for="cnpjEmpresa">CNPJ *</label> <input type="text" id="cnpjEmpresa" maxlength="18" placeholder="00.000.000/0000-00" oninput="maskCNPJ(this)">
+        </div>
+       </div>
+       <div class="form-row">
+        <div class="form-group"><label for="razaoSocial">Razão Social *</label> <input type="text" id="razaoSocial">
+        </div>
+        <div class="form-group"><label for="nomeFantasia">Nome Fantasia</label> <input type="text" id="nomeFantasia">
+        </div>
+       </div>
+       <div class="form-row">
+        <div class="form-group"><label for="inscricaoEstadual">Inscrição Estadual *</label> <input type="text" id="inscricaoEstadual">
+        </div>
+        <div class="form-group"><label for="inscricaoMunicipal">Inscrição Municipal</label> <input type="text" id="inscricaoMunicipal">
+        </div>
+       </div>
+       <div class="form-row">
+        <div class="form-group"><label for="emailEmpresa">E-mail</label> <input type="email" id="emailEmpresa">
+        </div>
+        <div class="form-group"><label for="telefoneEmpresa">Telefone</label> <input type="text" id="telefoneEmpresa" maxlength="15" placeholder="(00) 00000-0000" oninput="maskPhone(this)">
+        </div>
+       </div>
+       <div class="form-row">
+        <div class="form-group"><label for="cepEmpresa">CEP</label> <input type="text" id="cepEmpresa" maxlength="9" placeholder="00000-000" oninput="maskCEP(this)">
+        </div>
+        <div class="form-group"><label for="enderecoEmpresa">Endereço</label> <input type="text" id="enderecoEmpresa">
+        </div>
+       </div>
+      </div><button type="submit" class="btn" id="btnSalvarCliente">💾 Cadastrar Cliente</button> <button type="button" class="btn btn-secondary" onclick="limparFormCliente()">🔄 Limpar</button>
+     </form>
+    </div>
+    <div id="pesquisaCliente" class="tab-content">
+     <h2>Pesquisar Clientes</h2>
+     <div class="search-box">
+      <div class="form-row">
+       <div class="form-group"><label for="tipoBuscaCliente">Buscar por</label> <select id="tipoBuscaCliente" onchange="limparCampoBuscaCliente()"> <option value="nome">Nome</option> <option value="cpf">CPF</option> <option value="cnpj">CNPJ</option> </select>
+       </div>
+       <div class="form-group"><label for="searchCliente">Digite para buscar</label> <input type="text" id="searchCliente" placeholder="Digite para buscar..." oninput="aplicarMascaraBusca()">
+       </div>
+       <div class="form-group"><label for="filterTipo">Filtrar por Tipo</label> <select id="filterTipo"> <option value="">Todos</option> <option value="fisica">Pessoa Física</option> <option value="juridica">Pessoa Jurídica</option> </select>
+       </div>
+      </div><button class="btn" onclick="filtrarClientes()">🔍 Pesquisar</button>
+     </div>
+     <div id="listaClientes"></div>
+    </div>
+   </section><!-- Seção Serviços -->
+   <section id="servicos" class="content-section">
+    <div class="tabs"><button class="tab active" onclick="showTab('cadastroServico')">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaServico')">Pesquisar</button>
+    </div>
+    <div id="cadastroServico" class="tab-content active">
+     <h2>Cadastro de Serviços</h2>
+     <form id="formServico" onsubmit="salvarServico(event)">
+      <div class="form-row">
+       <div class="form-group"><label for="descricaoServico">Descrição *</label> <input type="text" id="descricaoServico" required>
+       </div>
+       <div class="form-group"><label for="valorServico">Valor (R$) *</label> <input type="number" id="valorServico" step="0.01" min="0" required>
+       </div>
+      </div><button type="submit" class="btn" id="btnSalvarServico">💾 Cadastrar Serviço</button> <button type="button" class="btn btn-secondary" onclick="limparFormServico()">🔄 Limpar</button>
+     </form>
+    </div>
+    <div id="pesquisaServico" class="tab-content">
+     <h2>Pesquisar Serviços</h2>
+     <div class="search-box"><input type="text" id="searchServico" placeholder="Digite para buscar..."> <button class="btn" onclick="filtrarServicos()" style="margin-top: 15px;">🔍 Pesquisar</button>
+     </div>
+     <div id="listaServicos"></div>
+    </div>
+   </section><!-- Seção Ordens de Serviço -->
+   <section id="ordens" class="content-section">
+    <div class="tabs"><button class="tab active" onclick="showTab('cadastroOS')">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaOS')">Pesquisar</button>
+    </div>
+    <div id="cadastroOS" class="tab-content active">
+     <h2>Nova Ordem de Serviço</h2>
+     <form id="formOS" onsubmit="salvarOS(event)">
+      <div class="card">
+       <h3>🔍 Buscar Cliente</h3>
+       <div class="form-group"><label for="searchClienteOS">Pesquisar por Nome, CPF, CNPJ ou Razão Social</label> <input type="text" id="searchClienteOS" placeholder="Digite para buscar cliente..." oninput="buscarClienteOS()">
+        <div id="resultadosClienteOS" class="search-results" style="display: none;"></div>
+       </div>
+       <div id="clienteSelecionadoOS"></div>
+      </div>
+      <div class="card">
+       <h3>🚗 Dados do Veículo (Opcional)</h3>
+       <div class="form-row">
+        <div class="form-group"><label for="placaOS">Placa</label> <input type="text" id="placaOS" maxlength="8" placeholder="ABC-1234">
+        </div>
+        <div class="form-group"><label for="marcaOS">Marca</label> <input type="text" id="marcaOS">
+        </div>
+        <div class="form-group"><label for="modeloOS">Modelo</label> <input type="text" id="modeloOS">
+        </div>
+       </div>
+       <div class="form-row">
+        <div class="form-group"><label for="corOS">Cor</label> <input type="text" id="corOS">
+        </div>
+        <div class="form-group"><label for="kmOS">Quilometragem</label> <input type="text" id="kmOS" placeholder="Ex: 50000" oninput="formatarQuilometragem(this)">
+        </div>
+       </div>
+      </div>
+      <div class="card">
+       <h3>👤 Responsáveis (Opcional)</h3>
+       <div class="form-row">
+        <div class="form-group"><label for="recebidoPorOS">Recebido Por</label> <input type="text" id="recebidoPorOS">
+        </div>
+        <div class="form-group"><label for="autorizadoPorOS">Autorizado Por</label> <input type="text" id="autorizadoPorOS">
+        </div>
+       </div>
+      </div>
+      <div class="card">
+       <h3>🔧 Serviços</h3>
+       <div class="form-row">
+        <div class="form-group"><label for="searchServicoOS">Pesquisar Serviço</label> <input type="text" id="searchServicoOS" placeholder="Digite para buscar..." oninput="buscarServicoOS()">
+         <div id="resultadosServicoOS" class="search-results" style="display: none;"></div>
+        </div>
+       </div>
+      </div>
+      <div id="itensOSContainer" style="display: none;">
+       <div class="os-items" id="itensOS"></div>
+       <div class="total-section" id="totalOS">
+        Total: R$ 0,00
+       </div>
+      </div>
+      <div class="card">
+       <h3>📝 Observações</h3>
+       <div class="form-group"><label for="observacoesOS">Observações</label> <textarea id="observacoesOS" rows="4"></textarea>
+       </div>
+      </div><button type="submit" class="btn" id="btnSalvarOS">💾 Criar Ordem de Serviço</button> <button type="button" class="btn btn-secondary" onclick="limparFormOS()">🔄 Limpar</button>
+     </form>
+    </div>
+    <div id="pesquisaOS" class="tab-content">
+     <h2>Pesquisar Ordens de Serviço</h2>
+     <div class="search-box">
+      <div class="form-row">
+       <div class="form-group"><label for="searchOS">Número da OS</label> <input type="text" id="searchOS" placeholder="Digite o número...">
+       </div>
+       <div class="form-group"><label for="searchPlacaOS">Placa</label> <input type="text" id="searchPlacaOS" placeholder="Digite a placa...">
+       </div>
+       <div class="form-group"><label for="searchCpfCnpjOS">CPF/CNPJ</label> <input type="text" id="searchCpfCnpjOS" placeholder="Digite CPF/CNPJ...">
+       </div>
+      </div>
+      <div class="form-row">
+       <div class="form-group"><label for="dataEntradaOS">Data de Entrada</label> <input type="date" id="dataEntradaOS">
+       </div>
+       <div class="form-group"><label for="dataSaidaOS">Data de Saída</label> <input type="date" id="dataSaidaOS">
+       </div>
+       <div class="form-group"><label for="filterStatusOS">Status</label> <select id="filterStatusOS"> <option value="">Todos</option> <option value="aberta">Aberta</option> <option value="fechada">Fechada</option> </select>
+       </div>
+      </div><button class="btn" onclick="filtrarOS()">🔍 Pesquisar</button>
+     </div>
+     <div id="listaOS"></div>
+    </div>
+   </section><!-- Seção Contas a Pagar -->
+   <section id="contasPagar" class="content-section">
+    <div class="tabs"><button class="tab active" onclick="showTab('cadastroContaPagar')">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaContaPagar')">Pesquisar</button>
+    </div>
+    <div id="cadastroContaPagar" class="tab-content active">
+     <h2>Cadastro de Contas a Pagar</h2>
+     <form id="formContaPagar" onsubmit="salvarContaPagar(event)">
+      <div class="card">
+       <h3>🔍 Buscar Empresa</h3>
+       <div class="form-group"><label for="searchEmpresaPagar">Pesquisar por Nome, CNPJ ou Código</label> <input type="text" id="searchEmpresaPagar" placeholder="Digite para buscar empresa..." oninput="buscarEmpresaPagar()">
+        <div id="resultadosEmpresaPagar" class="search-results" style="display: none;"></div>
+       </div>
+       <div id="empresaSelecionadaPagar"></div>
+      </div>
+      <div class="form-row">
+       <div class="form-group"><label for="numeroDocPagar">Número do Documento/NF *</label> <input type="text" id="numeroDocPagar" required>
+       </div>
+       <div class="form-group"><label for="empresaNomePagar">Nome da Empresa *</label> <input type="text" id="empresaNomePagar" required>
+       </div>
+      </div>
+      <div class="form-row">
+       <div class="form-group"><label for="empresaPagar">CNPJ da Empresa *</label> <input type="text" id="empresaPagar" required maxlength="18" placeholder="00.000.000/0000-00" oninput="maskCNPJ(this)">
+       </div>
+       <div class="form-group"><label for="dataLancamentoPagar">Data de Lançamento *</label> <input type="date" id="dataLancamentoPagar" required>
+       </div>
+      </div>
+      <div class="form-row">
+       <div class="form-group"><label for="dataVencimentoPagar">Data de Vencimento *</label> <input type="date" id="dataVencimentoPagar" required>
+       </div>
+       <div class="form-group"><label for="valorPagar">Valor (R$) *</label> <input type="number" id="valorPagar" step="0.01" min="0" required>
+       </div>
+      </div>
+      <div class="form-group"><label for="statusPagar">Status *</label> <select id="statusPagar" required> <option value="aberto">Em Aberto</option> <option value="pago">Pago</option> </select>
+      </div><button type="submit" class="btn" id="btnSalvarContaPagar">💾 Cadastrar Conta</button> <button type="button" class="btn btn-secondary" onclick="limparFormContaPagar()">🔄 Limpar</button>
+     </form>
+    </div>
+    <div id="pesquisaContaPagar" class="tab-content">
+     <h2>Pesquisar Contas a Pagar</h2>
+     <div class="search-box">
+      <div class="form-row">
+       <div class="form-group"><label for="searchContaPagar">Número do Documento ou Nome da Empresa</label> <input type="text" id="searchContaPagar" placeholder="Digite para buscar...">
+       </div>
+       <div class="form-group"><label for="searchDataVencPagar">Data de Vencimento</label> <input type="date" id="searchDataVencPagar">
+       </div>
+       <div class="form-group"><label for="filterStatusPagar">Status</label> <select id="filterStatusPagar"> <option value="">Todos</option> <option value="aberto">Em Aberto</option> <option value="pago">Pago</option> </select>
+       </div>
+      </div><button class="btn" onclick="filtrarContasPagar()">🔍 Pesquisar</button>
+     </div>
+     <div id="listaContasPagar"></div>
+    </div>
+   </section><!-- Seção Contas a Receber -->
+   <section id="contasReceber" class="content-section">
+    <div class="tabs"><button class="tab active" onclick="showTab('cadastroContaReceber')">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaContaReceber')">Pesquisar</button>
+    </div>
+    <div id="cadastroContaReceber" class="tab-content active">
+     <h2>Cadastro de Contas a Receber</h2>
+     <form id="formContaReceber" onsubmit="salvarContaReceber(event)">
+      <div class="form-row">
+       <div class="form-group"><label for="numeroDocReceber">Número do Documento/NF *</label> <input type="text" id="numeroDocReceber" required>
+       </div>
+       <div class="form-group"><label for="dataEmissaoReceber">Data de Emissão/Lançamento *</label> <input type="date" id="dataEmissaoReceber" required>
+       </div>
+      </div>
+      <div class="form-row">
+       <div class="form-group"><label for="dataVencimentoReceber">Data de Vencimento *</label> <input type="date" id="dataVencimentoReceber" required>
+       </div>
+       <div class="form-group"><label for="valorReceber">Valor (R$) *</label> <input type="number" id="valorReceber" step="0.01" min="0" required>
+       </div>
+      </div>
+      <div class="form-group"><label for="statusReceber">Status *</label> <select id="statusReceber" required> <option value="aberto">Em Aberto</option> <option value="pago">Pago</option> </select>
+      </div><button type="submit" class="btn" id="btnSalvarContaReceber">💾 Cadastrar Conta</button> <button type="button" class="btn btn-secondary" onclick="limparFormContaReceber()">🔄 Limpar</button>
+     </form>
+    </div>
+    <div id="pesquisaContaReceber" class="tab-content">
+     <h2>Pesquisar Contas a Receber</h2>
+     <div class="search-box">
+      <div class="form-row">
+       <div class="form-group"><label for="searchContaReceber">Número do Documento</label> <input type="text" id="searchContaReceber" placeholder="Digite para buscar...">
+       </div>
+       <div class="form-group"><label for="filterStatusReceber">Status</label> <select id="filterStatusReceber"> <option value="">Todos</option> <option value="aberto">Em Aberto</option> <option value="pago">Pago</option> </select>
+       </div>
+      </div><button class="btn" onclick="filtrarContasReceber()">🔍 Pesquisar</button>
+     </div>
+     <div id="listaContasReceber"></div>
+    </div>
+   </section><!-- Seção Relatórios -->
+   <section id="relatorios" class="content-section">
+    <h2>📊 Relatórios e Estatísticas</h2>
+    <div class="stats-grid" id="statsGrid"></div>
+    <div class="card">
+     <h3>Relatórios Detalhados</h3>
+     <div class="form-row"><button class="btn" onclick="gerarRelatorio('clientes')">📋 Clientes Cadastrados</button> <button class="btn" onclick="gerarRelatorio('osAbertas')">📂 OS em Aberto</button> <button class="btn" onclick="gerarRelatorio('osFechadas')">✅ OS Finalizadas</button> <button class="btn" onclick="gerarRelatorio('servicosExecutados')">🔧 Serviços Executados</button>
+     </div>
+     <div class="form-row"><button class="btn" onclick="gerarRelatorio('contasPagar')">💰 Contas a Pagar</button> <button class="btn" onclick="gerarRelatorio('contasReceber')">💵 Contas a Receber</button>
+     </div>
+    </div>
+    <div class="card">
+     <h3>Faturamento por Período</h3>
+     <div class="form-row">
+      <div class="form-group"><label for="dataInicialRelatorio">Data Inicial</label> <input type="date" id="dataInicialRelatorio">
+      </div>
+      <div class="form-group"><label for="dataFinalRelatorio">Data Final</label> <input type="date" id="dataFinalRelatorio">
+      </div>
+     </div><button class="btn" onclick="gerarRelatorio('faturamentoPeriodo')">📊 Gerar Relatório</button>
+    </div>
+    <div id="relatorioDetalhado"></div>
+   </section>
+  </div><!-- Painel de Edição -->
+  <div class="edit-panel" id="editPanel"><button class="close-panel" onclick="closeEditPanel()">×</button>
+   <div id="editPanelContent"></div>
+  </div>
+  <script>
+        let allData = [];
+        let editingId = null;
+        let currentOSItems = [];
+        let osCounter = 1;
+        let selectedClienteOS = null;
+
+        const defaultConfig = {
+            system_title: "Sistema de Gestão de Oficina",
+            company_name: "Auto Mecânica Premium",
+            background_color: "#1e88e5",
+            surface_color: "#ffffff",
+            text_color: "#2c3e50",
+            primary_action_color: "#00acc1",
+            secondary_action_color: "#43a047",
+            font_family: "Arial",
+            font_size: 16
+        };
+
+        // Máscaras de entrada
+        function maskCPF(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                input.value = value;
+            }
+        }
+
+        function maskCNPJ(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length <= 14) {
+                value = value.replace(/^(\d{2})(\d)/, '$1.$2');
+                value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+                value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
+                value = value.replace(/(\d{4})(\d)/, '$1-$2');
+                input.value = value;
+            }
+        }
+
+        function maskPhone(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                if (value.length <= 10) {
+                    value = value.replace(/^(\d{2})(\d)/, '($1) $2');
+                    value = value.replace(/(\d{4})(\d)/, '$1-$2');
+                } else {
+                    value = value.replace(/^(\d{2})(\d)/, '($1) $2');
+                    value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                }
+                input.value = value;
+            }
+        }
+
+        function maskCEP(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length <= 8) {
+                value = value.replace(/^(\d{5})(\d)/, '$1-$2');
+                input.value = value;
+            }
+        }
+
+        function aplicarMascaraBusca() {
+            const tipoBusca = document.getElementById('tipoBuscaCliente').value;
+            const input = document.getElementById('searchCliente');
+            
+            if (tipoBusca === 'cpf') {
+                maskCPF(input);
+            } else if (tipoBusca === 'cnpj') {
+                maskCNPJ(input);
+            }
+        }
+
+        function limparCampoBuscaCliente() {
+            document.getElementById('searchCliente').value = '';
+        }
+
+        function formatarQuilometragem(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value) {
+                input.value = value + ' km';
+                input.setSelectionRange(value.length, value.length);
+            }
+        }
+
+        // Carregar tema salvo
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.body.classList.add(savedTheme + '-theme');
+        });
+
+        const dataHandler = {
+            onDataChanged(data) {
+                allData = data;
+                atualizarTodasListas();
+                atualizarEstatisticas();
+                
+                const maxOS = Math.max(0, ...data
+                    .filter(item => item.type === 'os' && item.numeroOS)
+                    .map(os => parseInt(os.numeroOS.replace('OS-', '')) || 0)
+                );
+                osCounter = maxOS + 1;
+            }
+        };
+
+        async function init() {
+            const initResult = await window.dataSdk.init(dataHandler);
+            if (!initResult.isOk) {
+                showMessage('Erro ao inicializar o sistema', 'error');
+            }
+        }
+
+        async function onConfigChange(config) {
+            const systemTitle = document.getElementById('systemTitle');
+            const companyName = document.getElementById('companyName');
+            
+            if (systemTitle) {
+                systemTitle.textContent = config.system_title || defaultConfig.system_title;
+            }
+            if (companyName) {
+                companyName.textContent = config.company_name || defaultConfig.company_name;
+            }
+
+            const customFont = config.font_family || defaultConfig.font_family;
+            const baseSize = config.font_size || defaultConfig.font_size;
+            const baseFontStack = 'Arial, "Times New Roman", serif';
+
+            document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+            document.body.style.fontSize = `${baseSize}px`;
+
+            const h1Elements = document.querySelectorAll('h1');
+            h1Elements.forEach(el => el.style.fontSize = `${baseSize * 2.625}px`);
+
+            const h2Elements = document.querySelectorAll('h2');
+            h2Elements.forEach(el => el.style.fontSize = `${baseSize * 2}px`);
+
+            const h3Elements = document.querySelectorAll('h3');
+            h3Elements.forEach(el => el.style.fontSize = `${baseSize * 1.25}px`);
+        }
+
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                onConfigChange,
+                mapToCapabilities: (config) => ({
+                    recolorables: [
+                        {
+                            get: () => config.background_color || defaultConfig.background_color,
+                            set: (value) => {
+                                config.background_color = value;
+                                window.elementSdk.setConfig({ background_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.surface_color || defaultConfig.surface_color,
+                            set: (value) => {
+                                config.surface_color = value;
+                                window.elementSdk.setConfig({ surface_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.text_color || defaultConfig.text_color,
+                            set: (value) => {
+                                config.text_color = value;
+                                window.elementSdk.setConfig({ text_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.primary_action_color || defaultConfig.primary_action_color,
+                            set: (value) => {
+                                config.primary_action_color = value;
+                                window.elementSdk.setConfig({ primary_action_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+                            set: (value) => {
+                                config.secondary_action_color = value;
+                                window.elementSdk.setConfig({ secondary_action_color: value });
+                            }
+                        }
+                    ],
+                    borderables: [],
+                    fontEditable: {
+                        get: () => config.font_family || defaultConfig.font_family,
+                        set: (value) => {
+                            config.font_family = value;
+                            window.elementSdk.setConfig({ font_family: value });
+                        }
+                    },
+                    fontSizeable: {
+                        get: () => config.font_size || defaultConfig.font_size,
+                        set: (value) => {
+                            config.font_size = value;
+                            window.elementSdk.setConfig({ font_size: value });
+                        }
+                    }
+                }),
+                mapToEditPanelValues: (config) => new Map([
+                    ["system_title", config.system_title || defaultConfig.system_title],
+                    ["company_name", config.company_name || defaultConfig.company_name]
+                ])
+            });
+        }
+
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+
+            if (sectionId === 'relatorios') {
+                atualizarEstatisticas();
+            }
+        }
+
+        function showTab(tabId) {
+            const section = event.target.closest('.content-section');
+            const tabs = section.querySelectorAll('.tab');
+            const contents = section.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function showMessage(message, type = 'success') {
+            const container = document.getElementById('messageContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            
+            container.innerHTML = '';
+            container.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.style.opacity = '0';
+                setTimeout(() => messageDiv.remove(), 500);
+            }, 4000);
+        }
+
+        function toggleClienteForm() {
+            const tipo = document.querySelector('input[name="tipoCliente"]:checked').value;
+            const camposFisica = document.getElementById('camposFisica');
+            const camposJuridica = document.getElementById('camposJuridica');
+            
+            if (tipo === 'fisica') {
+                camposFisica.style.display = 'block';
+                camposJuridica.style.display = 'none';
+                document.getElementById('nomeCliente').required = true;
+                document.getElementById('telefoneCliente').required = true;
+                document.getElementById('nomeEmpresa').required = false;
+                document.getElementById('cnpjEmpresa').required = false;
+                document.getElementById('razaoSocial').required = false;
+                document.getElementById('inscricaoEstadual').required = false;
+            } else {
+                camposFisica.style.display = 'none';
+                camposJuridica.style.display = 'block';
+                document.getElementById('nomeCliente').required = false;
+                document.getElementById('telefoneCliente').required = false;
+                document.getElementById('nomeEmpresa').required = true;
+                document.getElementById('cnpjEmpresa').required = true;
+                document.getElementById('razaoSocial').required = true;
+                document.getElementById('inscricaoEstadual').required = true;
+            }
+        }
+
+        async function salvarCliente(event) {
+            event.preventDefault();
+            const tipo = document.querySelector('input[name="tipoCliente"]:checked').value;
+            
+            const cliente = {
+                type: 'cliente',
+                tipoCliente: tipo,
+                createdAt: new Date().toISOString()
+            };
+
+            if (tipo === 'fisica') {
+                cliente.nome = document.getElementById('nomeCliente').value.toUpperCase();
+                cliente.cpf = document.getElementById('cpfCliente').value;
+                cliente.telefone = document.getElementById('telefoneCliente').value;
+                cliente.endereco = document.getElementById('enderecoCliente').value.toUpperCase();
+                cliente.cep = document.getElementById('cepCliente').value;
+            } else {
+                cliente.nome = document.getElementById('nomeEmpresa').value.toUpperCase();
+                cliente.cnpj = document.getElementById('cnpjEmpresa').value;
+                cliente.razaoSocial = document.getElementById('razaoSocial').value.toUpperCase();
+                cliente.nomeFantasia = document.getElementById('nomeFantasia').value.toUpperCase();
+                cliente.inscricaoEstadual = document.getElementById('inscricaoEstadual').value.toUpperCase();
+                cliente.inscricaoMunicipal = document.getElementById('inscricaoMunicipal').value.toUpperCase();
+                cliente.email = document.getElementById('emailEmpresa').value.toUpperCase();
+                cliente.telefone = document.getElementById('telefoneEmpresa').value;
+                cliente.endereco = document.getElementById('enderecoEmpresa').value.toUpperCase();
+                cliente.cep = document.getElementById('cepEmpresa').value;
+            }
+
+            const btn = document.getElementById('btnSalvarCliente');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Salvando...';
+
+            if (editingId) {
+                const recordToUpdate = allData.find(r => r.__backendId === editingId);
+                if (recordToUpdate) {
+                    const updatedRecord = { ...recordToUpdate, ...cliente };
+                    const result = await window.dataSdk.update(updatedRecord);
+                    
+                    if (result.isOk) {
+                        showMessage('✅ Cliente atualizado com sucesso!', 'success');
+                        limparFormCliente();
+                        closeEditPanel();
+                    } else {
+                        showMessage('❌ Erro ao atualizar cliente', 'error');
+                    }
+                }
+            } else {
+                if (allData.length >= 999) {
+                    showMessage('⚠️ Limite de 999 registros atingido. Exclua alguns registros antes de adicionar novos.', 'error');
+                    btn.disabled = false;
+                    btn.textContent = '💾 Cadastrar Cliente';
+                    return;
+                }
+
+                const result = await window.dataSdk.create(cliente);
+                
+                if (result.isOk) {
+                    showMessage('✅ Cliente cadastrado com sucesso!', 'success');
+                    limparFormCliente();
+                } else {
+                    showMessage('❌ Erro ao cadastrar cliente', 'error');
+                }
+            }
+
+            btn.disabled = false;
+            btn.textContent = editingId ? '💾 Atualizar Cliente' : '💾 Cadastrar Cliente';
+            editingId = null;
+        }
+
+        function limparFormCliente() {
+            document.getElementById('formCliente').reset();
+            document.querySelector('input[name="tipoCliente"][value="fisica"]').checked = true;
+            toggleClienteForm();
+            editingId = null;
+            document.getElementById('btnSalvarCliente').textContent = '💾 Cadastrar Cliente';
+        }
+
+        function editarCliente(id) {
+            const cliente = allData.find(c => c.__backendId === id);
+            if (!cliente) {
+                showMessage('❌ Cliente não encontrado', 'error');
+                return;
+            }
+
+            openEditPanel();
+            
+            const content = document.getElementById('editPanelContent');
+            content.innerHTML = `
+                <h2>Editar Cliente</h2>
+                <form id="formEditCliente" onsubmit="salvarClienteEdit(event, '${id}')">
+                    ${cliente.tipoCliente === 'fisica' ? `
+                        <div class="form-group">
+                            <label>Nome *</label>
+                            <input type="text" id="editNome" value="${cliente.nome || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>CPF</label>
+                            <input type="text" id="editCpf" value="${cliente.cpf || ''}" maxlength="14" oninput="maskCPF(this)">
+                        </div>
+                        <div class="form-group">
+                            <label>Telefone *</label>
+                            <input type="text" id="editTelefone" value="${cliente.telefone || ''}" required maxlength="15" oninput="maskPhone(this)">
+                        </div>
+                        <div class="form-group">
+                            <label>CEP</label>
+                            <input type="text" id="editCep" value="${cliente.cep || ''}" maxlength="9" oninput="maskCEP(this)">
+                        </div>
+                        <div class="form-group">
+                            <label>Endereço</label>
+                            <input type="text" id="editEndereco" value="${cliente.endereco || ''}">
+                        </div>
+                    ` : `
+                        <div class="form-group">
+                            <label>Nome *</label>
+                            <input type="text" id="editNome" value="${cliente.nome || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>CNPJ *</label>
+                            <input type="text" id="editCnpj" value="${cliente.cnpj || ''}" required maxlength="18" oninput="maskCNPJ(this)">
+                        </div>
+                        <div class="form-group">
+                            <label>Razão Social *</label>
+                            <input type="text" id="editRazaoSocial" value="${cliente.razaoSocial || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nome Fantasia</label>
+                            <input type="text" id="editNomeFantasia" value="${cliente.nomeFantasia || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Inscrição Estadual *</label>
+                            <input type="text" id="editInscricaoEstadual" value="${cliente.inscricaoEstadual || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Inscrição Municipal</label>
+                            <input type="text" id="editInscricaoMunicipal" value="${cliente.inscricaoMunicipal || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>E-mail</label>
+                            <input type="email" id="editEmail" value="${cliente.email || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Telefone</label>
+                            <input type="text" id="editTelefone" value="${cliente.telefone || ''}" maxlength="15" oninput="maskPhone(this)">
+                        </div>
+                        <div class="form-group">
+                            <label>CEP</label>
+                            <input type="text" id="editCep" value="${cliente.cep || ''}" maxlength="9" oninput="maskCEP(this)">
+                        </div>
+                        <div class="form-group">
+                            <label>Endereço</label>
+                            <input type="text" id="editEndereco" value="${cliente.endereco || ''}">
+                        </div>
+                    `}
+                    <button type="submit" class="btn">💾 Salvar Alterações</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditPanel()">❌ Cancelar</button>
+                </form>
+            `;
+        }
+
+        async function salvarClienteEdit(event, id) {
+            event.preventDefault();
+            const cliente = allData.find(c => c.__backendId === id);
+            if (!cliente) return;
+
+            const updatedCliente = { ...cliente };
+            updatedCliente.nome = document.getElementById('editNome').value.toUpperCase();
+            updatedCliente.telefone = document.getElementById('editTelefone').value;
+            updatedCliente.cep = document.getElementById('editCep').value;
+            updatedCliente.endereco = document.getElementById('editEndereco').value.toUpperCase();
+
+            if (cliente.tipoCliente === 'fisica') {
+                updatedCliente.cpf = document.getElementById('editCpf').value;
+            } else {
+                updatedCliente.cnpj = document.getElementById('editCnpj').value;
+                updatedCliente.razaoSocial = document.getElementById('editRazaoSocial').value.toUpperCase();
+                updatedCliente.nomeFantasia = document.getElementById('editNomeFantasia').value.toUpperCase();
+                updatedCliente.inscricaoEstadual = document.getElementById('editInscricaoEstadual').value.toUpperCase();
+                updatedCliente.inscricaoMunicipal = document.getElementById('editInscricaoMunicipal').value.toUpperCase();
+                updatedCliente.email = document.getElementById('editEmail').value.toUpperCase();
+            }
+
+            const result = await window.dataSdk.update(updatedCliente);
+            
+            if (result.isOk) {
+                showMessage('✅ Cliente atualizado com sucesso!', 'success');
+                closeEditPanel();
+            } else {
+                showMessage('❌ Erro ao atualizar cliente', 'error');
+            }
+        }
+
+        async function excluirCliente(id) {
+            const cliente = allData.find(c => c.__backendId === id);
+            if (!cliente) return;
+
+            const confirmDiv = document.createElement('div');
+            confirmDiv.className = 'message info';
+            confirmDiv.innerHTML = `
+                ⚠️ Tem certeza que deseja excluir este cliente?
+                <div style="margin-top: 10px;">
+                    <button class="btn btn-danger btn-small" onclick="confirmarExclusaoCliente('${id}')">✓ Confirmar</button>
+                    <button class="btn btn-secondary btn-small" onclick="this.parentElement.parentElement.remove()">✗ Cancelar</button>
+                </div>
+            `;
+            document.getElementById('messageContainer').appendChild(confirmDiv);
+        }
+
+        async function confirmarExclusaoCliente(id) {
+            const cliente = allData.find(c => c.__backendId === id);
+            if (!cliente) return;
+
+            const result = await window.dataSdk.delete(cliente);
+            
+            if (result.isOk) {
+                showMessage('✅ Cliente excluído com sucesso!', 'success');
+            } else {
+                showMessage('❌ Erro ao excluir cliente', 'error');
+            }
+        }
+
+        function filtrarClientes() {
+            renderizarClientes();
+        }
+
+        function renderizarClientes() {
+            const searchTerm = document.getElementById('searchCliente').value.toLowerCase();
+            const filterTipo = document.getElementById('filterTipo').value;
+            const tipoBusca = document.getElementById('tipoBuscaCliente').value;
+            
+            const clientes = allData.filter(item => {
+                if (item.type !== 'cliente') return false;
+                
+                let matchSearch = !searchTerm;
+                
+                if (searchTerm) {
+                    if (tipoBusca === 'nome') {
+                        matchSearch = item.nome && item.nome.toLowerCase().includes(searchTerm);
+                    } else if (tipoBusca === 'cpf') {
+                        matchSearch = item.cpf && item.cpf.includes(searchTerm);
+                    } else if (tipoBusca === 'cnpj') {
+                        matchSearch = item.cnpj && item.cnpj.includes(searchTerm);
+                    }
+                }
+                
+                const matchTipo = !filterTipo || item.tipoCliente === filterTipo;
+                
+                return matchSearch && matchTipo;
+            });
+
+            const container = document.getElementById('listaClientes');
+            
+            if (clientes.length === 0 && (searchTerm || filterTipo)) {
+                container.innerHTML = '<div class="message info">❌ Nenhum cliente encontrado</div>';
+                return;
+            }
+            
+            if (clientes.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '<table><thead><tr><th>Nome</th><th>CPF/CNPJ</th><th>Telefone</th><th>Tipo</th><th>Ações</th></tr></thead><tbody>';
+            
+            clientes.forEach(cliente => {
+                html += `
+                    <tr>
+                        <td>${cliente.nome || '-'}</td>
+                        <td>${cliente.cpf || cliente.cnpj || '-'}</td>
+                        <td>${cliente.telefone || '-'}</td>
+                        <td>${cliente.tipoCliente === 'fisica' ? 'Pessoa Física' : 'Pessoa Jurídica'}</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-secondary btn-small" onclick="editarCliente('${cliente.__backendId}')">✏️ Editar</button>
+                            <button class="btn btn-danger btn-small" onclick="excluirCliente('${cliente.__backendId}')">🗑️ Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        async function salvarServico(event) {
+            event.preventDefault();
+            
+            const servico = {
+                type: 'servico',
+                descricao: document.getElementById('descricaoServico').value.toUpperCase(),
+                valor: parseFloat(document.getElementById('valorServico').value),
+                createdAt: new Date().toISOString()
+            };
+
+            const btn = document.getElementById('btnSalvarServico');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Salvando...';
+
+            if (editingId) {
+                const recordToUpdate = allData.find(r => r.__backendId === editingId);
+                if (recordToUpdate) {
+                    const updatedRecord = { ...recordToUpdate, ...servico };
+                    const result = await window.dataSdk.update(updatedRecord);
+                    
+                    if (result.isOk) {
+                        showMessage('✅ Serviço atualizado com sucesso!', 'success');
+                        limparFormServico();
+                        closeEditPanel();
+                    } else {
+                        showMessage('❌ Erro ao atualizar serviço', 'error');
+                    }
+                }
+            } else {
+                if (allData.length >= 999) {
+                    showMessage('⚠️ Limite de 999 registros atingido. Exclua alguns registros antes de adicionar novos.', 'error');
+                    btn.disabled = false;
+                    btn.textContent = '💾 Cadastrar Serviço';
+                    return;
+                }
+
+                const result = await window.dataSdk.create(servico);
+                
+                if (result.isOk) {
+                    showMessage('✅ Serviço cadastrado com sucesso!', 'success');
+                    limparFormServico();
+                } else {
+                    showMessage('❌ Erro ao cadastrar serviço', 'error');
+                }
+            }
+
+            btn.disabled = false;
+            btn.textContent = editingId ? '💾 Atualizar Serviço' : '💾 Cadastrar Serviço';
+            editingId = null;
+        }
+
+        function limparFormServico() {
+            document.getElementById('formServico').reset();
+            editingId = null;
+            document.getElementById('btnSalvarServico').textContent = '💾 Cadastrar Serviço';
+        }
+
+        function editarServico(id) {
+            const servico = allData.find(s => s.__backendId === id);
+            if (!servico) {
+                showMessage('❌ Serviço não encontrado', 'error');
+                return;
+            }
+
+            openEditPanel();
+            
+            const content = document.getElementById('editPanelContent');
+            content.innerHTML = `
+                <h2>Editar Serviço</h2>
+                <form id="formEditServico" onsubmit="salvarServicoEdit(event, '${id}')">
+                    <div class="form-group">
+                        <label>Descrição *</label>
+                        <input type="text" id="editDescricao" value="${servico.descricao || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Valor (R$) *</label>
+                        <input type="number" id="editValor" value="${servico.valor || 0}" step="0.01" min="0" required>
+                    </div>
+                    <button type="submit" class="btn">💾 Salvar Alterações</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditPanel()">❌ Cancelar</button>
+                </form>
+            `;
+        }
+
+        async function salvarServicoEdit(event, id) {
+            event.preventDefault();
+            const servico = allData.find(s => s.__backendId === id);
+            if (!servico) return;
+
+            const updatedServico = {
+                ...servico,
+                descricao: document.getElementById('editDescricao').value.toUpperCase(),
+                valor: parseFloat(document.getElementById('editValor').value)
+            };
+
+            const result = await window.dataSdk.update(updatedServico);
+            
+            if (result.isOk) {
+                showMessage('✅ Serviço atualizado com sucesso!', 'success');
+                closeEditPanel();
+            } else {
+                showMessage('❌ Erro ao atualizar serviço', 'error');
+            }
+        }
+
+        async function excluirServico(id) {
+            const servico = allData.find(s => s.__backendId === id);
+            if (!servico) return;
+
+            const confirmDiv = document.createElement('div');
+            confirmDiv.className = 'message info';
+            confirmDiv.innerHTML = `
+                ⚠️ Tem certeza que deseja excluir este serviço?
+                <div style="margin-top: 10px;">
+                    <button class="btn btn-danger btn-small" onclick="confirmarExclusaoServico('${id}')">✓ Confirmar</button>
+                    <button class="btn btn-secondary btn-small" onclick="this.parentElement.parentElement.remove()">✗ Cancelar</button>
+                </div>
+            `;
+            document.getElementById('messageContainer').appendChild(confirmDiv);
+        }
+
+        async function confirmarExclusaoServico(id) {
+            const servico = allData.find(s => s.__backendId === id);
+            if (!servico) return;
+
+            const result = await window.dataSdk.delete(servico);
+            
+            if (result.isOk) {
+                showMessage('✅ Serviço excluído com sucesso!', 'success');
+            } else {
+                showMessage('❌ Erro ao excluir serviço', 'error');
+            }
+        }
+
+        function filtrarServicos() {
+            renderizarServicos();
+        }
+
+        function renderizarServicos() {
+            const searchTerm = document.getElementById('searchServico').value.toLowerCase();
+            
+            const servicos = allData.filter(item => {
+                if (item.type !== 'servico') return false;
+                return !searchTerm || (item.descricao && item.descricao.toLowerCase().includes(searchTerm));
+            });
+
+            const container = document.getElementById('listaServicos');
+            
+            if (servicos.length === 0 && searchTerm) {
+                container.innerHTML = '<div class="message info">❌ Nenhum serviço encontrado</div>';
+                return;
+            }
+            
+            if (servicos.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '<table><thead><tr><th>Descrição</th><th>Valor</th><th>Ações</th></tr></thead><tbody>';
+            
+            servicos.forEach(servico => {
+                html += `
+                    <tr>
+                        <td>${servico.descricao || '-'}</td>
+                        <td>R$ ${(servico.valor || 0).toFixed(2)}</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-secondary btn-small" onclick="editarServico('${servico.__backendId}')">✏️ Editar</button>
+                            <button class="btn btn-danger btn-small" onclick="excluirServico('${servico.__backendId}')">🗑️ Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function buscarClienteOS() {
+            const searchTerm = document.getElementById('searchClienteOS').value.toLowerCase();
+            const resultados = document.getElementById('resultadosClienteOS');
+            
+            if (searchTerm.length < 2) {
+                resultados.style.display = 'none';
+                return;
+            }
+
+            const clientes = allData.filter(item => {
+                if (item.type !== 'cliente') return false;
+                return (item.nome && item.nome.toLowerCase().includes(searchTerm)) ||
+                       (item.cpf && item.cpf.includes(searchTerm)) ||
+                       (item.cnpj && item.cnpj.includes(searchTerm)) ||
+                       (item.razaoSocial && item.razaoSocial.toLowerCase().includes(searchTerm));
+            });
+
+            if (clientes.length === 0) {
+                resultados.innerHTML = '<div class="search-result-item">❌ Nenhum cliente encontrado</div>';
+                resultados.style.display = 'block';
+                return;
+            }
+
+            let html = '';
+            clientes.forEach(cliente => {
+                html += `
+                    <div class="search-result-item" onclick="selecionarClienteOS('${cliente.__backendId}')">
+                        <strong>${cliente.nome}</strong><br>
+                        <small>${cliente.cpf || cliente.cnpj || 'Sem documento'}</small>
+                        ${cliente.razaoSocial ? `<br><small>Razão Social: ${cliente.razaoSocial}</small>` : ''}
+                    </div>
+                `;
+            });
+
+            resultados.innerHTML = html;
+            resultados.style.display = 'block';
+        }
+
+        function selecionarClienteOS(id) {
+            const cliente = allData.find(c => c.__backendId === id);
+            if (!cliente) return;
+
+            selectedClienteOS = cliente;
+            document.getElementById('resultadosClienteOS').style.display = 'none';
+            document.getElementById('searchClienteOS').value = cliente.nome;
+
+            const container = document.getElementById('clienteSelecionadoOS');
+            container.innerHTML = `
+                <div class="selected-client">
+                    <h4>✓ Cliente Selecionado</h4>
+                    <p><strong>Nome:</strong> ${cliente.nome}</p>
+                    <p><strong>${cliente.cpf ? 'CPF' : 'CNPJ'}:</strong> ${cliente.cpf || cliente.cnpj || '-'}</p>
+                    ${cliente.telefone ? `<p><strong>Telefone:</strong> ${cliente.telefone}</p>` : ''}
+                    ${cliente.razaoSocial ? `<p><strong>Razão Social:</strong> ${cliente.razaoSocial}</p>` : ''}
+                </div>
+            `;
+        }
+
+        function buscarServicoOS() {
+            const searchTerm = document.getElementById('searchServicoOS').value.toLowerCase();
+            const resultados = document.getElementById('resultadosServicoOS');
+            
+            if (searchTerm.length < 2) {
+                resultados.style.display = 'none';
+                return;
+            }
+
+            const servicos = allData.filter(item => {
+                if (item.type !== 'servico') return false;
+                return item.descricao && item.descricao.toLowerCase().includes(searchTerm);
+            });
+
+            if (servicos.length === 0) {
+                resultados.innerHTML = '<div class="search-result-item">❌ Nenhum serviço encontrado</div>';
+                resultados.style.display = 'block';
+                return;
+            }
+
+            let html = '';
+            servicos.forEach(servico => {
+                html += `
+                    <div class="search-result-item" onclick="adicionarServicoOS('${servico.__backendId}')">
+                        <strong>${servico.descricao}</strong><br>
+                        <small>R$ ${(servico.valor || 0).toFixed(2)}</small>
+                    </div>
+                `;
+            });
+
+            resultados.innerHTML = html;
+            resultados.style.display = 'block';
+        }
+
+        function adicionarServicoOS(id) {
+            const servico = allData.find(s => s.__backendId === id);
+            if (!servico) return;
+
+            const existente = currentOSItems.find(item => item.id === id);
+            if (existente) {
+                existente.quantidade++;
+            } else {
+                currentOSItems.push({
+                    tipo: 'servico',
+                    id: id,
+                    descricao: servico.descricao,
+                    valor: servico.valor,
+                    quantidade: 1
+                });
+            }
+
+            atualizarItensOS();
+            document.getElementById('searchServicoOS').value = '';
+            document.getElementById('resultadosServicoOS').style.display = 'none';
+        }
+
+        function atualizarItensOS() {
+            const container = document.getElementById('itensOS');
+            const totalContainer = document.getElementById('totalOS');
+            const itensContainer = document.getElementById('itensOSContainer');
+            
+            if (currentOSItems.length === 0) {
+                itensContainer.style.display = 'none';
+                return;
+            }
+
+            itensContainer.style.display = 'block';
+
+            let html = '<h4 style="color: #1e88e5; margin-bottom: 15px;">Itens Adicionados</h4>';
+            let total = 0;
+
+            currentOSItems.forEach((item, index) => {
+                const subtotal = item.valor * item.quantidade;
+                total += subtotal;
+                
+                html += `
+                    <div class="os-item" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+                        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>🔧 ${item.descricao}</strong><br>
+                                <small>Subtotal: R$ ${subtotal.toFixed(2)}</small>
+                            </div>
+                            <button type="button" class="btn btn-danger btn-small" onclick="removerItemOS(${index})">🗑️ Remover</button>
+                        </div>
+                        <div style="width: 100%; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <label style="margin: 0; font-size: 13px;">Valor Unit.:</label>
+                                <input type="number" step="0.01" min="0" value="${item.valor.toFixed(2)}" 
+                                    onchange="alterarValorItem(${index}, this.value)"
+                                    style="width: 100px; padding: 6px; border-radius: 6px; border: 2px solid #3a3a5e; background: #2a2a3e; color: #e0e0e0;">
+                            </div>
+                            <div class="item-quantity">
+                                <label style="margin: 0; font-size: 13px; margin-right: 8px;">Qtd:</label>
+                                <button type="button" class="qty-btn" onclick="alterarQuantidadeItem(${index}, -1)">-</button>
+                                <span class="qty-display">${item.quantidade}</span>
+                                <button type="button" class="qty-btn" onclick="alterarQuantidadeItem(${index}, 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            totalContainer.textContent = `Total: R$ ${total.toFixed(2)}`;
+        }
+
+        function alterarValorItem(index, novoValor) {
+            const valor = parseFloat(novoValor);
+            if (isNaN(valor) || valor < 0) return;
+            
+            currentOSItems[index].valor = valor;
+            atualizarItensOS();
+        }
+
+        function alterarQuantidadeItem(index, delta) {
+            const item = currentOSItems[index];
+            const novaQtd = item.quantidade + delta;
+
+            if (novaQtd < 1) return;
+
+            item.quantidade = novaQtd;
+            atualizarItensOS();
+        }
+
+        function removerItemOS(index) {
+            currentOSItems.splice(index, 1);
+            atualizarItensOS();
+        }
+
+        async function salvarOS(event) {
+            event.preventDefault();
+
+            if (!selectedClienteOS) {
+                showMessage('⚠️ Selecione um cliente para a ordem de serviço', 'error');
+                return;
+            }
+
+            if (currentOSItems.length === 0) {
+                showMessage('⚠️ Adicione pelo menos um serviço', 'error');
+                return;
+            }
+
+            const total = currentOSItems.reduce((sum, item) => sum + (item.valor * item.quantidade), 0);
+
+            const os = {
+                type: 'os',
+                numeroOS: `OS-${String(osCounter).padStart(6, '0')}`,
+                dataEntrada: new Date().toISOString(),
+                status: 'aberta',
+                clienteId: selectedClienteOS.__backendId,
+                placa: document.getElementById('placaOS').value.toUpperCase(),
+                marca: document.getElementById('marcaOS').value.toUpperCase(),
+                modelo: document.getElementById('modeloOS').value.toUpperCase(),
+                cor: document.getElementById('corOS').value.toUpperCase(),
+                quilometragem: document.getElementById('kmOS').value,
+                recebidoPor: document.getElementById('recebidoPorOS').value.toUpperCase(),
+                autorizadoPor: document.getElementById('autorizadoPorOS').value.toUpperCase(),
+                observacoes: document.getElementById('observacoesOS').value.toUpperCase(),
+                servicos: JSON.stringify(currentOSItems),
+                total: total,
+                createdAt: new Date().toISOString()
+            };
+
+            const btn = document.getElementById('btnSalvarOS');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Salvando...';
+
+            if (editingId) {
+                const recordToUpdate = allData.find(r => r.__backendId === editingId);
+                if (recordToUpdate) {
+                    const updatedRecord = { ...recordToUpdate, ...os };
+                    const result = await window.dataSdk.update(updatedRecord);
+                    
+                    if (result.isOk) {
+                        showMessage('✅ Ordem de serviço atualizada com sucesso!', 'success');
+                        limparFormOS();
+                        closeEditPanel();
+                    } else {
+                        showMessage('❌ Erro ao atualizar ordem de serviço', 'error');
+                    }
+                }
+            } else {
+                if (allData.length >= 999) {
+                    showMessage('⚠️ Limite de 999 registros atingido. Exclua alguns registros antes de adicionar novos.', 'error');
+                    btn.disabled = false;
+                    btn.textContent = '💾 Criar Ordem de Serviço';
+                    return;
+                }
+
+                const result = await window.dataSdk.create(os);
+                
+                if (result.isOk) {
+                    showMessage(`✅ Ordem de serviço ${os.numeroOS} criada com sucesso!`, 'success');
+                    limparFormOS();
+                } else {
+                    showMessage('❌ Erro ao criar ordem de serviço', 'error');
+                }
+            }
+
+            btn.disabled = false;
+            btn.textContent = editingId ? '💾 Atualizar OS' : '💾 Criar Ordem de Serviço';
+            editingId = null;
+        }
+
+        function limparFormOS() {
+            document.getElementById('formOS').reset();
+            currentOSItems = [];
+            selectedClienteOS = null;
+            document.getElementById('clienteSelecionadoOS').innerHTML = '';
+            atualizarItensOS();
+            editingId = null;
+            document.getElementById('btnSalvarOS').textContent = '💾 Criar Ordem de Serviço';
+        }
+
+        function editarOS(id) {
+            const os = allData.find(o => o.__backendId === id);
+            if (!os) {
+                showMessage('❌ Ordem de serviço não encontrada', 'error');
+                return;
+            }
+
+            openEditPanel();
+            
+            const cliente = allData.find(c => c.__backendId === os.clienteId);
+            const clienteNome = cliente ? cliente.nome : 'Cliente não encontrado';
+            const clienteCpfCnpj = cliente ? (cliente.cpf || cliente.cnpj || '-') : '-';
+
+            let itensHTML = '';
+            let total = 0;
+
+            if (os.servicos) {
+                try {
+                    const servicos = JSON.parse(os.servicos);
+                    servicos.forEach(s => {
+                        const subtotal = s.valor * s.quantidade;
+                        total += subtotal;
+                        itensHTML += `<p>🔧 ${s.descricao} - Qtd: ${s.quantidade} - R$ ${s.valor.toFixed(2)} cada - Subtotal: R$ ${subtotal.toFixed(2)}</p>`;
+                    });
+                } catch (e) {}
+            }
+
+            let editServicosArray = [];
+            if (os.servicos) {
+                try {
+                    editServicosArray = JSON.parse(os.servicos);
+                } catch (e) {}
+            }
+
+            const content = document.getElementById('editPanelContent');
+            content.innerHTML = `
+                <h2>Editar Ordem de Serviço</h2>
+                <form id="formEditOS" onsubmit="salvarEdicaoOS(event, '${id}')">
+                    <div class="card">
+                        <h3>Informações da OS</h3>
+                        <p><strong>Número:</strong> ${os.numeroOS}</p>
+                        <p><strong>Status:</strong> <span class="badge badge-${os.status === 'aberta' ? 'open' : 'closed'}">${os.status === 'aberta' ? 'Aberta' : 'Fechada'}</span></p>
+                        <p><strong>Data de Entrada:</strong> ${new Date(os.dataEntrada).toLocaleDateString('pt-BR')}</p>
+                        ${os.dataSaida ? `<p><strong>Data de Saída:</strong> ${new Date(os.dataSaida).toLocaleDateString('pt-BR')}</p>` : ''}
+                    </div>
+                    <div class="card">
+                        <h3>Cliente</h3>
+                        <div class="form-group">
+                            <label>Nome do Cliente</label>
+                            <input type="text" id="editClienteNome" value="${clienteNome}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>CPF/CNPJ</label>
+                            <input type="text" id="editClienteCpfCnpj" value="${clienteCpfCnpj}">
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Veículo</h3>
+                        <div class="form-group">
+                            <label>Placa</label>
+                            <input type="text" id="editPlaca" value="${os.placa || ''}" maxlength="8">
+                        </div>
+                        <div class="form-group">
+                            <label>Modelo</label>
+                            <input type="text" id="editModelo" value="${os.modelo || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Quilometragem</label>
+                            <input type="text" id="editQuilometragem" value="${os.quilometragem || ''}" oninput="formatarQuilometragem(this)">
+                        </div>
+                        <p><strong>Marca:</strong> ${os.marca || '-'}</p>
+                        <p><strong>Cor:</strong> ${os.cor || '-'}</p>
+                    </div>
+                    <div class="card">
+                        <h3>Serviços</h3>
+                        <div id="editServicosOS"></div>
+                        <p style="margin-top: 15px;"><strong>Total: <span id="editTotalOS">R$ ${total.toFixed(2)}</span></strong></p>
+                    </div>
+                    <div class="card">
+                        <h3>Observações</h3>
+                        <div class="form-group">
+                            <textarea id="editObservacoes" rows="4">${os.observacoes || ''}</textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">💾 Salvar Alterações</button>
+                    ${os.status === 'aberta' ? `
+                        <button type="button" class="btn btn-secondary" onclick="fecharOS('${id}')">✓ Fechar OS</button>
+                    ` : ''}
+                    <button type="button" class="btn btn-danger" onclick="closeEditPanel()">❌ Cancelar</button>
+                </form>
+            `;
+
+            window.editServicosOSData = editServicosArray;
+            renderizarServicosEditOS();
+        }
+
+        function renderizarServicosEditOS() {
+            const container = document.getElementById('editServicosOS');
+            if (!container) return;
+
+            let html = '';
+            let total = 0;
+
+            window.editServicosOSData.forEach((servico, index) => {
+                const subtotal = servico.valor * servico.quantidade;
+                total += subtotal;
+
+                html += `
+                    <div class="os-item" style="flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 10px;">
+                        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>🔧 ${servico.descricao}</strong><br>
+                                <small>Subtotal: R$ ${subtotal.toFixed(2)}</small>
+                            </div>
+                            <button type="button" class="btn btn-danger btn-small" onclick="removerServicoEditOS(${index})">🗑️ Remover</button>
+                        </div>
+                        <div style="width: 100%; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <label style="margin: 0; font-size: 13px;">Valor Unit.:</label>
+                                <input type="number" step="0.01" min="0" value="${servico.valor.toFixed(2)}" 
+                                    onchange="alterarValorServicoEditOS(${index}, this.value)"
+                                    style="width: 100px; padding: 6px; border-radius: 6px; border: 2px solid #3a3a5e; background: #2a2a3e; color: #e0e0e0;">
+                            </div>
+                            <div class="item-quantity">
+                                <label style="margin: 0; font-size: 13px; margin-right: 8px;">Qtd:</label>
+                                <button type="button" class="qty-btn" onclick="alterarQtdServicoEditOS(${index}, -1)">-</button>
+                                <span class="qty-display">${servico.quantidade}</span>
+                                <button type="button" class="qty-btn" onclick="alterarQtdServicoEditOS(${index}, 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            document.getElementById('editTotalOS').textContent = `R$ ${total.toFixed(2)}`;
+        }
+
+        function alterarValorServicoEditOS(index, novoValor) {
+            const valor = parseFloat(novoValor);
+            if (isNaN(valor) || valor < 0) return;
+            
+            window.editServicosOSData[index].valor = valor;
+            renderizarServicosEditOS();
+        }
+
+        function alterarQtdServicoEditOS(index, delta) {
+            const servico = window.editServicosOSData[index];
+            const novaQtd = servico.quantidade + delta;
+
+            if (novaQtd < 1) return;
+
+            servico.quantidade = novaQtd;
+            renderizarServicosEditOS();
+        }
+
+        function removerServicoEditOS(index) {
+            window.editServicosOSData.splice(index, 1);
+            renderizarServicosEditOS();
+        }
+
+        async function salvarEdicaoOS(event, id) {
+            event.preventDefault();
+            const os = allData.find(o => o.__backendId === id);
+            if (!os) return;
+
+            const totalServicos = window.editServicosOSData.reduce((sum, item) => sum + (item.valor * item.quantidade), 0);
+
+            const updatedOS = {
+                ...os,
+                placa: document.getElementById('editPlaca').value.toUpperCase(),
+                modelo: document.getElementById('editModelo').value.toUpperCase(),
+                quilometragem: document.getElementById('editQuilometragem').value,
+                observacoes: document.getElementById('editObservacoes').value.toUpperCase(),
+                servicos: JSON.stringify(window.editServicosOSData),
+                total: totalServicos
+            };
+
+            const result = await window.dataSdk.update(updatedOS);
+            
+            if (result.isOk) {
+                showMessage('✅ Ordem de serviço atualizada com sucesso!', 'success');
+                closeEditPanel();
+            } else {
+                showMessage('❌ Erro ao atualizar ordem de serviço', 'error');
+            }
+        }
+
+        async function excluirOS(id) {
+            const os = allData.find(o => o.__backendId === id);
+            if (!os) return;
+
+            const confirmDiv = document.createElement('div');
+            confirmDiv.className = 'message info';
+            confirmDiv.innerHTML = `
+                ⚠️ Tem certeza que deseja excluir a OS ${os.numeroOS}?
+                <div style="margin-top: 10px;">
+                    <button class="btn btn-danger btn-small" onclick="confirmarExclusaoOS('${id}')">✓ Confirmar</button>
+                    <button class="btn btn-secondary btn-small" onclick="this.parentElement.parentElement.remove()">✗ Cancelar</button>
+                </div>
+            `;
+            document.getElementById('messageContainer').appendChild(confirmDiv);
+        }
+
+        async function confirmarExclusaoOS(id) {
+            const os = allData.find(o => o.__backendId === id);
+            if (!os) return;
+
+            const result = await window.dataSdk.delete(os);
+            
+            if (result.isOk) {
+                showMessage('✅ Ordem de serviço excluída com sucesso!', 'success');
+            } else {
+                showMessage('❌ Erro ao excluir ordem de serviço', 'error');
+            }
+        }
+
+        async function fecharOS(id) {
+            const os = allData.find(o => o.__backendId === id);
+            if (!os) return;
+
+            const updatedOS = { 
+                ...os, 
+                status: 'fechada',
+                dataSaida: new Date().toISOString()
+            };
+            
+            const result = await window.dataSdk.update(updatedOS);
+            
+            if (result.isOk) {
+                showMessage('✅ Ordem de serviço fechada com sucesso!', 'success');
+                closeEditPanel();
+            } else {
+                showMessage('❌ Erro ao fechar ordem de serviço', 'error');
+            }
+        }
+
+        function filtrarOS() {
+            renderizarOS();
+        }
+
+        function renderizarOS() {
+            const searchOS = document.getElementById('searchOS').value.toLowerCase();
+            const searchPlaca = document.getElementById('searchPlacaOS').value.toLowerCase();
+            const searchCpfCnpj = document.getElementById('searchCpfCnpjOS').value.toLowerCase();
+            const dataEntrada = document.getElementById('dataEntradaOS').value;
+            const dataSaida = document.getElementById('dataSaidaOS').value;
+            const filterStatus = document.getElementById('filterStatusOS').value;
+            
+            const ordens = allData.filter(item => {
+                if (item.type !== 'os') return false;
+                
+                const matchOS = !searchOS || (item.numeroOS && item.numeroOS.toLowerCase().includes(searchOS));
+                
+                const matchPlaca = !searchPlaca || (item.placa && item.placa.toLowerCase().includes(searchPlaca));
+                
+                const matchCpfCnpj = !searchCpfCnpj || (item.clienteId && (() => {
+                    const cliente = allData.find(c => c.__backendId === item.clienteId);
+                    return cliente && (
+                        (cliente.cpf && cliente.cpf.includes(searchCpfCnpj)) ||
+                        (cliente.cnpj && cliente.cnpj.includes(searchCpfCnpj))
+                    );
+                })());
+                
+                const matchStatus = !filterStatus || item.status === filterStatus;
+                
+                let matchDataEntrada = true;
+                if (dataEntrada) {
+                    const osDate = new Date(item.dataEntrada).toISOString().split('T')[0];
+                    matchDataEntrada = osDate === dataEntrada;
+                }
+                
+                let matchDataSaida = true;
+                if (dataSaida && item.dataSaida) {
+                    const osDateSaida = new Date(item.dataSaida).toISOString().split('T')[0];
+                    matchDataSaida = osDateSaida === dataSaida;
+                }
+                
+                return matchOS && matchPlaca && matchCpfCnpj && matchStatus && matchDataEntrada && matchDataSaida;
+            });
+
+            const container = document.getElementById('listaOS');
+            
+            const hasSearchCriteria = searchOS || searchPlaca || searchCpfCnpj || dataEntrada || dataSaida || filterStatus;
+            
+            if (ordens.length === 0 && hasSearchCriteria) {
+                container.innerHTML = '<div class="message info">❌ Nenhuma ordem de serviço encontrada</div>';
+                return;
+            }
+            
+            if (ordens.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '<table><thead><tr><th>Número</th><th>Cliente</th><th>Veículo</th><th>Data Entrada</th><th>Total</th><th>Status</th><th>Ações</th></tr></thead><tbody>';
+            
+            ordens.forEach(os => {
+                const cliente = allData.find(c => c.__backendId === os.clienteId);
+                const clienteNome = cliente ? cliente.nome : 'Cliente não encontrado';
+                const dataFormatada = new Date(os.dataEntrada).toLocaleDateString('pt-BR');
+                
+                html += `
+                    <tr>
+                        <td><strong>${os.numeroOS || '-'}</strong></td>
+                        <td>${clienteNome}</td>
+                        <td>${os.marca || '-'} ${os.modelo || '-'}<br><small>${os.placa || '-'}</small></td>
+                        <td>${dataFormatada}</td>
+                        <td><strong>R$ ${(os.total || 0).toFixed(2)}</strong></td>
+                        <td><span class="badge badge-${os.status === 'aberta' ? 'open' : 'closed'}">${os.status === 'aberta' ? 'Aberta' : 'Fechada'}</span></td>
+                        <td class="action-buttons">
+                            <button class="btn btn-secondary btn-small" onclick="editarOS('${os.__backendId}')">👁️ Ver Detalhes</button>
+                            <button class="btn btn-danger btn-small" onclick="excluirOS('${os.__backendId}')">🗑️ Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        async function salvarContaPagar(event) {
+            event.preventDefault();
+            
+            const conta = {
+                type: 'contaPagar',
+                numeroDocumento: document.getElementById('numeroDocPagar').value.toUpperCase(),
+                empresaNome: document.getElementById('empresaNomePagar').value.toUpperCase(),
+                empresaCnpj: document.getElementById('empresaPagar').value,
+                dataLancamento: document.getElementById('dataLancamentoPagar').value,
+                dataVencimento: document.getElementById('dataVencimentoPagar').value,
+                valor: parseFloat(document.getElementById('valorPagar').value),
+                statusPagamento: document.getElementById('statusPagar').value,
+                createdAt: new Date().toISOString()
+            };
+
+            const btn = document.getElementById('btnSalvarContaPagar');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Salvando...';
+
+            if (editingId) {
+                const recordToUpdate = allData.find(r => r.__backendId === editingId);
+                if (recordToUpdate) {
+                    const updatedRecord = { ...recordToUpdate, ...conta };
+                    const result = await window.dataSdk.update(updatedRecord);
+                    
+                    if (result.isOk) {
+                        showMessage('✅ Conta atualizada com sucesso!', 'success');
+                        limparFormContaPagar();
+                        closeEditPanel();
+                    } else {
+                        showMessage('❌ Erro ao atualizar conta', 'error');
+                    }
+                }
+            } else {
+                if (allData.length >= 999) {
+                    showMessage('⚠️ Limite de 999 registros atingido. Exclua alguns registros antes de adicionar novos.', 'error');
+                    btn.disabled = false;
+                    btn.textContent = '💾 Cadastrar Conta';
+                    return;
+                }
+
+                const result = await window.dataSdk.create(conta);
+                
+                if (result.isOk) {
+                    showMessage('✅ Conta cadastrada com sucesso!', 'success');
+                    limparFormContaPagar();
+                } else {
+                    showMessage('❌ Erro ao cadastrar conta', 'error');
+                }
+            }
+
+            btn.disabled = false;
+            btn.textContent = editingId ? '💾 Atualizar Conta' : '💾 Cadastrar Conta';
+            editingId = null;
+        }
+
+        function limparFormContaPagar() {
+            document.getElementById('formContaPagar').reset();
+            editingId = null;
+            document.getElementById('btnSalvarContaPagar').textContent = '💾 Cadastrar Conta';
+            document.getElementById('empresaSelecionadaPagar').innerHTML = '';
+        }
+
+        function buscarEmpresaPagar() {
+            const searchTerm = document.getElementById('searchEmpresaPagar').value.toLowerCase();
+            const resultados = document.getElementById('resultadosEmpresaPagar');
+            
+            if (searchTerm.length < 2) {
+                resultados.style.display = 'none';
+                return;
+            }
+
+            const empresas = allData.filter(item => {
+                if (item.type !== 'cliente' || item.tipoCliente !== 'juridica') return false;
+                return (item.nome && item.nome.toLowerCase().includes(searchTerm)) ||
+                       (item.cnpj && item.cnpj.includes(searchTerm)) ||
+                       (item.razaoSocial && item.razaoSocial.toLowerCase().includes(searchTerm));
+            });
+
+            if (empresas.length === 0) {
+                resultados.innerHTML = '<div class="search-result-item">❌ Nenhuma empresa encontrada</div>';
+                resultados.style.display = 'block';
+                return;
+            }
+
+            let html = '';
+            empresas.forEach(empresa => {
+                html += `
+                    <div class="search-result-item" onclick="selecionarEmpresaPagar('${empresa.__backendId}')">
+                        <strong>${empresa.nome}</strong><br>
+                        <small>CNPJ: ${empresa.cnpj || 'Sem CNPJ'}</small>
+                        ${empresa.razaoSocial ? `<br><small>Razão Social: ${empresa.razaoSocial}</small>` : ''}
+                    </div>
+                `;
+            });
+
+            resultados.innerHTML = html;
+            resultados.style.display = 'block';
+        }
+
+        function selecionarEmpresaPagar(id) {
+            const empresa = allData.find(c => c.__backendId === id);
+            if (!empresa) return;
+
+            document.getElementById('resultadosEmpresaPagar').style.display = 'none';
+            document.getElementById('searchEmpresaPagar').value = empresa.nome;
+            document.getElementById('empresaNomePagar').value = empresa.nome;
+            document.getElementById('empresaPagar').value = empresa.cnpj || '';
+
+            const container = document.getElementById('empresaSelecionadaPagar');
+            container.innerHTML = `
+                <div class="selected-client">
+                    <h4>✓ Empresa Selecionada</h4>
+                    <p><strong>Nome:</strong> ${empresa.nome}</p>
+                    <p><strong>CNPJ:</strong> ${empresa.cnpj || '-'}</p>
+                    ${empresa.razaoSocial ? `<p><strong>Razão Social:</strong> ${empresa.razaoSocial}</p>` : ''}
+                </div>
+            `;
+        }
+
+        function editarContaPagar(id) {
+            const conta = allData.find(c => c.__backendId === id);
+            if (!conta) {
+                showMessage('❌ Conta não encontrada', 'error');
+                return;
+            }
+
+            openEditPanel();
+            
+            const content = document.getElementById('editPanelContent');
+            content.innerHTML = `
+                <h2>Editar Conta a Pagar</h2>
+                <form id="formEditContaPagar" onsubmit="salvarContaPagarEdit(event, '${id}')">
+                    <div class="form-group">
+                        <label>Número do Documento/NF *</label>
+                        <input type="text" id="editNumeroDoc" value="${conta.numeroDocumento || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nome da Empresa *</label>
+                        <input type="text" id="editEmpresaNome" value="${conta.empresaNome || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CNPJ da Empresa *</label>
+                        <input type="text" id="editEmpresaCnpj" value="${conta.empresaCnpj || ''}" required maxlength="18" oninput="maskCNPJ(this)">
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Lançamento *</label>
+                        <input type="date" id="editDataLancamento" value="${conta.dataLancamento || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Vencimento *</label>
+                        <input type="date" id="editDataVencimento" value="${conta.dataVencimento || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Valor (R$) *</label>
+                        <input type="number" id="editValor" value="${conta.valor || 0}" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Status *</label>
+                        <select id="editStatus" required>
+                            <option value="aberto" ${conta.statusPagamento === 'aberto' ? 'selected' : ''}>Em Aberto</option>
+                            <option value="pago" ${conta.statusPagamento === 'pago' ? 'selected' : ''}>Pago</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">💾 Salvar Alterações</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditPanel()">❌ Cancelar</button>
+                </form>
+            `;
+        }
+
+        async function salvarContaPagarEdit(event, id) {
+            event.preventDefault();
+            const conta = allData.find(c => c.__backendId === id);
+            if (!conta) return;
+
+            const updatedConta = {
+                ...conta,
+                numeroDocumento: document.getElementById('editNumeroDoc').value.toUpperCase(),
+                empresaNome: document.getElementById('editEmpresaNome').value.toUpperCase(),
+                empresaCnpj: document.getElementById('editEmpresaCnpj').value,
+                dataLancamento: document.getElementById('editDataLancamento').value,
+                dataVencimento: document.getElementById('editDataVencimento').value,
+                valor: parseFloat(document.getElementById('editValor').value),
+                statusPagamento: document.getElementById('editStatus').value
+            };
+
+            const result = await window.dataSdk.update(updatedConta);
+            
+            if (result.isOk) {
+                showMessage('✅ Conta atualizada com sucesso!', 'success');
+                closeEditPanel();
+            } else {
+                showMessage('❌ Erro ao atualizar conta', 'error');
+            }
+        }
+
+        async function excluirContaPagar(id) {
+            const conta = allData.find(c => c.__backendId === id);
+            if (!conta) return;
+
+            const confirmDiv = document.createElement('div');
+            confirmDiv.className = 'message info';
+            confirmDiv.innerHTML = `
+                ⚠️ Tem certeza que deseja excluir esta conta?
+                <div style="margin-top: 10px;">
+                    <button class="btn btn-danger btn-small" onclick="confirmarExclusaoContaPagar('${id}')">✓ Confirmar</button>
+                    <button class="btn btn-secondary btn-small" onclick="this.parentElement.parentElement.remove()">✗ Cancelar</button>
+                </div>
+            `;
+            document.getElementById('messageContainer').appendChild(confirmDiv);
+        }
+
+        async function confirmarExclusaoContaPagar(id) {
+            const conta = allData.find(c => c.__backendId === id);
+            if (!conta) return;
+
+            const result = await window.dataSdk.delete(conta);
+            
+            if (result.isOk) {
+                showMessage('✅ Conta excluída com sucesso!', 'success');
+            } else {
+                showMessage('❌ Erro ao excluir conta', 'error');
+            }
+        }
+
+        function filtrarContasPagar() {
+            renderizarContasPagar();
+        }
+
+        function renderizarContasPagar() {
+            const searchTerm = document.getElementById('searchContaPagar').value.toLowerCase();
+            const searchDataVenc = document.getElementById('searchDataVencPagar').value;
+            const filterStatus = document.getElementById('filterStatusPagar').value;
+            
+            const contas = allData.filter(item => {
+                if (item.type !== 'contaPagar') return false;
+                
+                const matchSearch = !searchTerm || 
+                    (item.numeroDocumento && item.numeroDocumento.toLowerCase().includes(searchTerm)) ||
+                    (item.empresaNome && item.empresaNome.toLowerCase().includes(searchTerm)) ||
+                    (item.empresaCnpj && item.empresaCnpj.includes(searchTerm));
+                
+                const matchStatus = !filterStatus || item.statusPagamento === filterStatus;
+                
+                let matchDataVenc = true;
+                if (searchDataVenc) {
+                    matchDataVenc = item.dataVencimento === searchDataVenc;
+                }
+                
+                return matchSearch && matchStatus && matchDataVenc;
+            });
+
+            const container = document.getElementById('listaContasPagar');
+            
+            const hasSearchCriteria = searchTerm || searchDataVenc || filterStatus;
+            
+            if (contas.length === 0 && hasSearchCriteria) {
+                container.innerHTML = '<div class="message info">❌ Nenhuma conta encontrada</div>';
+                return;
+            }
+            
+            if (contas.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '<table><thead><tr><th>Documento</th><th>Empresa</th><th>CNPJ</th><th>Vencimento</th><th>Valor</th><th>Status</th><th>Ações</th></tr></thead><tbody>';
+            
+            contas.forEach(conta => {
+                const dataVencimento = new Date(conta.dataVencimento).toLocaleDateString('pt-BR');
+                
+                html += `
+                    <tr>
+                        <td>${conta.numeroDocumento || '-'}</td>
+                        <td>${conta.empresaNome || '-'}</td>
+                        <td>${conta.empresaCnpj || '-'}</td>
+                        <td>${dataVencimento}</td>
+                        <td><strong>R$ ${(conta.valor || 0).toFixed(2)}</strong></td>
+                        <td><span class="badge badge-${conta.statusPagamento === 'pago' ? 'paid' : 'pending'}">${conta.statusPagamento === 'pago' ? 'Pago' : 'Em Aberto'}</span></td>
+                        <td class="action-buttons">
+                            <button class="btn btn-secondary btn-small" onclick="editarContaPagar('${conta.__backendId}')">✏️ Editar</button>
+                            <button class="btn btn-danger btn-small" onclick="excluirContaPagar('${conta.__backendId}')">🗑️ Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        async function salvarContaReceber(event) {
+            event.preventDefault();
+            
+            const conta = {
+                type: 'contaReceber',
+                numeroDocumento: document.getElementById('numeroDocReceber').value.toUpperCase(),
+                dataEmissao: document.getElementById('dataEmissaoReceber').value,
+                dataVencimento: document.getElementById('dataVencimentoReceber').value,
+                valor: parseFloat(document.getElementById('valorReceber').value),
+                statusPagamento: document.getElementById('statusReceber').value,
+                createdAt: new Date().toISOString()
+            };
+
+            const btn = document.getElementById('btnSalvarContaReceber');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Salvando...';
+
+            if (editingId) {
+                const recordToUpdate = allData.find(r => r.__backendId === editingId);
+                if (recordToUpdate) {
+                    const updatedRecord = { ...recordToUpdate, ...conta };
+                    const result = await window.dataSdk.update(updatedRecord);
+                    
+                    if (result.isOk) {
+                        showMessage('✅ Conta atualizada com sucesso!', 'success');
+                        limparFormContaReceber();
+                        closeEditPanel();
+                    } else {
+                        showMessage('❌ Erro ao atualizar conta', 'error');
+                    }
+                }
+            } else {
+                if (allData.length >= 999) {
+                    showMessage('⚠️ Limite de 999 registros atingido. Exclua alguns registros antes de adicionar novos.', 'error');
+                    btn.disabled = false;
+                    btn.textContent = '💾 Cadastrar Conta';
+                    return;
+                }
+
+                const result = await window.dataSdk.create(conta);
+                
+                if (result.isOk) {
+                    showMessage('✅ Conta cadastrada com sucesso!', 'success');
+                    limparFormContaReceber();
+                } else {
+                    showMessage('❌ Erro ao cadastrar conta', 'error');
+                }
+            }
+
+            btn.disabled = false;
+            btn.textContent = editingId ? '💾 Atualizar Conta' : '💾 Cadastrar Conta';
+            editingId = null;
+        }
+
+        function limparFormContaReceber() {
+            document.getElementById('formContaReceber').reset();
+            editingId = null;
+            document.getElementById('btnSalvarContaReceber').textContent = '💾 Cadastrar Conta';
+        }
+
+        function editarContaReceber(id) {
+            const conta = allData.find(c => c.__backendId === id);
+            if (!conta) {
+                showMessage('❌ Conta não encontrada', 'error');
+                return;
+            }
+
+            openEditPanel();
+            
+            const content = document.getElementById('editPanelContent');
+            content.innerHTML = `
+                <h2>Editar Conta a Receber</h2>
+                <form id="formEditContaReceber" onsubmit="salvarContaReceberEdit(event, '${id}')">
+                    <div class="form-group">
+                        <label>Número do Documento/NF *</label>
+                        <input type="text" id="editNumeroDoc" value="${conta.numeroDocumento || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Emissão/Lançamento *</label>
+                        <input type="date" id="editDataEmissao" value="${conta.dataEmissao || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Vencimento *</label>
+                        <input type="date" id="editDataVencimento" value="${conta.dataVencimento || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Valor (R$) *</label>
+                        <input type="number" id="editValor" value="${conta.valor || 0}" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Status *</label>
+                        <select id="editStatus" required>
+                            <option value="aberto" ${conta.statusPagamento === 'aberto' ? 'selected' : ''}>Em Aberto</option>
+                            <option value="pago" ${conta.statusPagamento === 'pago' ? 'selected' : ''}>Pago</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">💾 Salvar Alterações</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditPanel()">❌ Cancelar</button>
+                </form>
+            `;
+        }
+
+        async function salvarContaReceberEdit(event, id) {
+            event.preventDefault();
+            const conta = allData.find(c => c.__backendId === id);
+            if (!conta) return;
+
+            const updatedConta = {
+                ...conta,
+                numeroDocumento: document.getElementById('editNumeroDoc').value.toUpperCase(),
+                dataEmissao: document.getElementById('editDataEmissao').value,
+                dataVencimento: document.getElementById('editDataVencimento').value,
+                valor: parseFloat(document.getElementById('editValor').value),
+                statusPagamento: document.getElementById('editStatus').value
+            };
+
+            const result = await window.dataSdk.update(updatedConta);
+            
+            if (result.isOk) {
+                showMessage('✅ Conta atualizada com sucesso!', 'success');
+                closeEditPanel();
+            } else {
+                showMessage('❌ Erro ao atualizar conta', 'error');
+            }
+        }
+
+        async function excluirContaReceber(id) {
+            const conta = allData.find(c => c.__backendId === id);
+            if (!conta) return;
+
+            const confirmDiv = document.createElement('div');
+            confirmDiv.className = 'message info';
+            confirmDiv.innerHTML = `
+                ⚠️ Tem certeza que deseja excluir esta conta?
+                <div style="margin-top: 10px;">
+                    <button class="btn btn-danger btn-small" onclick="confirmarExclusaoContaReceber('${id}')">✓ Confirmar</button>
+                    <button class="btn btn-secondary btn-small" onclick="this.parentElement.parentElement.remove()">✗ Cancelar</button>
+                </div>
+            `;
+            document.getElementById('messageContainer').appendChild(confirmDiv);
+        }
+
+        async function confirmarExclusaoContaReceber(id) {
+            const conta = allData.find(c => c.__backendId === id);
+            if (!conta) return;
+
+            const result = await window.dataSdk.delete(conta);
+            
+            if (result.isOk) {
+                showMessage('✅ Conta excluída com sucesso!', 'success');
+            } else {
+                showMessage('❌ Erro ao excluir conta', 'error');
+            }
+        }
+
+        function filtrarContasReceber() {
+            renderizarContasReceber();
+        }
+
+        function renderizarContasReceber() {
+            const searchTerm = document.getElementById('searchContaReceber').value.toLowerCase();
+            const filterStatus = document.getElementById('filterStatusReceber').value;
+            
+            const contas = allData.filter(item => {
+                if (item.type !== 'contaReceber') return false;
+                
+                const matchSearch = !searchTerm || 
+                    (item.numeroDocumento && item.numeroDocumento.toLowerCase().includes(searchTerm));
+                
+                const matchStatus = !filterStatus || item.statusPagamento === filterStatus;
+                
+                return matchSearch && matchStatus;
+            });
+
+            const container = document.getElementById('listaContasReceber');
+            
+            const hasSearchCriteria = searchTerm || filterStatus;
+            
+            if (contas.length === 0 && hasSearchCriteria) {
+                container.innerHTML = '<div class="message info">❌ Nenhuma conta encontrada</div>';
+                return;
+            }
+            
+            if (contas.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '<table><thead><tr><th>Documento</th><th>Emissão</th><th>Vencimento</th><th>Valor</th><th>Status</th><th>Ações</th></tr></thead><tbody>';
+            
+            contas.forEach(conta => {
+                const dataEmissao = new Date(conta.dataEmissao).toLocaleDateString('pt-BR');
+                const dataVencimento = new Date(conta.dataVencimento).toLocaleDateString('pt-BR');
+                
+                html += `
+                    <tr>
+                        <td>${conta.numeroDocumento || '-'}</td>
+                        <td>${dataEmissao}</td>
+                        <td>${dataVencimento}</td>
+                        <td><strong>R$ ${(conta.valor || 0).toFixed(2)}</strong></td>
+                        <td><span class="badge badge-${conta.statusPagamento === 'pago' ? 'paid' : 'pending'}">${conta.statusPagamento === 'pago' ? 'Pago' : 'Em Aberto'}</span></td>
+                        <td class="action-buttons">
+                            <button class="btn btn-secondary btn-small" onclick="editarContaReceber('${conta.__backendId}')">✏️ Editar</button>
+                            <button class="btn btn-danger btn-small" onclick="excluirContaReceber('${conta.__backendId}')">🗑️ Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function atualizarEstatisticas() {
+            const clientes = allData.filter(item => item.type === 'cliente');
+            const clientesFisica = clientes.filter(c => c.tipoCliente === 'fisica').length;
+            const clientesJuridica = clientes.filter(c => c.tipoCliente === 'juridica').length;
+            
+            const ordens = allData.filter(item => item.type === 'os');
+            const osAbertas = ordens.filter(o => o.status === 'aberta').length;
+            const osFechadas = ordens.filter(o => o.status === 'fechada').length;
+            
+            const faturamentoTotal = ordens.reduce((sum, os) => sum + (os.total || 0), 0);
+            
+            const hoje = new Date();
+            const mesAtual = hoje.getMonth();
+            const anoAtual = hoje.getFullYear();
+            const faturamentoMensal = ordens
+                .filter(os => {
+                    const dataOS = new Date(os.dataEntrada);
+                    return dataOS.getMonth() === mesAtual && dataOS.getFullYear() === anoAtual;
+                })
+                .reduce((sum, os) => sum + (os.total || 0), 0);
+
+            const contasPagar = allData.filter(item => item.type === 'contaPagar');
+            const contasPagarAbertas = contasPagar.filter(c => c.statusPagamento === 'aberto').length;
+
+            const contasReceber = allData.filter(item => item.type === 'contaReceber');
+            const contasReceberAbertas = contasReceber.filter(c => c.statusPagamento === 'aberto').length;
+
+            const statsHTML = `
+                <div class="stat-card">
+                    <div class="stat-label">Total de Clientes</div>
+                    <div class="stat-value">${clientes.length}</div>
+                    <small>PF: ${clientesFisica} | PJ: ${clientesJuridica}</small>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">OS em Aberto</div>
+                    <div class="stat-value">${osAbertas}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">OS Finalizadas</div>
+                    <div class="stat-value">${osFechadas}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Faturamento Total</div>
+                    <div class="stat-value">R$ ${faturamentoTotal.toFixed(2)}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Faturamento Mensal</div>
+                    <div class="stat-value">R$ ${faturamentoMensal.toFixed(2)}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Contas a Pagar</div>
+                    <div class="stat-value">${contasPagarAbertas}</div>
+                    <small style="color: #e53935;">Em aberto</small>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Contas a Receber</div>
+                    <div class="stat-value">${contasReceberAbertas}</div>
+                    <small style="color: #43a047;">Em aberto</small>
+                </div>
+            `;
+
+            document.getElementById('statsGrid').innerHTML = statsHTML;
+        }
+
+        function gerarRelatorio(tipo) {
+            const container = document.getElementById('relatorioDetalhado');
+            let html = '<div class="card" style="margin-top: 20px;">';
+
+            switch(tipo) {
+                case 'clientes':
+                    const clientes = allData.filter(item => item.type === 'cliente');
+                    html += '<h3>📋 Relatório de Clientes Cadastrados</h3>';
+                    html += '<table><thead><tr><th>Nome</th><th>Tipo</th><th>CPF/CNPJ</th><th>Telefone</th><th>Endereço</th></tr></thead><tbody>';
+                    clientes.forEach(c => {
+                        html += `<tr>
+                            <td>${c.nome || '-'}</td>
+                            <td>${c.tipoCliente === 'fisica' ? 'Pessoa Física' : 'Pessoa Jurídica'}</td>
+                            <td>${c.cpf || c.cnpj || '-'}</td>
+                            <td>${c.telefone || '-'}</td>
+                            <td>${c.endereco || '-'}</td>
+                        </tr>`;
+                    });
+                    html += '</tbody></table>';
+                    break;
+
+                case 'osAbertas':
+                    const osAbertas = allData.filter(item => item.type === 'os' && item.status === 'aberta');
+                    html += '<h3>📂 Relatório de Ordens de Serviço em Aberto</h3>';
+                    html += '<table><thead><tr><th>Número</th><th>Data</th><th>Cliente</th><th>Veículo</th><th>Total</th></tr></thead><tbody>';
+                    osAbertas.forEach(os => {
+                        const cliente = allData.find(c => c.__backendId === os.clienteId);
+                        html += `<tr>
+                            <td><strong>${os.numeroOS || '-'}</strong></td>
+                            <td>${new Date(os.dataEntrada).toLocaleDateString('pt-BR')}</td>
+                            <td>${cliente ? cliente.nome : 'N/A'}</td>
+                            <td>${os.marca || '-'} ${os.modelo || '-'} (${os.placa || '-'})</td>
+                            <td><strong>R$ ${(os.total || 0).toFixed(2)}</strong></td>
+                        </tr>`;
+                    });
+                    html += '</tbody></table>';
+                    break;
+
+                case 'osFechadas':
+                    const osFechadas = allData.filter(item => item.type === 'os' && item.status === 'fechada');
+                    html += '<h3>✅ Relatório de Ordens de Serviço Finalizadas</h3>';
+                    html += '<table><thead><tr><th>Número</th><th>Data Entrada</th><th>Data Saída</th><th>Cliente</th><th>Total</th></tr></thead><tbody>';
+                    osFechadas.forEach(os => {
+                        const cliente = allData.find(c => c.__backendId === os.clienteId);
+                        html += `<tr>
+                            <td><strong>${os.numeroOS || '-'}</strong></td>
+                            <td>${new Date(os.dataEntrada).toLocaleDateString('pt-BR')}</td>
+                            <td>${os.dataSaida ? new Date(os.dataSaida).toLocaleDateString('pt-BR') : '-'}</td>
+                            <td>${cliente ? cliente.nome : 'N/A'}</td>
+                            <td><strong>R$ ${(os.total || 0).toFixed(2)}</strong></td>
+                        </tr>`;
+                    });
+                    html += '</tbody></table>';
+                    break;
+
+                case 'servicosExecutados':
+                    const todasOS = allData.filter(item => item.type === 'os');
+                    const servicosCount = new Map();
+                    todasOS.forEach(os => {
+                        if (os.servicos) {
+                            try {
+                                const servicos = JSON.parse(os.servicos);
+                                servicos.forEach(s => {
+                                    const key = s.descricao;
+                                    servicosCount.set(key, (servicosCount.get(key) || 0) + s.quantidade);
+                                });
+                            } catch (e) {}
+                        }
+                    });
+                    const servicosArray = Array.from(servicosCount.entries())
+                        .sort((a, b) => b[1] - a[1]);
+                    
+                    html += '<h3>🔧 Relatório de Serviços Mais Executados</h3>';
+                    html += '<table><thead><tr><th>Serviço</th><th>Quantidade Executada</th></tr></thead><tbody>';
+                    servicosArray.forEach(([servico, qtd]) => {
+                        html += `<tr>
+                            <td>${servico}</td>
+                            <td><strong>${qtd}</strong></td>
+                        </tr>`;
+                    });
+                    html += '</tbody></table>';
+                    break;
+
+                case 'contasPagar':
+                    const contasPagar = allData.filter(item => item.type === 'contaPagar');
+                    html += '<h3>💰 Relatório de Contas a Pagar</h3>';
+                    html += '<table><thead><tr><th>Documento</th><th>Empresa</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead><tbody>';
+                    contasPagar.forEach(c => {
+                        html += `<tr>
+                            <td>${c.numeroDocumento || '-'}</td>
+                            <td>${c.empresaNome || '-'}</td>
+                            <td>${new Date(c.dataVencimento).toLocaleDateString('pt-BR')}</td>
+                            <td><strong>R$ ${(c.valor || 0).toFixed(2)}</strong></td>
+                            <td><span class="badge badge-${c.statusPagamento === 'pago' ? 'paid' : 'pending'}">${c.statusPagamento === 'pago' ? 'Pago' : 'Em Aberto'}</span></td>
+                        </tr>`;
+                    });
+                    html += '</tbody></table>';
+                    break;
+
+                case 'contasReceber':
+                    const contasReceber = allData.filter(item => item.type === 'contaReceber');
+                    html += '<h3>💵 Relatório de Contas a Receber</h3>';
+                    html += '<table><thead><tr><th>Documento</th><th>Emissão</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead><tbody>';
+                    contasReceber.forEach(c => {
+                        html += `<tr>
+                            <td>${c.numeroDocumento || '-'}</td>
+                            <td>${new Date(c.dataEmissao).toLocaleDateString('pt-BR')}</td>
+                            <td>${new Date(c.dataVencimento).toLocaleDateString('pt-BR')}</td>
+                            <td><strong>R$ ${(c.valor || 0).toFixed(2)}</strong></td>
+                            <td><span class="badge badge-${c.statusPagamento === 'pago' ? 'paid' : 'pending'}">${c.statusPagamento === 'pago' ? 'Pago' : 'Em Aberto'}</span></td>
+                        </tr>`;
+                    });
+                    html += '</tbody></table>';
+                    break;
+
+                case 'faturamentoPeriodo':
+                    const dataInicial = document.getElementById('dataInicialRelatorio').value;
+                    const dataFinal = document.getElementById('dataFinalRelatorio').value;
+                    
+                    if (!dataInicial || !dataFinal) {
+                        showMessage('⚠️ Selecione as datas inicial e final', 'error');
+                        return;
+                    }
+
+                    const ordensPeriodo = allData.filter(item => {
+                        if (item.type !== 'os') return false;
+                        const dataOS = item.dataEntrada.split('T')[0];
+                        return dataOS >= dataInicial && dataOS <= dataFinal;
+                    });
+
+                    const faturamentoPeriodo = ordensPeriodo.reduce((sum, os) => sum + (os.total || 0), 0);
+
+                    html += `<h3>📊 Faturamento por Período</h3>`;
+                    html += `<p><strong>Período:</strong> ${new Date(dataInicial).toLocaleDateString('pt-BR')} a ${new Date(dataFinal).toLocaleDateString('pt-BR')}</p>`;
+                    html += `<p style="font-size: 24px; color: #1e88e5;"><strong>Total: R$ ${faturamentoPeriodo.toFixed(2)}</strong></p>`;
+                    html += '<table><thead><tr><th>Número OS</th><th>Data</th><th>Cliente</th><th>Valor</th></tr></thead><tbody>';
+                    ordensPeriodo.forEach(os => {
+                        const cliente = allData.find(c => c.__backendId === os.clienteId);
+                        html += `<tr>
+                            <td><strong>${os.numeroOS || '-'}</strong></td>
+                            <td>${new Date(os.dataEntrada).toLocaleDateString('pt-BR')}</td>
+                            <td>${cliente ? cliente.nome : 'N/A'}</td>
+                            <td><strong>R$ ${(os.total || 0).toFixed(2)}</strong></td>
+                        </tr>`;
+                    });
+                    html += '</tbody></table>';
+                    break;
+            }
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function atualizarTodasListas() {
+            renderizarClientes();
+            renderizarServicos();
+            renderizarOS();
+            renderizarContasPagar();
+            renderizarContasReceber();
+        }
+
+        function openEditPanel() {
+            document.getElementById('editPanel').classList.add('open');
+            document.getElementById('overlay').classList.add('active');
+        }
+
+        function closeEditPanel() {
+            document.getElementById('editPanel').classList.remove('open');
+            document.getElementById('overlay').classList.remove('active');
+            editingId = null;
+        }
+
+        init();
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99c19bb327d1628f',t:'MTc2MjczNjM3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

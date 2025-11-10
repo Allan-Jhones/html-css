@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mini Scanner Web</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.3/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    .drop-zone {
+      border: 2px dashed #ccc;
+      border-radius: 12px;
+      transition: border-color 0.3s, background-color 0.3s;
+    }
+    .drop-zone.dragover {
+      border-color: #3b82f6;
+      background-color: #eff6ff;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+  <div class="max-w-3xl mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-2 text-center">📄 Mini Scanner Web</h1>
+    <p class="text-center text-gray-600 mb-6">Use a câmera, arraste imagens ou faça upload. Gere PDF com 90% de preenchimento por página.</p>
+
+    <div class="flex flex-wrap justify-center gap-3 mb-4">
+      <button id="startCam" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">📷 Abrir câmera</button>
+      <button id="stopCam" disabled class="bg-gray-400 text-white px-4 py-2 rounded-lg">🛑 Parar</button>
+      <button id="snap" disabled class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">📸 Capturar</button>
+      <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
+      <button id="uploadBtn" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg">📁 Upload</button>
+    </div>
+
+    <video id="video" autoplay playsinline class="rounded-xl hidden mx-auto shadow-lg"></video>
+    <canvas id="canvas" class="hidden"></canvas>
+
+    <div id="dropZone" class="drop-zone text-center py-10 text-gray-500">
+      Arraste e solte imagens aqui ou use os botões acima
+    </div>
+
+    <div id="previewContainer" class="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+
+    <div class="text-center mt-6">
+      <button id="downloadPdf" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg shadow-md">📕 Gerar PDF (90%)</button>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    const startCam = document.getElementById('startCam');
+    const stopCam = document.getElementById('stopCam');
+    const snap = document.getElementById('snap');
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const dropZone = document.getElementById('dropZone');
+    const previewContainer = document.getElementById('previewContainer');
+    const downloadPdf = document.getElementById('downloadPdf');
+    const ctx = canvas.getContext('2d');
+    let stream = null;
+    const images = [];
+
+    // Função auxiliar: cria miniatura
+    function addPreview(dataUrl) {
+      const img = document.createElement('img');
+      img.src = dataUrl;
+      img.className = "rounded-lg shadow-md w-full h-auto object-cover";
+      previewContainer.appendChild(img);
+    }
+
+    // Abrir câmera
+    startCam.addEventListener('click', async () => {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        video.srcObject = stream;
+        video.classList.remove('hidden');
+        startCam.disabled = true;
+        stopCam.disabled = false;
+        snap.disabled = false;
+      } catch (err) {
+        alert("Erro ao acessar a câmera: " + err.message);
+      }
+    });
+
+    stopCam.addEventListener('click', () => {
+      if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+        stream = null;
+      }
+      video.classList.add('hidden');
+      startCam.disabled = false;
+      stopCam.disabled = true;
+      snap.disabled = true;
+    });
+
+    // Capturar imagem da câmera
+    snap.addEventListener('click', () => {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      ctx.drawImage(video, 0, 0);
+      const dataUrl = canvas.toDataURL("image/png");
+      images.push(dataUrl);
+      addPreview(dataUrl);
+    });
+
+    // Upload manual
+    uploadBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', e => handleFiles(e.target.files));
+
+    // Drag & drop
+    dropZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      handleFiles(e.dataTransfer.files);
+    });
+
+    function handleFiles(files) {
+      Array.from(files).forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+          images.push(e.target.result);
+          addPreview(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Gerar PDF com imagens 90% da página
+    downloadPdf.addEventListener('click', async () => {
+      if (images.length === 0) {
+        alert("Nenhuma imagem adicionada.");
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ unit: "mm", format: "a4" });
+      const pageWidth = 210, pageHeight = 297;
+
+      for (let i = 0; i < images.length; i++) {
+        const img = await loadImage(images[i]);
+        const imgRatio = img.width / img.height;
+        const usableWidth = pageWidth * 0.9; // 90%
+        const usableHeight = pageHeight * 0.9;
+        let drawWidth, drawHeight;
+
+        if (imgRatio > 1) {
+          // imagem mais larga que alta
+          drawWidth = usableWidth;
+          drawHeight = usableWidth / imgRatio;
+        } else {
+          drawHeight = usableHeight;
+          drawWidth = usableHeight * imgRatio;
+        }
+
+        const x = (pageWidth - drawWidth) / 2;
+        const y = (pageHeight - drawHeight) / 2;
+
+        if (i > 0) pdf.addPage();
+        pdf.addImage(images[i], "JPEG", x, y, drawWidth, drawHeight);
+      }
+
+      pdf.save("scanner.pdf");
+    });
+
+    function loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
+    }
+  })();
+  </script>
+</body>
+</html>
