@@ -2126,7 +2126,9 @@
         <div class="form-group"><label for="enderecoEmpresa">Endereço</label> <input type="text" id="enderecoEmpresa">
         </div>
        </div>
-      </div><button type="submit" class="btn" id="btnSalvarCliente">💾 Cadastrar Cliente</button> <button type="button" class="btn btn-secondary" onclick="limparFormCliente()">🔄 Limpar</button>
+      </div>
+      <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid rgba(30, 136, 229, 0.2);"><button type="submit" class="btn" id="btnSalvarCliente">💾 Cadastrar Cliente</button> <button type="button" class="btn btn-secondary" onclick="limparFormCliente()">🔄 Limpar</button>
+      </div>
      </form>
     </div>
     <div id="pesquisaCliente" class="tab-content">
@@ -2171,7 +2173,9 @@
        </div>
        <div class="form-group"><label for="valorPeca">Valor (R$) *</label> <input type="number" id="valorPeca" step="0.01" min="0">
        </div>
-      </div><button type="submit" class="btn" id="btnSalvarServico">💾 Cadastrar Serviço</button> <button type="button" class="btn btn-secondary" onclick="limparFormServico()">🔄 Limpar</button>
+      </div>
+      <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid rgba(30, 136, 229, 0.2);"><button type="submit" class="btn" id="btnSalvarServico">💾 Cadastrar Serviço</button> <button type="button" class="btn btn-secondary" onclick="limparFormServico()">🔄 Limpar</button>
+      </div>
      </form>
     </div>
     <div id="pesquisaServico" class="tab-content">
@@ -2304,7 +2308,9 @@
        </div>
       </div>
       <div class="form-group"><label for="statusPagar">Status *</label> <select id="statusPagar" required> <option value="aberto">Em Aberto</option> <option value="pago">Pago</option> </select>
-      </div><button type="submit" class="btn" id="btnSalvarContaPagar">💾 Cadastrar Conta</button> <button type="button" class="btn btn-secondary" onclick="limparFormContaPagar()">🔄 Limpar</button>
+      </div>
+      <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid rgba(30, 136, 229, 0.2);"><button type="submit" class="btn" id="btnSalvarContaPagar">💾 Cadastrar Conta</button> <button type="button" class="btn btn-secondary" onclick="limparFormContaPagar()">🔄 Limpar</button>
+      </div>
      </form>
     </div>
     <div id="pesquisaContaPagar" class="tab-content">
@@ -2341,7 +2347,9 @@
        </div>
       </div>
       <div class="form-group"><label for="statusReceber">Status *</label> <select id="statusReceber" required> <option value="aberto">Em Aberto</option> <option value="pago">Pago</option> </select>
-      </div><button type="submit" class="btn" id="btnSalvarContaReceber">💾 Cadastrar Conta</button> <button type="button" class="btn btn-secondary" onclick="limparFormContaReceber()">🔄 Limpar</button>
+      </div>
+      <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid rgba(30, 136, 229, 0.2);"><button type="submit" class="btn" id="btnSalvarContaReceber">💾 Cadastrar Conta</button> <button type="button" class="btn btn-secondary" onclick="limparFormContaReceber()">🔄 Limpar</button>
+      </div>
      </form>
     </div>
     <div id="pesquisaContaReceber" class="tab-content">
@@ -2415,7 +2423,8 @@
     <div class="card">
      <h3>💾 Dados do Sistema</h3>
      <div class="form-row"><button class="btn btn-secondary" onclick="exportarDados()">📤 Exportar Dados</button> <button class="btn btn-secondary" onclick="importarDados()">📥 Importar Dados</button>
-     </div><input type="file" id="importFile" accept=".json" style="display: none;" onchange="processarImportacao(event)"> <small style="color: #666; margin-top: 10px; display: block;"> Exporte seus dados para backup ou importe dados de outro sistema </small>
+     </div><input type="file" id="importFile" accept=".json" style="display: none;" onchange="processarImportacao(event)"> <small style="color: #666; margin-top: 10px; display: block;"> 📤 Exportar: Salva todos os dados em arquivo JSON para backup<br>
+       📥 Importar: Carrega dados de arquivo JSON (substitui dados atuais) </small>
     </div>
    </section>
   </div><!-- Modal para Relatórios -->
@@ -5581,5 +5590,5 @@
             }
         });
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99e0e577016c7e15',t:'MTc2MzA2NDQ1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99e0f307404f480d',t:'MTc2MzA2NTAxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
