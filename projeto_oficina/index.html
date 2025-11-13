@@ -16,8 +16,8 @@
             font-family: Arial, 'Times New Roman', serif;
             min-height: 100%;
             transition: all 0.3s ease;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #e0e0e0;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #2d3748;
         }
 
         html, body {
@@ -39,7 +39,8 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
             transition: all 0.3s ease;
             position: relative;
-            background: rgba(30, 30, 50, 0.98);
+            background: rgba(255, 255, 255, 0.98);
+            border: 2px solid rgba(30, 136, 229, 0.1);
         }
 
         header:hover {
@@ -60,7 +61,7 @@
 
         .subtitle {
             text-align: center;
-            color: #718096;
+            color: #4a5568;
             font-size: 18px;
             font-style: italic;
         }
@@ -127,6 +128,23 @@
             border: 2px solid rgba(30, 136, 229, 0.3);
         }
 
+        /* Seção de cadastro de serviços centralizada */
+        .content-section#servicos .tab-content#cadastroServico {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 25px;
+            background: rgba(248, 250, 252, 0.98);
+            border-radius: 15px;
+            border: 2px solid rgba(30, 136, 229, 0.3);
+        }
+
+        /* Seção de cadastro de OS ajustada para acompanhar conteúdo */
+        .content-section#ordens .tab-content#cadastroOS {
+            max-width: none;
+            width: 100%;
+            padding: 20px;
+        }
+
         /* Seções com tabelas se expandem para acompanhar o conteúdo */
         .content-section:has(table) {
             max-width: none;
@@ -153,6 +171,35 @@
             max-width: none;
             width: 100%;
             overflow-x: auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(30, 136, 229, 0.1);
+        }
+
+        /* Scroll horizontal direto nas tabelas */
+        .content-section table {
+            width: 100%;
+            min-width: 800px; /* Largura mínima para manter colunas legíveis */
+            overflow-x: auto;
+            display: block;
+            white-space: nowrap;
+        }
+
+        .content-section table thead,
+        .content-section table tbody {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        /* Container das listas com scroll */
+        #listaClientes, #listaServicos, #listaOS, #listaContasPagar, #listaContasReceber {
+            max-width: none;
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 20px;
         }
 
         .content-section.active {
@@ -194,7 +241,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 16px;
             color: #4a5568;
         }
 
@@ -410,42 +457,118 @@
             text-overflow: ellipsis;
         }
 
-        /* Larguras específicas para colunas das tabelas */
-        table th:nth-child(1), table td:nth-child(1) { /* Nome */
+        /* Larguras específicas para tabelas de clientes */
+        #listaClientes table th:nth-child(1), #listaClientes table td:nth-child(1) { /* Nome */
             min-width: 200px;
-            max-width: 300px;
+            width: 25%;
         }
         
-        table th:nth-child(2), table td:nth-child(2) { /* CPF/CNPJ */
-            min-width: 140px;
-            width: 140px;
-        }
-        
-        table th:nth-child(3), table td:nth-child(3) { /* Telefone */
-            min-width: 130px;
-            width: 130px;
-        }
-        
-        table th:nth-child(4), table td:nth-child(4) { /* Tipo */
-            min-width: 120px;
-            width: 120px;
-        }
-        
-        table th:nth-child(5), table td:nth-child(5) { /* Ações */
-            min-width: 200px;
-            width: 200px;
-        }
-
-        /* Para tabelas de serviços */
-        .content-section table th:first-child,
-        .content-section table td:first-child {
-            min-width: 250px;
-        }
-
-        /* Para tabelas de OS */
-        .content-section table th:nth-child(3),
-        .content-section table td:nth-child(3) {
+        #listaClientes table th:nth-child(2), #listaClientes table td:nth-child(2) { /* CPF/CNPJ */
             min-width: 150px;
+            width: 18%;
+        }
+        
+        #listaClientes table th:nth-child(3), #listaClientes table td:nth-child(3) { /* Telefone */
+            min-width: 140px;
+            width: 17%;
+        }
+        
+        #listaClientes table th:nth-child(4), #listaClientes table td:nth-child(4) { /* Tipo */
+            min-width: 120px;
+            width: 15%;
+        }
+        
+        #listaClientes table th:nth-child(5), #listaClientes table td:nth-child(5) { /* Ações */
+            min-width: 220px;
+            width: 25%;
+        }
+
+        /* Larguras específicas para tabelas de serviços */
+        #listaServicos table th:nth-child(1), #listaServicos table td:nth-child(1) { /* Código */
+            min-width: 120px;
+            width: 15%;
+        }
+        
+        #listaServicos table th:nth-child(2), #listaServicos table td:nth-child(2) { /* Descrição */
+            min-width: 250px;
+            width: 50%;
+        }
+        
+        #listaServicos table th:nth-child(3), #listaServicos table td:nth-child(3) { /* Valor */
+            min-width: 120px;
+            width: 15%;
+        }
+        
+        #listaServicos table th:nth-child(4), #listaServicos table td:nth-child(4) { /* Ações */
+            min-width: 120px;
+            width: 20%;
+        }
+
+        /* Larguras específicas para tabelas de contas a pagar */
+        #listaContasPagar table th:nth-child(1), #listaContasPagar table td:nth-child(1) { /* Documento */
+            min-width: 120px;
+            width: 15%;
+        }
+        
+        #listaContasPagar table th:nth-child(2), #listaContasPagar table td:nth-child(2) { /* Empresa */
+            min-width: 200px;
+            width: 25%;
+        }
+        
+        #listaContasPagar table th:nth-child(3), #listaContasPagar table td:nth-child(3) { /* CNPJ */
+            min-width: 150px;
+            width: 18%;
+        }
+        
+        #listaContasPagar table th:nth-child(4), #listaContasPagar table td:nth-child(4) { /* Vencimento */
+            min-width: 110px;
+            width: 12%;
+        }
+        
+        #listaContasPagar table th:nth-child(5), #listaContasPagar table td:nth-child(5) { /* Valor */
+            min-width: 120px;
+            width: 15%;
+        }
+        
+        #listaContasPagar table th:nth-child(6), #listaContasPagar table td:nth-child(6) { /* Status */
+            min-width: 100px;
+            width: 10%;
+        }
+        
+        #listaContasPagar table th:nth-child(7), #listaContasPagar table td:nth-child(7) { /* Ações */
+            min-width: 220px;
+            width: 20%;
+        }
+
+        /* Larguras específicas para tabelas de contas a receber */
+        #listaContasReceber table th:nth-child(1), #listaContasReceber table td:nth-child(1) { /* Documento */
+            min-width: 150px;
+            width: 20%;
+        }
+        
+        #listaContasReceber table th:nth-child(2), #listaContasReceber table td:nth-child(2) { /* Emissão */
+            min-width: 110px;
+            width: 15%;
+        }
+        
+        #listaContasReceber table th:nth-child(3), #listaContasReceber table td:nth-child(3) { /* Vencimento */
+            min-width: 110px;
+            width: 15%;
+        }
+        
+        #listaContasReceber table th:nth-child(4), #listaContasReceber table td:nth-child(4) { /* Valor */
+            min-width: 120px;
+            width: 20%;
+        }
+        
+        #listaContasReceber table th:nth-child(5), #listaContasReceber table td:nth-child(5) { /* Status */
+            min-width: 100px;
+            width: 15%;
+        }
+        
+        #listaContasReceber table th:nth-child(6), #listaContasReceber table td:nth-child(6) { /* Ações */
+            min-width: 220px;
+            width: 25%;
         }
 
         th {
@@ -488,12 +611,44 @@
         }
 
         .card {
-            padding: 25px;
+            padding: 20px;
             border-radius: 12px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border: 2px solid rgba(30, 136, 229, 0.2);
             transition: all 0.3s ease;
             background: rgba(248, 250, 252, 0.98);
+        }
+
+        /* Cards específicos da OS com espaçamento reduzido */
+        #cadastroOS .card {
+            padding: 12px;
+            margin-bottom: 12px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #cadastroOS .form-group {
+            margin-bottom: 8px;
+        }
+
+        #cadastroOS h3 {
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        #cadastroOS label {
+            margin-bottom: 4px;
+            font-size: 15px;
+        }
+
+        #cadastroOS input, #cadastroOS select, #cadastroOS textarea {
+            padding: 6px 10px;
+            font-size: 13px;
+        }
+
+        #cadastroOS .form-row {
+            gap: 15px;
         }
 
         .card:hover {
@@ -703,23 +858,23 @@
             z-index: 1000;
             overflow-y: auto;
             padding: 30px;
-            background: #1e1e32;
+            background: #ffffff;
         }
 
         .edit-panel input, .edit-panel select, .edit-panel textarea {
-            background: #2a2a3e;
-            color: #e0e0e0;
-            border: 2px solid #3a3a5e;
+            background: #ffffff;
+            color: #2d3748;
+            border: 2px solid #e2e8f0;
         }
 
         .edit-panel input:focus, .edit-panel select:focus, .edit-panel textarea:focus {
             border-color: #1e88e5;
-            background: #2a2a3e;
-            color: #e0e0e0;
+            background: #ffffff;
+            color: #2d3748;
         }
 
         .edit-panel label {
-            color: #b0b0c0;
+            color: #4a5568;
         }
 
         .edit-panel h2 {
@@ -787,7 +942,7 @@
         }
 
         .modal-content {
-            background: #1e1e32;
+            background: #ffffff;
             border-radius: 0;
             padding: 30px;
             width: 100%;
@@ -796,7 +951,7 @@
             position: relative;
             box-shadow: none;
             animation: modalSlideIn 0.4s ease;
-            color: #e0e0e0;
+            color: #2d3748;
         }
 
         @keyframes modalSlideIn {
@@ -892,7 +1047,7 @@
         }
 
         .confirm-modal-content {
-            background: linear-gradient(135deg, #1e1e32 0%, #2a2a3e 100%);
+            background: #ffffff;
             border-radius: 20px;
             padding: 40px;
             max-width: 500px;
@@ -900,12 +1055,12 @@
             position: relative;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             animation: confirmModalSlideIn 0.4s ease;
-            color: #e0e0e0;
+            color: #2d3748;
             border: 2px solid rgba(229, 57, 53, 0.3);
         }
 
         .success-modal-content {
-            background: linear-gradient(135deg, #1e1e32 0%, #2a2a3e 100%);
+            background: #ffffff;
             border-radius: 20px;
             padding: 40px;
             max-width: 500px;
@@ -913,7 +1068,7 @@
             position: relative;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             animation: confirmModalSlideIn 0.4s ease;
-            color: #e0e0e0;
+            color: #2d3748;
             border: 2px solid rgba(67, 160, 71, 0.3);
         }
 
@@ -948,7 +1103,7 @@
 
         .confirm-modal-message {
             font-size: 16px;
-            color: #b0b0c0;
+            color: #4a5568;
             line-height: 1.5;
             text-align: center;
             margin-bottom: 30px;
@@ -974,7 +1129,7 @@
 
         .success-modal-message {
             font-size: 16px;
-            color: #b0b0c0;
+            color: #4a5568;
             line-height: 1.5;
             text-align: center;
             margin-bottom: 30px;
@@ -1031,7 +1186,7 @@
 
         .confirm-modal-item-details {
             font-size: 14px;
-            color: #b0b0c0;
+            color: #4a5568;
             line-height: 1.4;
         }
 
@@ -1124,7 +1279,7 @@
         }
 
         .modal-body {
-            color: #e0e0e0;
+            color: #2d3748;
         }
 
         .modal-summary {
@@ -1141,14 +1296,14 @@
         .modal-summary-item {
             text-align: center;
             padding: 15px;
-            background: rgba(30, 30, 50, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 12px;
             border: 1px solid rgba(30, 136, 229, 0.2);
         }
 
         .modal-summary-label {
             font-size: 14px;
-            color: #b0b0c0;
+            color: #4a5568;
             margin-bottom: 8px;
             font-weight: 600;
             text-transform: uppercase;
@@ -1186,7 +1341,7 @@
         }
 
         .modal-table-container {
-            background: rgba(30, 30, 50, 0.5);
+            background: rgba(248, 250, 252, 0.8);
             border-radius: 15px;
             padding: 20px;
             border: 2px solid rgba(30, 136, 229, 0.2);
@@ -1215,18 +1370,75 @@
 
         .modal td {
             padding: 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(40, 40, 60, 0.5);
-            color: #e0e0e0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            background: rgba(255, 255, 255, 0.8);
+            color: #2d3748;
         }
 
         .modal tr:hover td {
-            background: rgba(30, 136, 229, 0.2);
+            background: rgba(30, 136, 229, 0.1);
             transition: all 0.3s ease;
         }
 
         .modal tr:last-child td {
             border-bottom: none;
+        }
+
+        /* Larguras específicas para colunas dos relatórios */
+        .modal table th:first-child,
+        .modal table td:first-child {
+            width: 120px;
+            min-width: 120px;
+            max-width: 120px;
+        }
+
+        /* Para tabelas de contas a pagar/receber - coluna documento */
+        .modal table th:nth-child(1),
+        .modal table td:nth-child(1) {
+            width: 120px;
+            min-width: 120px;
+            max-width: 120px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Para tabelas de OS - coluna número */
+        .modal table th:first-child,
+        .modal table td:first-child {
+            width: 100px;
+            min-width: 100px;
+            max-width: 100px;
+        }
+
+        /* Colunas de data */
+        .modal table th:nth-child(2),
+        .modal table td:nth-child(2),
+        .modal table th:nth-child(3),
+        .modal table td:nth-child(3) {
+            width: 110px;
+            min-width: 110px;
+            max-width: 110px;
+            white-space: nowrap;
+        }
+
+        /* Colunas de valor */
+        .modal table th:last-child,
+        .modal table td:last-child {
+            width: 120px;
+            min-width: 120px;
+            max-width: 120px;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        /* Coluna de status */
+        .modal table th:nth-last-child(2),
+        .modal table td:nth-last-child(2) {
+            width: 100px;
+            min-width: 100px;
+            max-width: 100px;
+            text-align: center;
         }
 
         @media (max-width: 768px) {
@@ -1452,7 +1664,7 @@
     <h1 id="systemTitle">Sistema de Gestão de Oficina</h1>
     <p class="subtitle" id="companyName">Auto Mecânica Premium</p>
    </header>
-   <nav><button class="nav-btn active" onclick="showSection('clientes', event)">👥 Clientes</button> <button class="nav-btn" onclick="showSection('servicos', event)">🔧 Serviços</button> <button class="nav-btn" onclick="showSection('ordens', event)">📋 Ordens de Serviço</button> <button class="nav-btn" onclick="showSection('contasPagar', event)">💰 Contas a Pagar</button> <button class="nav-btn" onclick="showSection('contasReceber', event)">💵 Contas a Receber</button> <button class="nav-btn" onclick="showSection('relatorios', event)">📊 Relatórios</button>
+   <nav><button class="nav-btn active" onclick="showSection('clientes', event)">👥 Clientes</button> <button class="nav-btn" onclick="showSection('servicos', event)">🔧 Serviços/Peças</button> <button class="nav-btn" onclick="showSection('ordens', event)">📋 Ordens de Serviço</button> <button class="nav-btn" onclick="showSection('contasPagar', event)">💰 Contas a Pagar</button> <button class="nav-btn" onclick="showSection('contasReceber', event)">💵 Contas a Receber</button> <button class="nav-btn" onclick="showSection('relatorios', event)">📊 Relatórios</button>
    </nav>
    <div id="messageContainer"></div><!-- Seção Clientes -->
    <section id="clientes" class="content-section active">
@@ -1519,7 +1731,7 @@
       <div class="form-row">
        <div class="form-group"><label for="tipoBuscaCliente">Buscar por</label> <select id="tipoBuscaCliente" onchange="limparCampoBuscaCliente()"> <option value="nome">Nome</option> <option value="cpf">CPF</option> <option value="cnpj">CNPJ</option> </select>
        </div>
-       <div class="form-group"><label for="searchCliente">Digite para buscar</label> <input type="text" id="searchCliente" placeholder="Digite para buscar..." oninput="aplicarMascaraBusca()">
+       <div class="form-group"><label for="searchCliente">Digite para buscar</label> <input type="text" id="searchCliente" placeholder="Digite para buscar..." oninput="aplicarMascaraBusca()" onkeypress="if(event.key==='Enter') filtrarClientes()">
        </div>
        <div class="form-group"><label for="filterTipo">Filtrar por Tipo</label> <select id="filterTipo"> <option value="">Todos</option> <option value="fisica">Pessoa Física</option> <option value="juridica">Pessoa Jurídica</option> </select>
        </div>
@@ -1532,19 +1744,41 @@
     <div class="tabs"><button class="tab active" onclick="showTab('cadastroServico', event)">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaServico', event)">Pesquisar</button>
     </div>
     <div id="cadastroServico" class="tab-content active">
-     <h2>Cadastro de Serviços</h2>
+     <h2>Cadastro de Serviços/Peças</h2>
+     <div class="radio-group"><label> <input type="radio" name="tipoItem" value="servico" checked onchange="toggleItemForm()"> Serviço </label> <label> <input type="radio" name="tipoItem" value="peca" onchange="toggleItemForm()"> Peça </label>
+     </div>
      <form id="formServico" onsubmit="salvarServico(event)">
-      <div class="form-row">
-       <div class="form-group"><label for="descricaoServico">Descrição *</label> <input type="text" id="descricaoServico" required>
+      <div id="camposServico">
+       <div class="form-row">
+        <div class="form-group"><label for="descricaoServico">Descrição do Serviço *</label> <input type="text" id="descricaoServico" required>
+        </div>
+        <div class="form-group"><label for="codigoServico">Código do Serviço</label> <input type="text" id="codigoServico">
+        </div>
        </div>
        <div class="form-group"><label for="valorServico">Valor (R$) *</label> <input type="number" id="valorServico" step="0.01" min="0" required>
+       </div>
+      </div>
+      <div id="camposPeca" style="display: none;">
+       <div class="form-row">
+        <div class="form-group"><label for="descricaoPeca">Descrição da Peça *</label> <input type="text" id="descricaoPeca">
+        </div>
+        <div class="form-group"><label for="codigoPeca">Código da Peça</label> <input type="text" id="codigoPeca">
+        </div>
+       </div>
+       <div class="form-group"><label for="valorPeca">Valor (R$) *</label> <input type="number" id="valorPeca" step="0.01" min="0">
        </div>
       </div><button type="submit" class="btn" id="btnSalvarServico">💾 Cadastrar Serviço</button> <button type="button" class="btn btn-secondary" onclick="limparFormServico()">🔄 Limpar</button>
      </form>
     </div>
     <div id="pesquisaServico" class="tab-content">
-     <h2>Pesquisar Serviços</h2>
-     <div class="search-box"><input type="text" id="searchServico" placeholder="Digite para buscar..."> <button class="btn" onclick="filtrarServicos()" style="margin-top: 15px;">🔍 Pesquisar</button>
+     <h2>Pesquisar Serviços/Peças</h2>
+     <div class="search-box">
+      <div class="form-row">
+       <div class="form-group"><label for="searchServico">Digite para buscar</label> <input type="text" id="searchServico" placeholder="Digite para buscar..." onkeypress="if(event.key==='Enter') filtrarServicos()">
+       </div>
+       <div class="form-group"><label for="filterTipoItem">Filtrar por Tipo</label> <select id="filterTipoItem"> <option value="">Todos</option> <option value="servico">Serviços</option> <option value="peca">Peças</option> </select>
+       </div>
+      </div><button class="btn" onclick="filtrarServicos()">🔍 Pesquisar</button>
      </div>
      <div id="listaServicos"></div>
     </div>
@@ -1589,9 +1823,9 @@
        </div>
       </div>
       <div class="card">
-       <h3>🔧 Serviços</h3>
+       <h3>🔧 Serviços e Peças</h3>
        <div class="form-row">
-        <div class="form-group"><label for="searchServicoOS">Pesquisar Serviço</label> <input type="text" id="searchServicoOS" placeholder="Digite para buscar..." oninput="buscarServicoOS()">
+        <div class="form-group"><label for="searchServicoOS">Pesquisar Serviço ou Peça</label> <input type="text" id="searchServicoOS" placeholder="Digite para buscar serviços ou peças..." oninput="buscarServicoOS()">
          <div id="resultadosServicoOS" class="search-results" style="display: none;"></div>
         </div>
        </div>
@@ -1606,18 +1840,20 @@
        <h3>📝 Observações</h3>
        <div class="form-group"><label for="observacoesOS">Observações</label> <textarea id="observacoesOS" rows="4"></textarea>
        </div>
-      </div><button type="submit" class="btn" id="btnSalvarOS">💾 Criar Ordem de Serviço</button> <button type="button" class="btn btn-secondary" onclick="limparFormOS()">🔄 Limpar</button>
+      </div>
+      <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid rgba(30, 136, 229, 0.2);"><button type="submit" class="btn" id="btnSalvarOS">💾 Criar Ordem de Serviço</button> <button type="button" class="btn btn-secondary" onclick="limparFormOS()">🔄 Limpar</button>
+      </div>
      </form>
     </div>
     <div id="pesquisaOS" class="tab-content">
      <h2>Pesquisar Ordens de Serviço</h2>
      <div class="search-box">
       <div class="form-row">
-       <div class="form-group"><label for="searchOS">Número da OS</label> <input type="text" id="searchOS" placeholder="Digite o número...">
+       <div class="form-group"><label for="searchOS">Número da OS</label> <input type="text" id="searchOS" placeholder="Digite o número..." onkeypress="if(event.key==='Enter') filtrarOS()">
        </div>
-       <div class="form-group"><label for="searchPlacaOS">Placa</label> <input type="text" id="searchPlacaOS" placeholder="Digite a placa...">
+       <div class="form-group"><label for="searchPlacaOS">Placa</label> <input type="text" id="searchPlacaOS" placeholder="Digite a placa..." onkeypress="if(event.key==='Enter') filtrarOS()">
        </div>
-       <div class="form-group"><label for="searchCpfCnpjOS">CPF/CNPJ</label> <input type="text" id="searchCpfCnpjOS" placeholder="Digite CPF/CNPJ...">
+       <div class="form-group"><label for="searchCpfCnpjOS">CPF/CNPJ</label> <input type="text" id="searchCpfCnpjOS" placeholder="Digite CPF/CNPJ..." onkeypress="if(event.key==='Enter') filtrarOS()">
        </div>
       </div>
       <div class="form-row">
@@ -1671,7 +1907,7 @@
      <h2>Pesquisar Contas a Pagar</h2>
      <div class="search-box">
       <div class="form-row">
-       <div class="form-group"><label for="searchContaPagar">Número do Documento ou Nome da Empresa</label> <input type="text" id="searchContaPagar" placeholder="Digite para buscar...">
+       <div class="form-group"><label for="searchContaPagar">Número do Documento ou Nome da Empresa</label> <input type="text" id="searchContaPagar" placeholder="Digite para buscar..." onkeypress="if(event.key==='Enter') filtrarContasPagar()">
        </div>
        <div class="form-group"><label for="dataVencimentoBuscaPagar">Data de Vencimento</label> <input type="date" id="dataVencimentoBuscaPagar">
        </div>
@@ -1708,7 +1944,7 @@
      <h2>Pesquisar Contas a Receber</h2>
      <div class="search-box">
       <div class="form-row">
-       <div class="form-group"><label for="searchContaReceber">Número do Documento</label> <input type="text" id="searchContaReceber" placeholder="Digite para buscar...">
+       <div class="form-group"><label for="searchContaReceber">Número do Documento</label> <input type="text" id="searchContaReceber" placeholder="Digite para buscar..." onkeypress="if(event.key==='Enter') filtrarContasReceber()">
        </div>
        <div class="form-group"><label for="filterStatusReceber">Status</label> <select id="filterStatusReceber"> <option value="">Todos</option> <option value="aberto">Em Aberto</option> <option value="pago">Pago</option> </select>
        </div>
@@ -1778,7 +2014,7 @@
      <div class="confirm-modal-item-name" id="confirmItemName"></div>
      <div class="confirm-modal-item-details" id="confirmItemDetails"></div>
     </div>
-    <div class="confirm-modal-actions"><button class="confirm-btn confirm-btn-danger" id="confirmDeleteBtn"> 🗑️ Confirmar Exclusão </button> <button class="confirm-btn confirm-btn-secondary" onclick="fecharConfirmModal()"> ❌ Cancelar </button>
+    <div class="confirm-modal-actions"><button class="confirm-btn confirm-btn-danger" id="confirmDeleteBtn"> 🗑️ Confirmar Exclusão </button> <button class="confirm-btn confirm-btn-secondary" onclick="fecharConfirmModal()"> ❌ Fechar </button>
     </div>
    </div>
   </div><!-- Modal de Sucesso -->
@@ -2008,6 +2244,31 @@
             }
         }
 
+        function toggleItemForm() {
+            const tipo = document.querySelector('input[name="tipoItem"]:checked').value;
+            const camposServico = document.getElementById('camposServico');
+            const camposPeca = document.getElementById('camposPeca');
+            const btnSalvar = document.getElementById('btnSalvarServico');
+            
+            if (tipo === 'servico') {
+                camposServico.style.display = 'block';
+                camposPeca.style.display = 'none';
+                document.getElementById('descricaoServico').required = true;
+                document.getElementById('valorServico').required = true;
+                document.getElementById('descricaoPeca').required = false;
+                document.getElementById('valorPeca').required = false;
+                btnSalvar.textContent = '💾 Cadastrar Serviço';
+            } else {
+                camposServico.style.display = 'none';
+                camposPeca.style.display = 'block';
+                document.getElementById('descricaoServico').required = false;
+                document.getElementById('valorServico').required = false;
+                document.getElementById('descricaoPeca').required = true;
+                document.getElementById('valorPeca').required = true;
+                btnSalvar.textContent = '💾 Cadastrar Peça';
+            }
+        }
+
         function salvarCliente(event) {
             event.preventDefault();
             
@@ -2021,22 +2282,22 @@
             };
 
             if (tipo === 'fisica') {
-                cliente.nome = document.getElementById('nomeCliente').value.toUpperCase();
-                cliente.cpf = document.getElementById('cpfCliente').value;
-                cliente.telefone = document.getElementById('telefoneCliente').value;
-                cliente.endereco = document.getElementById('enderecoCliente').value.toUpperCase();
-                cliente.cep = document.getElementById('cepCliente').value;
+                cliente.nome = document.getElementById('nomeCliente').value.toUpperCase() || '-';
+                cliente.cpf = document.getElementById('cpfCliente').value || '-';
+                cliente.telefone = document.getElementById('telefoneCliente').value || '-';
+                cliente.endereco = document.getElementById('enderecoCliente').value.toUpperCase() || '-';
+                cliente.cep = document.getElementById('cepCliente').value || '-';
             } else {
-                cliente.nome = document.getElementById('nomeEmpresa').value.toUpperCase();
-                cliente.cnpj = document.getElementById('cnpjEmpresa').value;
-                cliente.razaoSocial = document.getElementById('razaoSocial').value.toUpperCase();
-                cliente.nomeFantasia = document.getElementById('nomeFantasia').value.toUpperCase();
-                cliente.inscricaoEstadual = document.getElementById('inscricaoEstadual').value.toUpperCase();
-                cliente.inscricaoMunicipal = document.getElementById('inscricaoMunicipal').value.toUpperCase();
-                cliente.email = document.getElementById('emailEmpresa').value.toUpperCase();
-                cliente.telefone = document.getElementById('telefoneEmpresa').value;
-                cliente.endereco = document.getElementById('enderecoEmpresa').value.toUpperCase();
-                cliente.cep = document.getElementById('cepEmpresa').value;
+                cliente.nome = document.getElementById('nomeEmpresa').value.toUpperCase() || '-';
+                cliente.cnpj = document.getElementById('cnpjEmpresa').value || '-';
+                cliente.razaoSocial = document.getElementById('razaoSocial').value.toUpperCase() || '-';
+                cliente.nomeFantasia = document.getElementById('nomeFantasia').value.toUpperCase() || '-';
+                cliente.inscricaoEstadual = document.getElementById('inscricaoEstadual').value.toUpperCase() || '-';
+                cliente.inscricaoMunicipal = document.getElementById('inscricaoMunicipal').value.toUpperCase() || '-';
+                cliente.email = document.getElementById('emailEmpresa').value.toUpperCase() || '-';
+                cliente.telefone = document.getElementById('telefoneEmpresa').value || '-';
+                cliente.endereco = document.getElementById('enderecoEmpresa').value.toUpperCase() || '-';
+                cliente.cep = document.getElementById('cepEmpresa').value || '-';
             }
 
             if (editingId) {
@@ -2141,7 +2402,7 @@
                         </div>
                     `}
                     <button type="submit" class="btn">💾 Salvar Alterações</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeEditPanel()">❌ Cancelar</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditPanel()">❌ Fechar</button>
                 </form>
             `;
         }
@@ -2151,20 +2412,20 @@
             const cliente = allData.find(c => c.id === id);
             if (!cliente) return;
 
-            cliente.nome = document.getElementById('editNome').value.toUpperCase();
-            cliente.telefone = document.getElementById('editTelefone').value;
-            cliente.cep = document.getElementById('editCep').value;
-            cliente.endereco = document.getElementById('editEndereco').value.toUpperCase();
+            cliente.nome = document.getElementById('editNome').value.toUpperCase() || '-';
+            cliente.telefone = document.getElementById('editTelefone').value || '-';
+            cliente.cep = document.getElementById('editCep').value || '-';
+            cliente.endereco = document.getElementById('editEndereco').value.toUpperCase() || '-';
 
             if (cliente.tipoCliente === 'fisica') {
-                cliente.cpf = document.getElementById('editCpf').value;
+                cliente.cpf = document.getElementById('editCpf').value || '-';
             } else {
-                cliente.cnpj = document.getElementById('editCnpj').value;
-                cliente.razaoSocial = document.getElementById('editRazaoSocial').value.toUpperCase();
-                cliente.nomeFantasia = document.getElementById('editNomeFantasia').value.toUpperCase();
-                cliente.inscricaoEstadual = document.getElementById('editInscricaoEstadual').value.toUpperCase();
-                cliente.inscricaoMunicipal = document.getElementById('editInscricaoMunicipal').value.toUpperCase();
-                cliente.email = document.getElementById('editEmail').value.toUpperCase();
+                cliente.cnpj = document.getElementById('editCnpj').value || '-';
+                cliente.razaoSocial = document.getElementById('editRazaoSocial').value.toUpperCase() || '-';
+                cliente.nomeFantasia = document.getElementById('editNomeFantasia').value.toUpperCase() || '-';
+                cliente.inscricaoEstadual = document.getElementById('editInscricaoEstadual').value.toUpperCase() || '-';
+                cliente.inscricaoMunicipal = document.getElementById('editInscricaoMunicipal').value.toUpperCase() || '-';
+                cliente.email = document.getElementById('editEmail').value.toUpperCase() || '-';
             }
 
             saveToLocalStorage();
@@ -2299,23 +2560,34 @@
         function salvarServico(event) {
             event.preventDefault();
             
-            const servico = {
+            const tipo = document.querySelector('input[name="tipoItem"]:checked').value;
+            
+            const item = {
                 id: editingId || generateId(),
                 type: 'servico',
-                descricao: document.getElementById('descricaoServico').value.toUpperCase(),
-                valor: parseFloat(document.getElementById('valorServico').value),
+                tipoItem: tipo,
                 createdAt: new Date().toISOString()
             };
+
+            if (tipo === 'servico') {
+                item.descricao = document.getElementById('descricaoServico').value.toUpperCase() || '-';
+                item.codigo = document.getElementById('codigoServico').value.toUpperCase() || '-';
+                item.valor = parseFloat(document.getElementById('valorServico').value) || 0;
+            } else {
+                item.descricao = document.getElementById('descricaoPeca').value.toUpperCase() || '-';
+                item.codigo = document.getElementById('codigoPeca').value.toUpperCase() || '-';
+                item.valor = parseFloat(document.getElementById('valorPeca').value) || 0;
+            }
 
             if (editingId) {
                 const index = allData.findIndex(r => r.id === editingId);
                 if (index !== -1) {
-                    allData[index] = servico;
-                    showMessage('✅ Serviço atualizado com sucesso!', 'success');
+                    allData[index] = item;
+                    showMessage(`✅ ${tipo === 'servico' ? 'Serviço' : 'Peça'} atualizado com sucesso!`, 'success');
                 }
             } else {
-                allData.push(servico);
-                showMessage('✅ Serviço cadastrado com sucesso!', 'success');
+                allData.push(item);
+                showMessage(`✅ ${tipo === 'servico' ? 'Serviço' : 'Peça'} cadastrado com sucesso!`, 'success');
             }
 
             saveToLocalStorage();
@@ -2326,73 +2598,126 @@
 
         function limparFormServico() {
             document.getElementById('formServico').reset();
+            document.querySelector('input[name="tipoItem"][value="servico"]').checked = true;
+            toggleItemForm();
             editingId = null;
-            document.getElementById('btnSalvarServico').textContent = '💾 Cadastrar Serviço';
         }
 
         function editarServico(id) {
-            const servico = allData.find(s => s.id === id);
-            if (!servico) {
-                showMessage('❌ Serviço não encontrado', 'error');
+            const item = allData.find(s => s.id === id);
+            if (!item) {
+                showMessage('❌ Item não encontrado', 'error');
                 return;
             }
 
             openEditPanel();
             
+            const tipoItem = item.tipoItem || 'servico';
+            const tituloTipo = tipoItem === 'servico' ? 'Serviço' : 'Peça';
+            
             const content = document.getElementById('editPanelContent');
-            content.innerHTML = `
-                <h2>Editar Serviço</h2>
-                <form id="formEditServico" onsubmit="salvarServicoEdit(event, '${id}')">
-                    <div class="form-group">
-                        <label>Descrição *</label>
-                        <input type="text" id="editDescricao" value="${servico.descricao || ''}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Valor (R$) *</label>
-                        <input type="number" id="editValor" value="${servico.valor || 0}" step="0.01" min="0" required>
-                    </div>
-                    <button type="submit" class="btn">💾 Salvar Alterações</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeEditPanel()">❌ Cancelar</button>
-                </form>
-            `;
+            
+            if (tipoItem === 'servico') {
+                content.innerHTML = `
+                    <h2>Editar Serviço</h2>
+                    <form id="formEditServico" onsubmit="salvarServicoEdit(event, '${id}')">
+                        <div class="form-group">
+                            <label>Descrição *</label>
+                            <input type="text" id="editDescricao" value="${item.descricao || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Código do Serviço</label>
+                            <input type="text" id="editCodigo" value="${item.codigo || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Valor (R$) *</label>
+                            <input type="number" id="editValor" value="${item.valor || 0}" step="0.01" min="0" required>
+                        </div>
+                        <button type="submit" class="btn">💾 Salvar Alterações</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeEditPanel()">❌ Fechar</button>
+                    </form>
+                `;
+            } else {
+                content.innerHTML = `
+                    <h2>Editar Peça</h2>
+                    <form id="formEditServico" onsubmit="salvarServicoEdit(event, '${id}')">
+                        <div class="form-group">
+                            <label>Descrição *</label>
+                            <input type="text" id="editDescricao" value="${item.descricao || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Código da Peça</label>
+                            <input type="text" id="editCodigo" value="${item.codigo || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Valor (R$) *</label>
+                            <input type="number" id="editValor" value="${item.valor || 0}" step="0.01" min="0" required>
+                        </div>
+                        <button type="submit" class="btn">💾 Salvar Alterações</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeEditPanel()">❌ Fechar</button>
+                    </form>
+                `;
+            }
         }
 
         function salvarServicoEdit(event, id) {
             event.preventDefault();
-            const servico = allData.find(s => s.id === id);
-            if (!servico) return;
+            const item = allData.find(s => s.id === id);
+            if (!item) return;
 
-            servico.descricao = document.getElementById('editDescricao').value.toUpperCase();
-            servico.valor = parseFloat(document.getElementById('editValor').value);
+            const tipoItem = item.tipoItem || 'servico';
+
+            item.descricao = document.getElementById('editDescricao').value.toUpperCase() || '-';
+            item.valor = parseFloat(document.getElementById('editValor').value) || 0;
+
+            if (tipoItem === 'servico') {
+                item.codigo = document.getElementById('editCodigo').value.toUpperCase() || '-';
+            } else if (tipoItem === 'peca') {
+                item.codigo = document.getElementById('editCodigo').value.toUpperCase() || '-';
+            }
 
             saveToLocalStorage();
-            showMessage('✅ Serviço atualizado com sucesso!', 'success');
+            showMessage(`✅ ${tipoItem === 'servico' ? 'Serviço' : 'Peça'} atualizado com sucesso!`, 'success');
             atualizarTodasListas();
             closeEditPanel();
         }
 
         function excluirServico(id) {
-            const servico = allData.find(s => s.id === id);
-            if (!servico) return;
+            const item = allData.find(s => s.id === id);
+            if (!item) return;
+
+            const tipoItem = item.tipoItem || 'servico';
+            const tituloTipo = tipoItem === 'servico' ? 'Serviço' : 'Peça';
+            const iconeTipo = tipoItem === 'servico' ? '🔧' : '🔩';
+
+            let detalhes = `
+                <strong>Valor:</strong> R$ ${(item.valor || 0).toFixed(2)}<br>
+                <strong>Cadastrado em:</strong> ${new Date(item.createdAt).toLocaleDateString('pt-BR')}
+            `;
+
+            if (tipoItem === 'peca') {
+                detalhes += `<br><strong>Código:</strong> ${item.codigo || 'Não informado'}`;
+            }
 
             abrirConfirmModal({
-                icon: '🔧',
-                title: 'Excluir Serviço',
-                message: 'Tem certeza que deseja excluir este serviço? Esta ação não pode ser desfeita.',
-                itemName: servico.descricao,
-                itemDetails: `
-                    <strong>Valor:</strong> R$ ${(servico.valor || 0).toFixed(2)}<br>
-                    <strong>Cadastrado em:</strong> ${new Date(servico.createdAt).toLocaleDateString('pt-BR')}
-                `,
-                buttonText: '🗑️ Excluir Serviço',
+                icon: iconeTipo,
+                title: `Excluir ${tituloTipo}`,
+                message: `Tem certeza que deseja excluir este ${tipoItem}? Esta ação não pode ser desfeita.`,
+                itemName: item.descricao,
+                itemDetails: detalhes,
+                buttonText: `🗑️ Excluir ${tituloTipo}`,
                 onConfirm: () => confirmarExclusaoServico(id)
             });
         }
 
         function confirmarExclusaoServico(id) {
+            const item = allData.find(s => s.id === id);
+            const tipoItem = item ? (item.tipoItem || 'servico') : 'item';
+            const tituloTipo = tipoItem === 'servico' ? 'Serviço' : 'Peça';
+            
             allData = allData.filter(s => s.id !== id);
             saveToLocalStorage();
-            showMessage('✅ Serviço excluído com sucesso!', 'success');
+            showMessage(`✅ ${tituloTipo} excluído com sucesso!`, 'success');
             atualizarTodasListas();
             fecharConfirmModal();
         }
@@ -2403,34 +2728,54 @@
 
         function renderizarServicos() {
             const searchTerm = document.getElementById('searchServico').value.toLowerCase();
+            const filterTipo = document.getElementById('filterTipoItem').value;
             
-            const servicos = allData.filter(item => {
+            const itens = allData.filter(item => {
                 if (item.type !== 'servico') return false;
-                return !searchTerm || (item.descricao && item.descricao.toLowerCase().includes(searchTerm));
+                
+                const matchSearch = !searchTerm || (item.descricao && item.descricao.toLowerCase().includes(searchTerm)) ||
+                                   (item.codigo && item.codigo.toLowerCase().includes(searchTerm)) ||
+                                   (item.marca && item.marca.toLowerCase().includes(searchTerm));
+                
+                const matchTipo = !filterTipo || (item.tipoItem === filterTipo);
+                
+                return matchSearch && matchTipo;
             });
 
             const container = document.getElementById('listaServicos');
             
-            if (servicos.length === 0 && searchTerm) {
-                container.innerHTML = '<div class="message info">❌ Nenhum serviço encontrado</div>';
+            const hasSearchCriteria = searchTerm || filterTipo;
+            
+            if (itens.length === 0 && hasSearchCriteria) {
+                container.innerHTML = '<div class="message info">❌ Nenhum item encontrado</div>';
                 return;
             }
             
-            if (servicos.length === 0) {
+            if (itens.length === 0) {
                 container.innerHTML = '';
                 return;
             }
 
-            let html = '<table><thead><tr><th>Descrição</th><th>Valor</th><th>Ações</th></tr></thead><tbody>';
+            let html = '<table><thead><tr><th>Código</th><th>Descrição</th><th>Valor</th><th>Ações</th></tr></thead><tbody>';
             
-            servicos.forEach(servico => {
+            itens.forEach(item => {
+                const tipoItem = item.tipoItem || 'servico';
+                const tipoIcon = tipoItem === 'servico' ? '🔧' : '🔩';
+                const codigo = item.codigo && item.codigo !== '-' ? item.codigo : '-';
+                
                 html += `
                     <tr>
-                        <td>${servico.descricao || '-'}</td>
-                        <td>R$ ${(servico.valor || 0).toFixed(2)}</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">${tipoIcon}</span>
+                                <strong>${codigo}</strong>
+                            </div>
+                        </td>
+                        <td><strong>${item.descricao || '-'}</strong></td>
+                        <td><strong>R$ ${(item.valor || 0).toFixed(2)}</strong></td>
                         <td class="action-buttons">
-                            <button class="btn btn-secondary btn-small" onclick="editarServico('${servico.id}')">✏️ Editar</button>
-                            <button class="btn btn-danger btn-small" onclick="excluirServico('${servico.id}')">🗑️ Excluir</button>
+                            <button class="btn btn-secondary btn-small" onclick="editarServico('${item.id}')">✏️</button>
+                            <button class="btn btn-danger btn-small" onclick="excluirServico('${item.id}')">🗑️</button>
                         </td>
                     </tr>
                 `;
@@ -2511,23 +2856,26 @@
                 return;
             }
 
-            const servicos = allData.filter(item => {
+            const itens = allData.filter(item => {
                 if (item.type !== 'servico') return false;
                 return item.descricao && item.descricao.toLowerCase().includes(searchTerm);
             });
 
-            if (servicos.length === 0) {
-                resultados.innerHTML = '<div class="search-result-item">❌ Nenhum serviço encontrado</div>';
+            if (itens.length === 0) {
+                resultados.innerHTML = '<div class="search-result-item">❌ Nenhum item encontrado</div>';
                 resultados.style.display = 'block';
                 return;
             }
 
             let html = '';
-            servicos.forEach(servico => {
+            itens.forEach(item => {
+                const tipoIcon = item.tipoItem === 'servico' ? '🔧' : '🔩';
+                const tipoLabel = item.tipoItem === 'servico' ? 'Serviço' : 'Peça';
+                
                 html += `
-                    <div class="search-result-item" onclick="adicionarServicoOS('${servico.id}')">
-                        <strong>${servico.descricao}</strong><br>
-                        <small>R$ ${(servico.valor || 0).toFixed(2)}</small>
+                    <div class="search-result-item" onclick="adicionarServicoOS('${item.id}')">
+                        <strong>${tipoIcon} ${item.descricao}</strong><br>
+                        <small>${tipoLabel} - R$ ${(item.valor || 0).toFixed(2)}</small>
                     </div>
                 `;
             });
@@ -2537,18 +2885,18 @@
         }
 
         function adicionarServicoOS(id) {
-            const servico = allData.find(s => s.id === id);
-            if (!servico) return;
+            const item = allData.find(s => s.id === id);
+            if (!item) return;
 
-            const existente = currentOSItems.find(item => item.id === id);
+            const existente = currentOSItems.find(osItem => osItem.id === id);
             if (existente) {
                 existente.quantidade++;
             } else {
                 currentOSItems.push({
-                    tipo: 'servico',
+                    tipo: item.tipoItem || 'servico',
                     id: id,
-                    descricao: servico.descricao,
-                    valor: servico.valor,
+                    descricao: item.descricao,
+                    valor: item.valor,
                     quantidade: 1
                 });
             }
@@ -2576,25 +2924,26 @@
             currentOSItems.forEach((item, index) => {
                 const subtotal = item.valor * item.quantidade;
                 total += subtotal;
+                const tipoIcon = item.tipo === 'servico' ? '🔧' : '🔩';
                 
                 html += `
                     <div class="os-item" style="flex-direction: column; align-items: flex-start; gap: 10px;">
                         <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                             <div>
-                                <strong>🔧 ${item.descricao}</strong><br>
+                                <strong>${tipoIcon} ${item.descricao}</strong><br>
                                 <small>Subtotal: R$ ${subtotal.toFixed(2)}</small>
                             </div>
                             <button type="button" class="btn btn-danger btn-small" onclick="removerItemOS(${index})">🗑️ Remover</button>
                         </div>
                         <div style="width: 100%; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <label style="margin: 0; font-size: 13px;">Valor Unit.:</label>
+                                <label style="margin: 0; font-size: 15px;">Valor Unit.:</label>
                                 <input type="number" step="0.01" min="0" value="${item.valor.toFixed(2)}" 
                                     onchange="alterarValorItem(${index}, this.value)"
-                                    style="width: 100px; padding: 6px; border-radius: 6px; border: 2px solid #3a3a5e; background: #2a2a3e; color: #e0e0e0;">
+                                    style="width: 100px; padding: 6px; border-radius: 6px; border: 2px solid #e2e8f0; background: #ffffff; color: #2d3748;">
                             </div>
                             <div class="item-quantity">
-                                <label style="margin: 0; font-size: 13px; margin-right: 8px;">Qtd:</label>
+                                <label style="margin: 0; font-size: 15px; margin-right: 8px;">Qtd:</label>
                                 <button type="button" class="qty-btn" onclick="alterarQuantidadeItem(${index}, -1)">-</button>
                                 <span class="qty-display">${item.quantidade}</span>
                                 <button type="button" class="qty-btn" onclick="alterarQuantidadeItem(${index}, 1)">+</button>
@@ -2653,14 +3002,14 @@
                 dataEntrada: new Date().toISOString(),
                 status: 'aberta',
                 clienteId: selectedClienteOS.id,
-                placa: document.getElementById('placaOS').value.toUpperCase(),
-                marca: document.getElementById('marcaOS').value.toUpperCase(),
-                modelo: document.getElementById('modeloOS').value.toUpperCase(),
-                cor: document.getElementById('corOS').value.toUpperCase(),
-                quilometragem: document.getElementById('kmOS').value,
-                recebidoPor: document.getElementById('recebidoPorOS').value.toUpperCase(),
-                autorizadoPor: document.getElementById('autorizadoPorOS').value.toUpperCase(),
-                observacoes: document.getElementById('observacoesOS').value.toUpperCase(),
+                placa: document.getElementById('placaOS').value.toUpperCase() || '-',
+                marca: document.getElementById('marcaOS').value.toUpperCase() || '-',
+                modelo: document.getElementById('modeloOS').value.toUpperCase() || '-',
+                cor: document.getElementById('corOS').value.toUpperCase() || '-',
+                quilometragem: document.getElementById('kmOS').value || '-',
+                recebidoPor: document.getElementById('recebidoPorOS').value.toUpperCase() || '-',
+                autorizadoPor: document.getElementById('autorizadoPorOS').value.toUpperCase() || '-',
+                observacoes: document.getElementById('observacoesOS').value.toUpperCase() || '-',
                 servicos: JSON.stringify(currentOSItems),
                 total: total,
                 createdAt: new Date().toISOString()
@@ -2710,20 +3059,6 @@
             const clienteNome = cliente ? cliente.nome : 'Cliente não encontrado';
             const clienteCpfCnpj = cliente ? (cliente.cpf || cliente.cnpj || '-') : '-';
 
-            let itensHTML = '';
-            let total = 0;
-
-            if (os.servicos) {
-                try {
-                    const servicos = JSON.parse(os.servicos);
-                    servicos.forEach(s => {
-                        const subtotal = s.valor * s.quantidade;
-                        total += subtotal;
-                        itensHTML += `<p>🔧 ${s.descricao} - Qtd: ${s.quantidade} - R$ ${s.valor.toFixed(2)} cada - Subtotal: R$ ${subtotal.toFixed(2)}</p>`;
-                    });
-                } catch (e) {}
-            }
-
             let editServicosArray = [];
             if (os.servicos) {
                 try {
@@ -2731,65 +3066,140 @@
                 } catch (e) {}
             }
 
+            const total = editServicosArray.reduce((sum, item) => sum + (item.valor * item.quantidade), 0);
+
+            // Formatar datas para input date
+            const dataEntradaFormatada = os.dataEntrada ? os.dataEntrada.split('T')[0] : '';
+            const dataSaidaFormatada = os.dataSaida ? os.dataSaida.split('T')[0] : '';
+
             const content = document.getElementById('editPanelContent');
             content.innerHTML = `
                 <h2>Editar Ordem de Serviço</h2>
+                
+                <div class="os-card" style="margin-bottom: 20px;">
+                    <div class="os-card-header">
+                        <div class="os-number">${os.numeroOS}</div>
+                        <span class="badge badge-${os.status === 'aberta' ? 'open' : 'closed'}">${os.status === 'aberta' ? 'Aberta' : 'Fechada'}</span>
+                    </div>
+                    <div class="os-card-body">
+                        <div class="os-info-row">
+                            <span class="os-label">💰 Total Atual:</span>
+                            <span class="os-value os-total" id="editTotalOSDisplay">R$ ${total.toFixed(2)}</span>
+                        </div>
+                    </div>
+                </div>
+
                 <form id="formEditOS" onsubmit="salvarEdicaoOS(event, '${id}')">
                     <div class="card">
-                        <h3>Informações da OS</h3>
-                        <p><strong>Número:</strong> ${os.numeroOS}</p>
-                        <p><strong>Status:</strong> <span class="badge badge-${os.status === 'aberta' ? 'open' : 'closed'}">${os.status === 'aberta' ? 'Aberta' : 'Fechada'}</span></p>
-                        <p><strong>Data de Entrada:</strong> ${new Date(os.dataEntrada).toLocaleDateString('pt-BR')}</p>
-                        ${os.dataSaida ? `<p><strong>Data de Saída:</strong> ${new Date(os.dataSaida).toLocaleDateString('pt-BR')}</p>` : ''}
+                        <h3>📅 Datas da Ordem de Serviço</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Data de Entrada *</label>
+                                <input type="date" id="editDataEntrada" value="${dataEntradaFormatada}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Data de Saída</label>
+                                <input type="date" id="editDataSaida" value="${dataSaidaFormatada}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Status da OS *</label>
+                            <select id="editStatusOS" required>
+                                <option value="aberta" ${os.status === 'aberta' ? 'selected' : ''}>Aberta</option>
+                                <option value="fechada" ${os.status === 'fechada' ? 'selected' : ''}>Fechada</option>
+                            </select>
+                        </div>
                     </div>
+
                     <div class="card">
-                        <h3>Cliente</h3>
+                        <h3>👤 Alterar Cliente</h3>
                         <div class="form-group">
-                            <label>Nome do Cliente</label>
-                            <input type="text" id="editClienteNome" value="${clienteNome}" required>
+                            <label>Cliente Atual: <strong>${clienteNome}</strong></label>
+                            <input type="text" id="searchClienteEditOS" placeholder="Digite para buscar outro cliente..." oninput="buscarClienteEditOS()">
+                            <div id="resultadosClienteEditOS" class="search-results" style="display: none;"></div>
                         </div>
-                        <div class="form-group">
-                            <label>CPF/CNPJ</label>
-                            <input type="text" id="editClienteCpfCnpj" value="${clienteCpfCnpj}">
+                        <div id="clienteSelecionadoEditOS">
+                            <div class="selected-client">
+                                <h4>✓ Cliente Atual</h4>
+                                <p><strong>Nome:</strong> ${clienteNome}</p>
+                                <p><strong>Documento:</strong> ${clienteCpfCnpj}</p>
+                            </div>
                         </div>
                     </div>
+
                     <div class="card">
-                        <h3>Veículo</h3>
-                        <div class="form-group">
-                            <label>Placa</label>
-                            <input type="text" id="editPlaca" value="${os.placa || ''}" maxlength="8">
+                        <h3>🚗 Dados do Veículo</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Placa</label>
+                                <input type="text" id="editPlaca" value="${os.placa || ''}" maxlength="8" placeholder="ABC-1234">
+                            </div>
+                            <div class="form-group">
+                                <label>Marca</label>
+                                <input type="text" id="editMarca" value="${os.marca || ''}">
+                            </div>
+                            <div class="form-group">
+                                <label>Modelo</label>
+                                <input type="text" id="editModelo" value="${os.modelo || ''}">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Modelo</label>
-                            <input type="text" id="editModelo" value="${os.modelo || ''}">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Cor</label>
+                                <input type="text" id="editCor" value="${os.cor || ''}">
+                            </div>
+                            <div class="form-group">
+                                <label>Quilometragem</label>
+                                <input type="text" id="editQuilometragem" value="${os.quilometragem || ''}" placeholder="Ex: 50000 km" oninput="formatarQuilometragem(this)">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Quilometragem</label>
-                            <input type="text" id="editQuilometragem" value="${os.quilometragem || ''}" oninput="formatarQuilometragem(this)">
-                        </div>
-                        <p><strong>Marca:</strong> ${os.marca || '-'}</p>
-                        <p><strong>Cor:</strong> ${os.cor || '-'}</p>
                     </div>
+
                     <div class="card">
-                        <h3>Serviços</h3>
+                        <h3>👥 Responsáveis</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Recebido Por</label>
+                                <input type="text" id="editRecebidoPor" value="${os.recebidoPor || ''}">
+                            </div>
+                            <div class="form-group">
+                                <label>Autorizado Por</label>
+                                <input type="text" id="editAutorizadoPor" value="${os.autorizadoPor || ''}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>🔧 Serviços e Peças</h3>
+                        <div class="form-group">
+                            <label for="searchServicoEditOS">Adicionar Novo Serviço ou Peça</label>
+                            <input type="text" id="searchServicoEditOS" placeholder="Digite para buscar e adicionar..." oninput="buscarServicoEditOS()">
+                            <div id="resultadosServicoEditOS" class="search-results" style="display: none;"></div>
+                        </div>
                         <div id="editServicosOS"></div>
-                        <p style="margin-top: 15px;"><strong>Total: <span id="editTotalOS">R$ ${total.toFixed(2)}</span></strong></p>
                     </div>
+                    
                     <div class="card">
-                        <h3>Observações</h3>
+                        <h3>📝 Observações</h3>
                         <div class="form-group">
-                            <textarea id="editObservacoes" rows="4">${os.observacoes || ''}</textarea>
+                            <textarea id="editObservacoes" rows="4" placeholder="Digite observações sobre a ordem de serviço...">${os.observacoes || ''}</textarea>
                         </div>
                     </div>
-                    <button type="submit" class="btn">💾 Salvar Alterações</button>
-                    ${os.status === 'aberta' ? `
-                        <button type="button" class="btn btn-secondary" onclick="fecharOS('${id}')">✓ Fechar OS</button>
-                    ` : ''}
-                    <button type="button" class="btn btn-danger" onclick="closeEditPanel()">❌ Cancelar</button>
+                    
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px;">
+                        <button type="submit" class="btn">💾 Salvar Todas as Alterações</button>
+                        ${os.status === 'aberta' ? `
+                            <button type="button" class="btn btn-secondary" onclick="fecharOSRapido('${id}')">✓ Fechar OS Rapidamente</button>
+                        ` : `
+                            <button type="button" class="btn btn-secondary" onclick="reabrirOS('${id}')">🔄 Reabrir OS</button>
+                        `}
+                        <button type="button" class="btn btn-danger" onclick="closeEditPanel()">❌ Fechar</button>
+                    </div>
                 </form>
             `;
 
             window.editServicosOSData = editServicosArray;
+            window.editClienteOSData = cliente; // Armazenar cliente atual
             renderizarServicosEditOS();
         }
 
@@ -2800,39 +3210,49 @@
             let html = '';
             let total = 0;
 
-            window.editServicosOSData.forEach((servico, index) => {
-                const subtotal = servico.valor * servico.quantidade;
-                total += subtotal;
+            if (window.editServicosOSData.length === 0) {
+                html = '<div class="message info" style="margin: 10px 0;">Nenhum serviço adicionado</div>';
+            } else {
+                window.editServicosOSData.forEach((item, index) => {
+                    const subtotal = item.valor * item.quantidade;
+                    total += subtotal;
+                    const tipoIcon = item.tipo === 'servico' ? '🔧' : '🔩';
 
-                html += `
-                    <div class="os-item" style="flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 10px;">
-                        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <strong>🔧 ${servico.descricao}</strong><br>
-                                <small>Subtotal: R$ ${subtotal.toFixed(2)}</small>
+                    html += `
+                        <div class="os-item" style="flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 10px;">
+                            <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <strong>${tipoIcon} ${item.descricao}</strong><br>
+                                    <small>Subtotal: R$ ${subtotal.toFixed(2)}</small>
+                                </div>
+                                <button type="button" class="btn btn-danger btn-small" onclick="removerServicoEditOS(${index})">🗑️ Remover</button>
                             </div>
-                            <button type="button" class="btn btn-danger btn-small" onclick="removerServicoEditOS(${index})">🗑️ Remover</button>
+                            <div style="width: 100%; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <label style="margin: 0; font-size: 15px;">Valor Unit.:</label>
+                                    <input type="number" step="0.01" min="0" value="${item.valor.toFixed(2)}" 
+                                        onchange="alterarValorServicoEditOS(${index}, this.value)"
+                                        style="width: 100px; padding: 6px; border-radius: 6px; border: 2px solid #e2e8f0; background: #ffffff; color: #2d3748;">
+                                </div>
+                                <div class="item-quantity">
+                                    <label style="margin: 0; font-size: 15px; margin-right: 8px;">Qtd:</label>
+                                    <button type="button" class="qty-btn" onclick="alterarQtdServicoEditOS(${index}, -1)">-</button>
+                                    <span class="qty-display">${item.quantidade}</span>
+                                    <button type="button" class="qty-btn" onclick="alterarQtdServicoEditOS(${index}, 1)">+</button>
+                                </div>
+                            </div>
                         </div>
-                        <div style="width: 100%; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <label style="margin: 0; font-size: 13px;">Valor Unit.:</label>
-                                <input type="number" step="0.01" min="0" value="${servico.valor.toFixed(2)}" 
-                                    onchange="alterarValorServicoEditOS(${index}, this.value)"
-                                    style="width: 100px; padding: 6px; border-radius: 6px; border: 2px solid #3a3a5e; background: #2a2a3e; color: #e0e0e0;">
-                            </div>
-                            <div class="item-quantity">
-                                <label style="margin: 0; font-size: 13px; margin-right: 8px;">Qtd:</label>
-                                <button type="button" class="qty-btn" onclick="alterarQtdServicoEditOS(${index}, -1)">-</button>
-                                <span class="qty-display">${servico.quantidade}</span>
-                                <button type="button" class="qty-btn" onclick="alterarQtdServicoEditOS(${index}, 1)">+</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            }
 
             container.innerHTML = html;
-            document.getElementById('editTotalOS').textContent = `R$ ${total.toFixed(2)}`;
+            
+            // Atualizar o total no card principal
+            const totalDisplay = document.getElementById('editTotalOSDisplay');
+            if (totalDisplay) {
+                totalDisplay.textContent = `R$ ${total.toFixed(2)}`;
+            }
         }
 
         function alterarValorServicoEditOS(index, novoValor) {
@@ -2858,6 +3278,151 @@
             renderizarServicosEditOS();
         }
 
+        function buscarServicoEditOS() {
+            const searchTerm = document.getElementById('searchServicoEditOS').value.toLowerCase();
+            const resultados = document.getElementById('resultadosServicoEditOS');
+            
+            if (searchTerm.length < 2) {
+                resultados.style.display = 'none';
+                return;
+            }
+
+            const itens = allData.filter(item => {
+                if (item.type !== 'servico') return false;
+                return item.descricao && item.descricao.toLowerCase().includes(searchTerm);
+            });
+
+            if (itens.length === 0) {
+                resultados.innerHTML = '<div class="search-result-item">❌ Nenhum item encontrado</div>';
+                resultados.style.display = 'block';
+                return;
+            }
+
+            let html = '';
+            itens.forEach(item => {
+                const tipoIcon = item.tipoItem === 'servico' ? '🔧' : '🔩';
+                const tipoLabel = item.tipoItem === 'servico' ? 'Serviço' : 'Peça';
+                
+                html += `
+                    <div class="search-result-item" onclick="adicionarServicoEditOS('${item.id}')">
+                        <strong>${tipoIcon} ${item.descricao}</strong><br>
+                        <small>${tipoLabel} - R$ ${(item.valor || 0).toFixed(2)}</small>
+                    </div>
+                `;
+            });
+
+            resultados.innerHTML = html;
+            resultados.style.display = 'block';
+        }
+
+        function adicionarServicoEditOS(id) {
+            const item = allData.find(s => s.id === id);
+            if (!item) return;
+
+            const existente = window.editServicosOSData.find(osItem => osItem.id === id);
+            if (existente) {
+                existente.quantidade++;
+            } else {
+                window.editServicosOSData.push({
+                    tipo: item.tipoItem || 'servico',
+                    id: id,
+                    descricao: item.descricao,
+                    valor: item.valor,
+                    quantidade: 1
+                });
+            }
+
+            renderizarServicosEditOS();
+            document.getElementById('searchServicoEditOS').value = '';
+            document.getElementById('resultadosServicoEditOS').style.display = 'none';
+        }
+
+        function buscarClienteEditOS() {
+            const searchTerm = document.getElementById('searchClienteEditOS').value.toLowerCase();
+            const resultados = document.getElementById('resultadosClienteEditOS');
+            
+            if (searchTerm.length < 2) {
+                resultados.style.display = 'none';
+                return;
+            }
+
+            const clientes = allData.filter(item => {
+                if (item.type !== 'cliente') return false;
+                return (item.nome && item.nome.toLowerCase().includes(searchTerm)) ||
+                       (item.cpf && item.cpf.includes(searchTerm)) ||
+                       (item.cnpj && item.cnpj.includes(searchTerm)) ||
+                       (item.razaoSocial && item.razaoSocial.toLowerCase().includes(searchTerm));
+            });
+
+            if (clientes.length === 0) {
+                resultados.innerHTML = '<div class="search-result-item">❌ Nenhum cliente encontrado</div>';
+                resultados.style.display = 'block';
+                return;
+            }
+
+            let html = '';
+            clientes.forEach(cliente => {
+                html += `
+                    <div class="search-result-item" onclick="selecionarClienteEditOS('${cliente.id}')">
+                        <strong>${cliente.nome}</strong><br>
+                        <small>${cliente.cpf || cliente.cnpj || 'Sem documento'}</small>
+                        ${cliente.razaoSocial ? `<br><small>Razão Social: ${cliente.razaoSocial}</small>` : ''}
+                    </div>
+                `;
+            });
+
+            resultados.innerHTML = html;
+            resultados.style.display = 'block';
+        }
+
+        function selecionarClienteEditOS(id) {
+            const cliente = allData.find(c => c.id === id);
+            if (!cliente) return;
+
+            window.editClienteOSData = cliente;
+            document.getElementById('resultadosClienteEditOS').style.display = 'none';
+            document.getElementById('searchClienteEditOS').value = cliente.nome;
+
+            const container = document.getElementById('clienteSelecionadoEditOS');
+            container.innerHTML = `
+                <div class="selected-client">
+                    <h4>✓ Novo Cliente Selecionado</h4>
+                    <p><strong>Nome:</strong> ${cliente.nome}</p>
+                    <p><strong>${cliente.cpf ? 'CPF' : 'CNPJ'}:</strong> ${cliente.cpf || cliente.cnpj || '-'}</p>
+                    ${cliente.telefone ? `<p><strong>Telefone:</strong> ${cliente.telefone}</p>` : ''}
+                    ${cliente.razaoSocial ? `<p><strong>Razão Social:</strong> ${cliente.razaoSocial}</p>` : ''}
+                </div>
+            `;
+        }
+
+        function fecharOSRapido(id) {
+            const os = allData.find(o => o.id === id);
+            if (!os) return;
+
+            os.status = 'fechada';
+            if (!os.dataSaida) {
+                os.dataSaida = new Date().toISOString();
+            }
+            
+            saveToLocalStorage();
+            showMessage('✅ Ordem de serviço fechada rapidamente!', 'success');
+            atualizarTodasListas();
+            closeEditPanel();
+        }
+
+        function reabrirOS(id) {
+            const os = allData.find(o => o.id === id);
+            if (!os) return;
+
+            os.status = 'aberta';
+            os.dataSaida = null;
+            
+            saveToLocalStorage();
+            showMessage('✅ Ordem de serviço reaberta com sucesso!', 'success');
+            atualizarTodasListas();
+            closeEditPanel();
+        }
+
         function salvarEdicaoOS(event, id) {
             event.preventDefault();
             const os = allData.find(o => o.id === id);
@@ -2865,15 +3430,39 @@
 
             const totalServicos = window.editServicosOSData.reduce((sum, item) => sum + (item.valor * item.quantidade), 0);
 
-            os.placa = document.getElementById('editPlaca').value.toUpperCase();
-            os.modelo = document.getElementById('editModelo').value.toUpperCase();
-            os.quilometragem = document.getElementById('editQuilometragem').value;
-            os.observacoes = document.getElementById('editObservacoes').value.toUpperCase();
+            // Atualizar datas
+            const dataEntrada = document.getElementById('editDataEntrada').value;
+            const dataSaida = document.getElementById('editDataSaida').value;
+            
+            os.dataEntrada = dataEntrada ? new Date(dataEntrada + 'T00:00:00').toISOString() : os.dataEntrada;
+            os.dataSaida = dataSaida ? new Date(dataSaida + 'T00:00:00').toISOString() : null;
+            
+            // Atualizar status
+            os.status = document.getElementById('editStatusOS').value || 'aberta';
+            
+            // Atualizar cliente (se foi alterado)
+            if (window.editClienteOSData) {
+                os.clienteId = window.editClienteOSData.id;
+            }
+            
+            // Atualizar dados do veículo
+            os.placa = document.getElementById('editPlaca').value.toUpperCase() || '-';
+            os.marca = document.getElementById('editMarca').value.toUpperCase() || '-';
+            os.modelo = document.getElementById('editModelo').value.toUpperCase() || '-';
+            os.cor = document.getElementById('editCor').value.toUpperCase() || '-';
+            os.quilometragem = document.getElementById('editQuilometragem').value || '-';
+            
+            // Atualizar responsáveis
+            os.recebidoPor = document.getElementById('editRecebidoPor').value.toUpperCase() || '-';
+            os.autorizadoPor = document.getElementById('editAutorizadoPor').value.toUpperCase() || '-';
+            
+            // Atualizar observações e serviços
+            os.observacoes = document.getElementById('editObservacoes').value.toUpperCase() || '-';
             os.servicos = JSON.stringify(window.editServicosOSData);
             os.total = totalServicos;
 
             saveToLocalStorage();
-            showMessage('✅ Ordem de serviço atualizada com sucesso!', 'success');
+            showMessage('✅ Ordem de serviço atualizada completamente!', 'success');
             atualizarTodasListas();
             closeEditPanel();
         }
@@ -3039,13 +3628,13 @@
             const conta = {
                 id: editingId || generateId(),
                 type: 'contaPagar',
-                numeroDocumento: document.getElementById('numeroDocPagar').value.toUpperCase(),
-                empresaNome: document.getElementById('empresaNomePagar').value.toUpperCase(),
-                empresaCnpj: document.getElementById('empresaPagar').value,
-                dataLancamento: document.getElementById('dataLancamentoPagar').value,
-                dataVencimento: document.getElementById('dataVencimentoPagar').value,
-                valor: parseFloat(document.getElementById('valorPagar').value),
-                statusPagamento: document.getElementById('statusPagar').value,
+                numeroDocumento: document.getElementById('numeroDocPagar').value.toUpperCase() || '-',
+                empresaNome: document.getElementById('empresaNomePagar').value.toUpperCase() || '-',
+                empresaCnpj: document.getElementById('empresaPagar').value || '-',
+                dataLancamento: document.getElementById('dataLancamentoPagar').value || '-',
+                dataVencimento: document.getElementById('dataVencimentoPagar').value || '-',
+                valor: parseFloat(document.getElementById('valorPagar').value) || 0,
+                statusPagamento: document.getElementById('statusPagar').value || 'aberto',
                 createdAt: new Date().toISOString()
             };
 
@@ -3175,7 +3764,7 @@
                         </select>
                     </div>
                     <button type="submit" class="btn">💾 Salvar Alterações</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeEditPanel()">❌ Cancelar</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditPanel()">❌ Fechar</button>
                 </form>
             `;
         }
@@ -3185,13 +3774,13 @@
             const conta = allData.find(c => c.id === id);
             if (!conta) return;
 
-            conta.numeroDocumento = document.getElementById('editNumeroDoc').value.toUpperCase();
-            conta.empresaNome = document.getElementById('editEmpresaNome').value.toUpperCase();
-            conta.empresaCnpj = document.getElementById('editEmpresaCnpj').value;
-            conta.dataLancamento = document.getElementById('editDataLancamento').value;
-            conta.dataVencimento = document.getElementById('editDataVencimento').value;
-            conta.valor = parseFloat(document.getElementById('editValor').value);
-            conta.statusPagamento = document.getElementById('editStatus').value;
+            conta.numeroDocumento = document.getElementById('editNumeroDoc').value.toUpperCase() || '-';
+            conta.empresaNome = document.getElementById('editEmpresaNome').value.toUpperCase() || '-';
+            conta.empresaCnpj = document.getElementById('editEmpresaCnpj').value || '-';
+            conta.dataLancamento = document.getElementById('editDataLancamento').value || '-';
+            conta.dataVencimento = document.getElementById('editDataVencimento').value || '-';
+            conta.valor = parseFloat(document.getElementById('editValor').value) || 0;
+            conta.statusPagamento = document.getElementById('editStatus').value || 'aberto';
 
             saveToLocalStorage();
             showMessage('✅ Conta atualizada com sucesso!', 'success');
@@ -3306,11 +3895,11 @@
             const conta = {
                 id: editingId || generateId(),
                 type: 'contaReceber',
-                numeroDocumento: document.getElementById('numeroDocReceber').value.toUpperCase(),
-                dataEmissao: document.getElementById('dataEmissaoReceber').value,
-                dataVencimento: document.getElementById('dataVencimentoReceber').value,
-                valor: parseFloat(document.getElementById('valorReceber').value),
-                statusPagamento: document.getElementById('statusReceber').value,
+                numeroDocumento: document.getElementById('numeroDocReceber').value.toUpperCase() || '-',
+                dataEmissao: document.getElementById('dataEmissaoReceber').value || '-',
+                dataVencimento: document.getElementById('dataVencimentoReceber').value || '-',
+                valor: parseFloat(document.getElementById('valorReceber').value) || 0,
+                statusPagamento: document.getElementById('statusReceber').value || 'aberto',
                 createdAt: new Date().toISOString()
             };
 
@@ -3374,7 +3963,7 @@
                         </select>
                     </div>
                     <button type="submit" class="btn">💾 Salvar Alterações</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeEditPanel()">❌ Cancelar</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditPanel()">❌ Fechar</button>
                 </form>
             `;
         }
@@ -3384,11 +3973,11 @@
             const conta = allData.find(c => c.id === id);
             if (!conta) return;
 
-            conta.numeroDocumento = document.getElementById('editNumeroDoc').value.toUpperCase();
-            conta.dataEmissao = document.getElementById('editDataEmissao').value;
-            conta.dataVencimento = document.getElementById('editDataVencimento').value;
-            conta.valor = parseFloat(document.getElementById('editValor').value);
-            conta.statusPagamento = document.getElementById('editStatus').value;
+            conta.numeroDocumento = document.getElementById('editNumeroDoc').value.toUpperCase() || '-';
+            conta.dataEmissao = document.getElementById('editDataEmissao').value || '-';
+            conta.dataVencimento = document.getElementById('editDataVencimento').value || '-';
+            conta.valor = parseFloat(document.getElementById('editValor').value) || 0;
+            conta.statusPagamento = document.getElementById('editStatus').value || 'aberto';
 
             saveToLocalStorage();
             showMessage('✅ Conta atualizada com sucesso!', 'success');
@@ -4242,5 +4831,5 @@
             }
         });
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99dfafaad421f2e4',t:'MTc2MzA1MTc2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99e0296c320d480d',t:'MTc2MzA1Njc1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
