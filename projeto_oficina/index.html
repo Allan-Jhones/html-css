@@ -212,10 +212,22 @@
         h2 {
             color: #1e88e5;
             margin-bottom: 25px;
-            font-size: 32px;
+            font-size: 48px;
             font-weight: bold;
             border-bottom: 3px solid #00acc1;
             padding-bottom: 12px;
+            text-align: center;
+        }
+
+        /* Garantir que TODOS os H2 tenham o mesmo tamanho grande */
+        .content-section h2,
+        .tab-content h2,
+        .edit-panel h2,
+        .modal h2,
+        .modal-title {
+            font-size: 48px !important;
+            font-weight: bold !important;
+            color: #1e88e5 !important;
         }
 
         h3 {
@@ -1663,6 +1675,312 @@
             min-width: auto;
         }
 
+        /* Estilos para Configurações */
+        .theme-toggle-container {
+            margin-top: 10px;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 25px;
+            border: 2px solid #1e88e5;
+            border-radius: 12px;
+            background: transparent;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #1e88e5;
+            min-width: 200px;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(30, 136, 229, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(30, 136, 229, 0.2);
+        }
+
+        .theme-icon {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover .theme-icon {
+            transform: rotate(15deg);
+        }
+
+        .font-size-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+            padding: 20px;
+            background: rgba(30, 136, 229, 0.05);
+            border-radius: 12px;
+            border: 2px solid rgba(30, 136, 229, 0.1);
+        }
+
+        .font-size-label {
+            font-weight: bold;
+            color: #1e88e5;
+            font-size: 16px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .font-size-label.large {
+            font-size: 24px;
+        }
+
+        #fontSizeSlider {
+            flex: 1;
+            height: 8px;
+            border-radius: 5px;
+            background: #e2e8f0;
+            outline: none;
+            cursor: pointer;
+            -webkit-appearance: none;
+        }
+
+        #fontSizeSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e88e5 0%, #00acc1 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(30, 136, 229, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        #fontSizeSlider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 15px rgba(30, 136, 229, 0.4);
+        }
+
+        #fontSizeSlider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e88e5 0%, #00acc1 100%);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(30, 136, 229, 0.3);
+        }
+
+        .font-size-value {
+            font-weight: bold;
+            color: #1e88e5;
+            font-size: 16px;
+            min-width: 50px;
+            text-align: center;
+            background: rgba(30, 136, 229, 0.1);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(30, 136, 229, 0.2);
+        }
+
+        .font-size-description {
+            color: #666;
+            font-style: italic;
+            margin-top: 8px;
+            display: block;
+        }
+
+        /* Modo Escuro */
+        body.dark-theme {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e0e0e0;
+        }
+
+        .dark-theme .container {
+            background: rgba(45, 45, 45, 0.95);
+        }
+
+        .dark-theme header {
+            background: rgba(45, 45, 45, 0.98);
+            border-color: rgba(30, 136, 229, 0.3);
+            color: #e0e0e0;
+        }
+
+        .dark-theme nav {
+            background: rgba(45, 45, 45, 0.98);
+            border-color: rgba(30, 136, 229, 0.3);
+        }
+
+        .dark-theme .content-section {
+            background: rgba(45, 45, 45, 0.98);
+            border-color: rgba(30, 136, 229, 0.2);
+            color: #e0e0e0;
+        }
+
+        .dark-theme .card {
+            background: rgba(55, 55, 55, 0.98);
+            border-color: rgba(30, 136, 229, 0.3);
+            color: #e0e0e0;
+        }
+
+        .dark-theme .search-box {
+            background: rgba(55, 55, 55, 0.98);
+            border-color: rgba(30, 136, 229, 0.3);
+            color: #e0e0e0;
+        }
+
+        .dark-theme input, .dark-theme select, .dark-theme textarea {
+            background: #3a3a3a;
+            border-color: #555;
+            color: #e0e0e0;
+        }
+
+        .dark-theme input:focus, .dark-theme select:focus, .dark-theme textarea:focus {
+            background: #404040;
+            border-color: #1e88e5;
+            color: #e0e0e0;
+        }
+
+        .dark-theme label {
+            color: #c0c0c0;
+        }
+
+        .dark-theme th {
+            background: linear-gradient(135deg, #1e88e5 0%, #00acc1 100%);
+            color: white;
+        }
+
+        .dark-theme td {
+            background: rgba(55, 55, 55, 0.8);
+            color: #e0e0e0;
+        }
+
+        .dark-theme tbody tr:nth-child(even) td {
+            background: rgba(65, 65, 65, 0.9) !important;
+        }
+
+        .dark-theme tbody tr:nth-child(odd) td {
+            background: rgba(55, 55, 55, 0.9) !important;
+        }
+
+        .dark-theme tr:hover td {
+            background: rgba(30, 136, 229, 0.25) !important;
+        }
+
+        .dark-theme .selected-client {
+            background: linear-gradient(135deg, rgba(30, 136, 229, 0.2) 0%, rgba(0, 172, 193, 0.2) 100%);
+            border-color: #1e88e5;
+            color: #e0e0e0;
+        }
+
+        .dark-theme .os-items {
+            background: rgba(55, 55, 55, 0.8);
+            border-color: rgba(30, 136, 229, 0.3);
+            color: #e0e0e0;
+        }
+
+        .dark-theme .os-item {
+            color: #e0e0e0;
+        }
+
+        .dark-theme .os-item:hover {
+            background: rgba(30, 136, 229, 0.15);
+        }
+
+        .dark-theme .stat-card {
+            background: linear-gradient(135deg, rgba(30, 136, 229, 0.25) 0%, rgba(0, 172, 193, 0.25) 100%);
+            border-color: rgba(30, 136, 229, 0.5);
+            color: #e0e0e0;
+        }
+
+        .dark-theme .os-card {
+            background: rgba(55, 55, 55, 0.95);
+            border-color: rgba(30, 136, 229, 0.3);
+            color: #e0e0e0;
+        }
+
+        .dark-theme .os-card:hover {
+            border-color: rgba(30, 136, 229, 0.5);
+        }
+
+        .dark-theme .edit-panel {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        .dark-theme .edit-panel input, .dark-theme .edit-panel select, .dark-theme .edit-panel textarea {
+            background: #3a3a3a;
+            border-color: #555;
+            color: #e0e0e0;
+        }
+
+        .dark-theme .edit-panel input:focus, .dark-theme .edit-panel select:focus, .dark-theme .edit-panel textarea:focus {
+            background: #404040;
+            border-color: #1e88e5;
+            color: #e0e0e0;
+        }
+
+        .dark-theme .edit-panel label {
+            color: #c0c0c0;
+        }
+
+        .dark-theme .modal-content {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        .dark-theme .modal-table-container {
+            background: rgba(55, 55, 55, 0.8);
+            border-color: rgba(30, 136, 229, 0.3);
+        }
+
+        .dark-theme .confirm-modal-content {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        .dark-theme .success-modal-content {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        .dark-theme .search-results {
+            background: #3a3a3a;
+            border-color: rgba(30, 136, 229, 0.4);
+        }
+
+        .dark-theme .search-result-item {
+            color: #e0e0e0;
+        }
+
+        .dark-theme .search-result-item:hover {
+            background: rgba(30, 136, 229, 0.2);
+        }
+
+        .dark-theme .message.info {
+            background: rgba(23, 162, 184, 0.2);
+            border-color: #17a2b8;
+            color: #b8e6f0;
+        }
+
+        .dark-theme .font-size-container {
+            background: rgba(30, 136, 229, 0.15);
+            border-color: rgba(30, 136, 229, 0.3);
+        }
+
+        .dark-theme .font-size-description {
+            color: #aaa;
+        }
+
+        .dark-theme .theme-toggle {
+            color: #e0e0e0;
+            border-color: #1e88e5;
+        }
+
+        .dark-theme .theme-toggle:hover {
+            background: rgba(30, 136, 229, 0.2);
+        }
+
         @media (max-width: 768px) {
             .form-row {
                 grid-template-columns: 1fr;
@@ -1725,6 +2043,17 @@
             .os-card-actions .btn {
                 width: 100%;
             }
+
+            .font-size-container {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .theme-toggle {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
   <style>@view-transition { navigation: auto; }</style>
@@ -1739,7 +2068,7 @@
     <h1 id="systemTitle">Sistema de Gestão de Oficina</h1>
     <p class="subtitle" id="companyName">Auto Mecânica Premium</p>
    </header>
-   <nav><button class="nav-btn active" onclick="showSection('clientes', event)">👥 Clientes</button> <button class="nav-btn" onclick="showSection('servicos', event)">🔧 Serviços/Peças</button> <button class="nav-btn" onclick="showSection('ordens', event)">📋 Ordens de Serviço</button> <button class="nav-btn" onclick="showSection('contasPagar', event)">💰 Contas a Pagar</button> <button class="nav-btn" onclick="showSection('contasReceber', event)">💵 Contas a Receber</button> <button class="nav-btn" onclick="showSection('relatorios', event)">📊 Relatórios</button>
+   <nav><button class="nav-btn active" onclick="showSection('clientes', event)">👥 Clientes</button> <button class="nav-btn" onclick="showSection('servicos', event)">🔧 Serviços/Peças</button> <button class="nav-btn" onclick="showSection('ordens', event)">📋 Ordens de Serviço</button> <button class="nav-btn" onclick="showSection('contasPagar', event)">💰 Contas a Pagar</button> <button class="nav-btn" onclick="showSection('contasReceber', event)">💵 Contas a Receber</button> <button class="nav-btn" onclick="showSection('relatorios', event)">📊 Relatórios</button> <button class="nav-btn" onclick="showSection('configuracoes', event)">⚙️ Configurações</button>
    </nav>
    <div id="messageContainer"></div><!-- Seção Clientes -->
    <section id="clientes" class="content-section active">
@@ -1862,7 +2191,7 @@
     <div class="tabs"><button class="tab active" onclick="showTab('cadastroOS', event)">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaOS', event)">Pesquisar</button>
     </div>
     <div id="cadastroOS" class="tab-content active">
-     <h2 style="text-align: center; font-size: 36px; margin-bottom: 30px;">Nova Ordem de Serviço</h2>
+     <h2>Nova Ordem de Serviço</h2>
      <form id="formOS" onsubmit="salvarOS(event)">
       <div class="card">
        <h3>🔍 Buscar Cliente</h3>
@@ -2064,6 +2393,30 @@
      </div><button class="btn" onclick="gerarRelatorio('faturamentoPeriodo')">📊 Gerar Relatório</button>
     </div>
     <div id="relatorioDetalhado"></div>
+   </section><!-- Seção Configurações -->
+   <section id="configuracoes" class="content-section">
+    <h2>⚙️ Configurações do Sistema</h2>
+    <div class="card">
+     <h3>🎨 Aparência</h3>
+     <div class="form-group"><label for="themeToggle">Tema do Sistema</label>
+      <div class="theme-toggle-container"><button class="theme-toggle" id="themeToggle" onclick="toggleTheme()"> <span class="theme-icon" id="themeIcon">☀️</span> <span class="theme-text" id="themeText">Modo Claro</span> </button>
+      </div>
+     </div>
+    </div>
+    <div class="card">
+     <h3>🔤 Acessibilidade</h3>
+     <div class="form-group"><label for="fontSizeSlider">Tamanho da Fonte</label>
+      <div class="font-size-container"><span class="font-size-label">A</span> <input type="range" id="fontSizeSlider" min="85" max="130" value="100" step="5" oninput="adjustFontSize(this.value)"> <span class="font-size-label large">A</span> <span class="font-size-value" id="fontSizeValue">100%</span>
+      </div><small class="font-size-description">Ajuste o tamanho do texto para melhor legibilidade</small>
+     </div>
+     <div class="form-group"><button class="btn btn-secondary" onclick="resetFontSize()">🔄 Restaurar Padrão</button>
+     </div>
+    </div>
+    <div class="card">
+     <h3>💾 Dados do Sistema</h3>
+     <div class="form-row"><button class="btn btn-secondary" onclick="exportarDados()">📤 Exportar Dados</button> <button class="btn btn-secondary" onclick="importarDados()">📥 Importar Dados</button>
+     </div><input type="file" id="importFile" accept=".json" style="display: none;" onchange="processarImportacao(event)"> <small style="color: #666; margin-top: 10px; display: block;"> Exporte seus dados para backup ou importe dados de outro sistema </small>
+    </div>
    </section>
   </div><!-- Modal para Relatórios -->
   <div class="modal" id="relatorioModal">
@@ -2116,11 +2469,15 @@
         let osCounter = 1;
         let selectedClienteOS = null;
         let columnWidths = {};
+        let currentTheme = 'light';
+        let currentFontSize = 100;
 
         // Funções de armazenamento local
         function saveToLocalStorage() {
             localStorage.setItem('oficinaData', JSON.stringify(allData));
             localStorage.setItem('columnWidths', JSON.stringify(columnWidths));
+            localStorage.setItem('userTheme', currentTheme);
+            localStorage.setItem('userFontSize', currentFontSize.toString());
         }
 
         function loadFromLocalStorage() {
@@ -2139,6 +2496,19 @@
             const widths = localStorage.getItem('columnWidths');
             if (widths) {
                 columnWidths = JSON.parse(widths);
+            }
+
+            // Carregar configurações de tema e fonte
+            const savedTheme = localStorage.getItem('userTheme');
+            if (savedTheme) {
+                currentTheme = savedTheme;
+                applyTheme(currentTheme);
+            }
+
+            const savedFontSize = localStorage.getItem('userFontSize');
+            if (savedFontSize) {
+                currentFontSize = parseInt(savedFontSize);
+                applyFontSize(currentFontSize);
             }
             
             console.log('Sistema inicializado com sucesso!');
@@ -5060,6 +5430,143 @@
             }
         }
 
+        // Funções de Configuração - Tema
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            applyTheme(currentTheme);
+            saveToLocalStorage();
+        }
+
+        function applyTheme(theme) {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            if (theme === 'dark') {
+                body.classList.add('dark-theme');
+                if (themeIcon) themeIcon.textContent = '🌙';
+                if (themeText) themeText.textContent = 'Modo Escuro';
+            } else {
+                body.classList.remove('dark-theme');
+                if (themeIcon) themeIcon.textContent = '☀️';
+                if (themeText) themeText.textContent = 'Modo Claro';
+            }
+        }
+
+        // Funções de Configuração - Fonte
+        function adjustFontSize(value) {
+            currentFontSize = parseInt(value);
+            applyFontSize(currentFontSize);
+            document.getElementById('fontSizeValue').textContent = currentFontSize + '%';
+            saveToLocalStorage();
+        }
+
+        function applyFontSize(percentage) {
+            const scaleFactor = percentage / 100;
+            document.documentElement.style.fontSize = (16 * scaleFactor) + 'px';
+            
+            // Atualizar o slider se existir
+            const slider = document.getElementById('fontSizeSlider');
+            if (slider) {
+                slider.value = percentage;
+            }
+            
+            const valueDisplay = document.getElementById('fontSizeValue');
+            if (valueDisplay) {
+                valueDisplay.textContent = percentage + '%';
+            }
+        }
+
+        function resetFontSize() {
+            currentFontSize = 100;
+            applyFontSize(100);
+            document.getElementById('fontSizeSlider').value = 100;
+            document.getElementById('fontSizeValue').textContent = '100%';
+            saveToLocalStorage();
+            showMessage('✅ Tamanho da fonte restaurado para o padrão!', 'success');
+        }
+
+        // Funções de Importação/Exportação
+        function exportarDados() {
+            const dataToExport = {
+                data: allData,
+                exportDate: new Date().toISOString(),
+                version: '1.0',
+                systemName: 'Sistema de Gestão de Oficina'
+            };
+            
+            const dataStr = JSON.stringify(dataToExport, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `backup_oficina_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            showMessage('✅ Dados exportados com sucesso!', 'success');
+        }
+
+        function importarDados() {
+            document.getElementById('importFile').click();
+        }
+
+        function processarImportacao(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    // Validar estrutura dos dados
+                    if (!importedData.data || !Array.isArray(importedData.data)) {
+                        throw new Error('Formato de arquivo inválido');
+                    }
+
+                    // Confirmar importação
+                    abrirConfirmModal({
+                        icon: '📥',
+                        title: 'Confirmar Importação',
+                        message: 'Esta ação irá substituir todos os dados atuais. Tem certeza que deseja continuar?',
+                        itemName: `${importedData.data.length} registros encontrados`,
+                        itemDetails: `
+                            <strong>Data do Backup:</strong> ${new Date(importedData.exportDate).toLocaleDateString('pt-BR')}<br>
+                            <strong>Versão:</strong> ${importedData.version || 'N/A'}<br>
+                            <strong>Sistema:</strong> ${importedData.systemName || 'N/A'}
+                        `,
+                        buttonText: '📥 Confirmar Importação',
+                        onConfirm: () => confirmarImportacao(importedData.data)
+                    });
+
+                } catch (error) {
+                    showMessage('❌ Erro ao ler arquivo: ' + error.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+            
+            // Limpar input
+            event.target.value = '';
+        }
+
+        function confirmarImportacao(dadosImportados) {
+            allData = dadosImportados;
+            
+            // Recalcular contador de OS
+            const maxOS = Math.max(0, ...allData
+                .filter(item => item.type === 'os' && item.numeroOS)
+                .map(os => parseInt(os.numeroOS.replace('OS-', '')) || 0)
+            );
+            osCounter = maxOS + 1;
+            
+            saveToLocalStorage();
+            atualizarTodasListas();
+            atualizarEstatisticas();
+            fecharConfirmModal();
+            
+            showMessage('✅ Dados importados com sucesso!', 'success');
+        }
+
         // Múltiplas estratégias de inicialização
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', inicializarSistema);
@@ -5074,5 +5581,5 @@
             }
         });
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99e06a2254f6593b',t:'MTc2MzA1OTQwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99e0e577016c7e15',t:'MTc2MzA2NDQ1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
