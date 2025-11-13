@@ -182,15 +182,7 @@
         .content-section table {
             width: 100%;
             min-width: 800px; /* Largura mínima para manter colunas legíveis */
-            overflow-x: auto;
-            display: block;
-            white-space: nowrap;
-        }
-
-        .content-section table thead,
-        .content-section table tbody {
-            display: table;
-            width: 100%;
+            border-collapse: collapse;
             table-layout: fixed;
         }
 
@@ -241,7 +233,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 18px;
             color: #4a5568;
         }
 
@@ -370,6 +362,7 @@
         .btn-small {
             padding: 8px 16px;
             font-size: 13px;
+            min-width: 85px;
         }
 
         .message {
@@ -425,6 +418,7 @@
             align-items: center;
             cursor: pointer;
             font-weight: 600;
+            font-size: 18px;
         }
 
         .radio-group input[type="radio"] {
@@ -446,6 +440,7 @@
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            table-layout: fixed;
         }
 
         th, td {
@@ -455,6 +450,49 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            position: relative;
+        }
+
+        /* Estilos para redimensionamento de colunas */
+        .resizable-table th {
+            position: relative;
+            user-select: none;
+        }
+
+        .resizable-table th:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            cursor: col-resize;
+            background: transparent;
+            z-index: 10;
+        }
+
+        .resizable-table th:not(:last-child):hover::after {
+            background: rgba(30, 136, 229, 0.3);
+        }
+
+        .resizable-table th.resizing::after {
+            background: rgba(30, 136, 229, 0.6);
+        }
+
+        .resizable-table td {
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+
+        /* Indicador visual durante redimensionamento */
+        .resize-line {
+            position: absolute;
+            top: 0;
+            width: 2px;
+            background: #1e88e5;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.8;
         }
 
         /* Larguras específicas para tabelas de clientes */
@@ -481,27 +519,42 @@
         #listaClientes table th:nth-child(5), #listaClientes table td:nth-child(5) { /* Ações */
             min-width: 220px;
             width: 25%;
+            text-align: center;
         }
 
         /* Larguras específicas para tabelas de serviços */
         #listaServicos table th:nth-child(1), #listaServicos table td:nth-child(1) { /* Código */
-            min-width: 120px;
-            width: 15%;
+            min-width: 140px;
+            width: 18%;
         }
         
         #listaServicos table th:nth-child(2), #listaServicos table td:nth-child(2) { /* Descrição */
-            min-width: 250px;
-            width: 50%;
+            min-width: 220px;
+            width: 32%;
         }
         
-        #listaServicos table th:nth-child(3), #listaServicos table td:nth-child(3) { /* Valor */
-            min-width: 120px;
-            width: 15%;
+        #listaServicos table th:nth-child(3), #listaServicos table td:nth-child(3) { /* Tipo */
+            min-width: 130px;
+            width: 16%;
         }
         
-        #listaServicos table th:nth-child(4), #listaServicos table td:nth-child(4) { /* Ações */
-            min-width: 120px;
-            width: 20%;
+        #listaServicos table th:nth-child(4), #listaServicos table td:nth-child(4) { /* Valor */
+            min-width: 140px;
+            width: 16%;
+            text-align: right;
+            padding-right: 20px;
+        }
+        
+        #listaServicos table th:nth-child(5), #listaServicos table td:nth-child(5) { /* Ações */
+            min-width: 240px;
+            width: 24%;
+            text-align: center;
+            padding-left: 20px;
+        }
+
+        /* Garantir que todas as colunas de ações fiquem centralizadas */
+        table th:last-child, table td:last-child {
+            text-align: center;
         }
 
         /* Larguras específicas para tabelas de contas a pagar */
@@ -538,6 +591,7 @@
         #listaContasPagar table th:nth-child(7), #listaContasPagar table td:nth-child(7) { /* Ações */
             min-width: 220px;
             width: 20%;
+            text-align: center;
         }
 
         /* Larguras específicas para tabelas de contas a receber */
@@ -569,6 +623,7 @@
         #listaContasReceber table th:nth-child(6), #listaContasReceber table td:nth-child(6) { /* Ações */
             min-width: 220px;
             width: 25%;
+            text-align: center;
         }
 
         th {
@@ -585,9 +640,18 @@
             background: rgba(255, 255, 255, 0.8);
         }
 
+        /* Efeito zebrado - linhas alternadas */
+        tbody tr:nth-child(even) td {
+            background: rgba(248, 250, 252, 0.9) !important;
+        }
+
+        tbody tr:nth-child(odd) td {
+            background: rgba(255, 255, 255, 0.9) !important;
+        }
+
         tr:hover td {
             transition: all 0.3s ease;
-            background: rgba(30, 136, 229, 0.1);
+            background: rgba(30, 136, 229, 0.15) !important;
         }
 
         tr:last-child td {
@@ -596,10 +660,11 @@
 
         .action-buttons {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: nowrap;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
+            white-space: nowrap;
         }
 
         .search-box {
@@ -639,7 +704,7 @@
 
         #cadastroOS label {
             margin-bottom: 4px;
-            font-size: 15px;
+            font-size: 17px;
         }
 
         #cadastroOS input, #cadastroOS select, #cadastroOS textarea {
@@ -875,6 +940,7 @@
 
         .edit-panel label {
             color: #4a5568;
+            font-size: 18px;
         }
 
         .edit-panel h2 {
@@ -1375,8 +1441,17 @@
             color: #2d3748;
         }
 
+        /* Efeito zebrado nos modais */
+        .modal tbody tr:nth-child(even) td {
+            background: rgba(248, 250, 252, 0.9);
+        }
+
+        .modal tbody tr:nth-child(odd) td {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
         .modal tr:hover td {
-            background: rgba(30, 136, 229, 0.1);
+            background: rgba(30, 136, 229, 0.15) !important;
             transition: all 0.3s ease;
         }
 
@@ -1787,7 +1862,7 @@
     <div class="tabs"><button class="tab active" onclick="showTab('cadastroOS', event)">Cadastrar</button> <button class="tab" onclick="showTab('pesquisaOS', event)">Pesquisar</button>
     </div>
     <div id="cadastroOS" class="tab-content active">
-     <h2>Nova Ordem de Serviço</h2>
+     <h2 style="text-align: center; font-size: 36px; margin-bottom: 30px;">Nova Ordem de Serviço</h2>
      <form id="formOS" onsubmit="salvarOS(event)">
       <div class="card">
        <h3>🔍 Buscar Cliente</h3>
@@ -1846,7 +1921,7 @@
      </form>
     </div>
     <div id="pesquisaOS" class="tab-content">
-     <h2>Pesquisar Ordens de Serviço</h2>
+     <h2 style="text-align: center; font-size: 36px; margin-bottom: 30px;">Pesquisar Ordens de Serviço</h2>
      <div class="search-box">
       <div class="form-row">
        <div class="form-group"><label for="searchOS">Número da OS</label> <input type="text" id="searchOS" placeholder="Digite o número..." onkeypress="if(event.key==='Enter') filtrarOS()">
@@ -2040,10 +2115,12 @@
         let currentOSItems = [];
         let osCounter = 1;
         let selectedClienteOS = null;
+        let columnWidths = {};
 
         // Funções de armazenamento local
         function saveToLocalStorage() {
             localStorage.setItem('oficinaData', JSON.stringify(allData));
+            localStorage.setItem('columnWidths', JSON.stringify(columnWidths));
         }
 
         function loadFromLocalStorage() {
@@ -2058,11 +2135,131 @@
                 atualizarTodasListas();
                 atualizarEstatisticas();
             }
+            
+            const widths = localStorage.getItem('columnWidths');
+            if (widths) {
+                columnWidths = JSON.parse(widths);
+            }
+            
             console.log('Sistema inicializado com sucesso!');
         }
 
         function generateId() {
             return 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Funções para redimensionamento de colunas
+        function makeTableResizable(table, tableId) {
+            if (!table) return;
+            
+            table.classList.add('resizable-table');
+            const headers = table.querySelectorAll('th');
+            
+            headers.forEach((header, index) => {
+                if (index === headers.length - 1) return; // Não redimensionar última coluna
+                
+                const columnKey = `${tableId}_col_${index}`;
+                
+                // Aplicar largura salva se existir
+                if (columnWidths[columnKey]) {
+                    header.style.width = columnWidths[columnKey] + 'px';
+                }
+                
+                let isResizing = false;
+                let startX = 0;
+                let startWidth = 0;
+                let resizeLine = null;
+                
+                const onMouseDown = (e) => {
+                    const rect = header.getBoundingClientRect();
+                    if (e.clientX >= rect.right - 4) {
+                        isResizing = true;
+                        startX = e.clientX;
+                        startWidth = header.offsetWidth;
+                        header.classList.add('resizing');
+                        
+                        // Criar linha de redimensionamento
+                        resizeLine = document.createElement('div');
+                        resizeLine.className = 'resize-line';
+                        resizeLine.style.left = e.clientX + 'px';
+                        resizeLine.style.height = table.offsetHeight + 'px';
+                        document.body.appendChild(resizeLine);
+                        
+                        document.addEventListener('mousemove', onMouseMove);
+                        document.addEventListener('mouseup', onMouseUp);
+                        e.preventDefault();
+                    }
+                };
+                
+                const onMouseMove = (e) => {
+                    if (!isResizing) return;
+                    
+                    const diff = e.clientX - startX;
+                    const newWidth = Math.max(50, startWidth + diff); // Largura mínima de 50px
+                    
+                    header.style.width = newWidth + 'px';
+                    
+                    // Atualizar linha de redimensionamento
+                    if (resizeLine) {
+                        resizeLine.style.left = e.clientX + 'px';
+                    }
+                    
+                    // Aplicar largura para todas as células da coluna
+                    const rows = table.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        const cell = row.children[index];
+                        if (cell) {
+                            cell.style.width = newWidth + 'px';
+                        }
+                    });
+                };
+                
+                const onMouseUp = () => {
+                    if (!isResizing) return;
+                    
+                    isResizing = false;
+                    header.classList.remove('resizing');
+                    
+                    // Remover linha de redimensionamento
+                    if (resizeLine) {
+                        document.body.removeChild(resizeLine);
+                        resizeLine = null;
+                    }
+                    
+                    // Salvar largura
+                    columnWidths[columnKey] = header.offsetWidth;
+                    saveToLocalStorage();
+                    
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                };
+                
+                header.addEventListener('mousedown', onMouseDown);
+            });
+        }
+
+        function applyColumnWidths(table, tableId) {
+            if (!table) return;
+            
+            const headers = table.querySelectorAll('th');
+            const rows = table.querySelectorAll('tr');
+            
+            headers.forEach((header, index) => {
+                const columnKey = `${tableId}_col_${index}`;
+                
+                if (columnWidths[columnKey]) {
+                    const width = columnWidths[columnKey];
+                    header.style.width = width + 'px';
+                    
+                    // Aplicar para todas as células da coluna
+                    rows.forEach(row => {
+                        const cell = row.children[index];
+                        if (cell) {
+                            cell.style.width = width + 'px';
+                        }
+                    });
+                }
+            });
         }
 
         // Máscaras de entrada
@@ -2552,6 +2749,12 @@
             html += '</tbody></table>';
             container.innerHTML = html;
             
+            // Aplicar redimensionamento de colunas
+            const table = container.querySelector('table');
+            if (table) {
+                makeTableResizable(table, 'contasReceber');
+            }
+            
             // Adicionar classe para expandir seção
             const section = container.closest('.content-section');
             if (section) section.classList.add('with-table');
@@ -2756,11 +2959,12 @@
                 return;
             }
 
-            let html = '<table><thead><tr><th>Código</th><th>Descrição</th><th>Valor</th><th>Ações</th></tr></thead><tbody>';
+            let html = '<table><thead><tr><th>Código</th><th>Descrição</th><th>Tipo</th><th style="text-align: right;">Valor</th><th style="text-align: center;">Ações</th></tr></thead><tbody>';
             
             itens.forEach(item => {
                 const tipoItem = item.tipoItem || 'servico';
                 const tipoIcon = tipoItem === 'servico' ? '🔧' : '🔩';
+                const tipoLabel = tipoItem === 'servico' ? 'Serviço' : 'Peça';
                 const codigo = item.codigo && item.codigo !== '-' ? item.codigo : '-';
                 
                 html += `
@@ -2772,10 +2976,16 @@
                             </div>
                         </td>
                         <td><strong>${item.descricao || '-'}</strong></td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 16px;">${tipoIcon}</span>
+                                <strong>${tipoLabel}</strong>
+                            </div>
+                        </td>
                         <td><strong>R$ ${(item.valor || 0).toFixed(2)}</strong></td>
                         <td class="action-buttons">
-                            <button class="btn btn-secondary btn-small" onclick="editarServico('${item.id}')">✏️</button>
-                            <button class="btn btn-danger btn-small" onclick="excluirServico('${item.id}')">🗑️</button>
+                            <button class="btn btn-secondary btn-small" onclick="editarServico('${item.id}')" title="Editar">✏️ Editar</button>
+                            <button class="btn btn-danger btn-small" onclick="excluirServico('${item.id}')" title="Excluir">🗑️ Excluir</button>
                         </td>
                     </tr>
                 `;
@@ -2783,6 +2993,12 @@
             
             html += '</tbody></table>';
             container.innerHTML = html;
+            
+            // Aplicar redimensionamento de colunas
+            const table = container.querySelector('table');
+            if (table) {
+                makeTableResizable(table, 'servicos');
+            }
             
             // Adicionar classe para expandir seção
             const section = container.closest('.content-section');
@@ -3617,6 +3833,12 @@
             
             container.innerHTML = html;
             
+            // Aplicar redimensionamento de colunas
+            const table = container.querySelector('table');
+            if (table) {
+                makeTableResizable(table, 'ordens');
+            }
+            
             // Adicionar classe para expandir seção
             const section = container.closest('.content-section');
             if (section) section.classList.add('with-table');
@@ -3884,6 +4106,12 @@
             html += '</tbody></table>';
             container.innerHTML = html;
             
+            // Aplicar redimensionamento de colunas
+            const table = container.querySelector('table');
+            if (table) {
+                makeTableResizable(table, 'contasReceber');
+            }
+            
             // Adicionar classe para expandir seção
             const section = container.closest('.content-section');
             if (section) section.classList.add('with-table');
@@ -4071,6 +4299,12 @@
             
             html += '</tbody></table>';
             container.innerHTML = html;
+            
+            // Aplicar redimensionamento de colunas
+            const table = container.querySelector('table');
+            if (table) {
+                makeTableResizable(table, 'contasReceber');
+            }
             
             // Adicionar classe para expandir seção
             const section = container.closest('.content-section');
@@ -4423,6 +4657,15 @@
             document.getElementById('modalTitle').textContent = titulo;
             document.getElementById('modalSummary').innerHTML = summaryHTML;
             document.getElementById('modalTableContainer').innerHTML = tableHTML;
+            
+            // Aplicar redimensionamento nas tabelas do modal
+            setTimeout(() => {
+                const modalTable = document.querySelector('#modalTableContainer table');
+                if (modalTable) {
+                    makeTableResizable(modalTable, 'modal_' + titulo.replace(/\s+/g, '_').toLowerCase());
+                }
+            }, 100);
+            
             document.getElementById('relatorioModal').classList.add('active');
         }
 
@@ -4831,5 +5074,5 @@
             }
         });
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99e0296c320d480d',t:'MTc2MzA1Njc1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99e06a2254f6593b',t:'MTc2MzA1OTQwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
